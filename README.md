@@ -3,11 +3,11 @@ Group 8 Readme
 
 Group Name: Group 8
 
-Group Members:
-	Matthew Apple
-	Kyle Bobak
-	Kayla Gandy
-	Andrew Ohlschwager
+Group Members:  
+	Matthew Apple  
+	Kyle Bobak  
+	Kayla Gandy  
+	Andrew Ohlschwager  
 
 Project Name:
 	Mind Palace App
