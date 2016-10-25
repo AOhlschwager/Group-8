@@ -8,6 +8,7 @@ Group Members:
 	Kyle Bobak  
 	Kayla Gandy  
 	Andrew Ohlschwager  
+	Shaya Wolf
 
 Project Name:  
 	Mind Palace App  
