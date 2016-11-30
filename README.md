@@ -6,17 +6,15 @@ Group Name: Group 8
 Group Members:  
 	Matthew Apple  
 	Kyle Bobak  
-	Kayla Gandy  
 	Andrew Ohlschwager  
 	Shaya Wolf
 
 Project Name:  
-	Mind Palace App  
-	(subject to change)  
+	Smart Mirror  
 
 Brief Project Description:  
-	This is an augmented reality app for Android. Our goal is to allow the user to digitally map a room so that they can place a digital object (e.g. text, a sticky note, an image) in a selected position in the room. Then when the user looks at the room through their phone camera, they will see this object.  
+	We plan to build an initial smart mirror along with a mobile app that controls the content on the mirror. We are building the mirror off of a disassembled television using a raspberry pi. We will also be using Android Studios to program the mobile app. The mobile app will include options on which features to display and how to display them.  
 
 Files and folders to review for grading:  
-	currently none  
+	 
 
