@@ -4,7 +4,7 @@
 
 ###CHARACTERISTIC INFORMATION
 
-**Goal in Context:** *a longer statement of the goal, if needed*
+**Goal in Context:** Build a smart mirror with gesture control and voice recognition
 
 **Scope:** *what system is being considered black-box under design*
 
