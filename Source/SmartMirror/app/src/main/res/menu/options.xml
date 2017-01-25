@@ -21,4 +21,8 @@
         android:id="@+id/power"
         android:title="Power"/>
 
+    <item
+        android:id="@+id/clear"
+        android:title="Clear Mirror"/>
+
 </menu>

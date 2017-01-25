@@ -1,6 +1,7 @@
 package edu.wolf.smartmirror;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,33 +32,24 @@ public class MainActivity extends AppCompatActivity {
     EditText ip, port;
     String ipString, portString;
 
-    String a1String = "";
-    String a2String = "";
-    String a3String = "";
-    String b1String = "";
-    String b2String = "";
-    String b3String = "";
-    String c1String = "";
-    String c2String = "";
-    String c3String = "";
-
-    String a1Current = "";
-    String a2Current = "";
-    String a3Current = "";
-    String b1Current = "";
-    String b2Current = "";
-    String b3Current = "";
-    String c1Current = "";
-    String c2Current = "";
-    String c3Current = "";
+    String a1String = ""; String a1Current = "";
+    String a2String = ""; String a2Current = "";
+    String a3String = ""; String a3Current = "";
+    String b1String = ""; String b1Current = "";
+    String b2String = ""; String b2Current = "";
+    String b3String = ""; String b3Current = "";
+    String c1String = ""; String c1Current = "";
+    String c2String = ""; String c2Current = "";
+    String c3String = ""; String c3Current = "";
 
     String stateSelected, citySelected;
 
-    Button connect, sleepCancel, sleepOk, powerCancel, powerOk, clockCancel, clockOk,
+    Button connect, sleepCancel, sleepOk, powerCancel, powerOk, clearCancel, clearOk, clockCancel, clockOk,
             gesturesCancel, gesturesOk, vcCancel, vcOk, colorCancel, colorOk, textColor, backColor,
             weatherCancel, weatherOk, addReminder, reminderCancel, reminderOk, addRCancel, addROk;
     Button text1, text2, text3, text4, text5, text6, text7, text8;
     Button back1, back2, back3, back4, back5, back6, back7, back8;
+
     Button a1, a2, a3, b1, b2, b3, c1, c2, c3;
 
     RadioButton sleepSelected, powerSelected, formatSelected, timezoneSelected, gesturesSelected, vcSelected;
@@ -66,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
     int a1text, a2text, a3text, b1text, b2text, b3text, c1text, c2text, c3text, textTemp;
     int a1back, a2back, a3back, b1back, b2back, b3back, c1back, c2back, c3back, backTemp;
+
+    int sleepID, powerID, gestureID, voiceID;
+    int a1timezoneID, a2timezoneID, a3timezoneID, b1timezoneID, b2timezoneID, b3timezoneID, c1timezoneID, c2timezoneID, c3timezoneID;
+    int a1formatID, a2formatID, a3formatID, b1formatID, b2formatID, b3formatID, c1formatID, c2formatID, c3formatID;
+
 
     Spinner stateSpinner, citySpinner;
 
@@ -80,9 +77,15 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // What happens when an item is selected from the menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            // If the user selects the "Network Settings" option
+            //     If you are on the mirror layout
+            //         Exit the method
+            //     If you didn't exit above, switch the view.
+            //     Exit the method
             case R.id.network:
                 if(findViewById(R.id.networkSwitch).isShown())
                 {
@@ -91,10 +94,13 @@ public class MainActivity extends AppCompatActivity {
                 switcher.showNext();
                 return true;
 
+            // If the user selects the "Sleep Timer" option
+            //     Create a new Dialog and set the layout to the correct file
+            //
             case R.id.sleep:
                 final Dialog sleepDialog = new Dialog(this);
-
                 sleepDialog.setContentView(R.layout.sleep);
+
                 List<String> sleepList = new ArrayList<>();
                 sleepList.add("30 Seconds");
                 sleepList.add("10 Minutes");
@@ -114,6 +120,13 @@ public class MainActivity extends AppCompatActivity {
                     if(sleepSelected != null)
                     {
                         if(i == (sleepSelected.getId()-1))
+                        {
+                            rb.toggle();
+                        }
+                    }
+                    else if(sleepID != 0)
+                    {
+                        if(i == (sleepID-1))
                         {
                             rb.toggle();
                         }
@@ -182,9 +195,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                         sleepSelected = (RadioButton) sleepDialog.findViewById(id);
                         sleepDialog.dismiss();
+                        sleepID = sleepSelected.getId();
                     }
                 });
-
 
                 sleepDialog.show();
 
@@ -208,6 +221,13 @@ public class MainActivity extends AppCompatActivity {
                     if(powerSelected != null)
                     {
                         if(i == (powerSelected.getId()-1))
+                        {
+                            rb2.toggle();
+                        }
+                    }
+                    else if(powerID != 0)
+                    {
+                        if(i == (powerID-1))
                         {
                             rb2.toggle();
                         }
@@ -251,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         powerSelected = (RadioButton) powerDialog.findViewById(id);
                         powerDialog.dismiss();
+                        powerID = powerSelected.getId();
                     }
                 });
 
@@ -276,6 +297,13 @@ public class MainActivity extends AppCompatActivity {
                     if(gesturesSelected != null)
                     {
                         if(i == (gesturesSelected.getId()-1))
+                        {
+                            gestureRadio.toggle();
+                        }
+                    }
+                    else if(gestureID != 0)
+                    {
+                        if(i == (gestureID-1))
                         {
                             gestureRadio.toggle();
                         }
@@ -319,6 +347,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         gesturesSelected = (RadioButton) gestureDialog.findViewById(id);
                         gestureDialog.dismiss();
+                        gestureID = gesturesSelected.getId();
                     }
                 });
 
@@ -344,6 +373,13 @@ public class MainActivity extends AppCompatActivity {
                     if(vcSelected != null)
                     {
                         if(i == (vcSelected.getId()-1))
+                        {
+                            vcRadio.toggle();
+                        }
+                    }
+                    else if(voiceID != 0)
+                    {
+                        if(i == (voiceID-1))
                         {
                             vcRadio.toggle();
                         }
@@ -387,10 +423,111 @@ public class MainActivity extends AppCompatActivity {
                         }
                         vcSelected = (RadioButton) vcDialog.findViewById(id);
                         vcDialog.dismiss();
+                        voiceID = vcSelected.getId();
                     }
                 });
 
                 vcDialog.show();
+
+                return true;
+            case R.id.clear:
+                final Dialog clearDialog = new Dialog(this);
+
+                clearDialog.setContentView(R.layout.clear_mirror);
+
+                clearCancel = (Button) clearDialog.findViewById(R.id.clearCancel);
+                clearCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        clearDialog.dismiss();
+                    }
+                });
+
+                clearOk = (Button) clearDialog.findViewById(R.id.clearOk);
+                clearOk.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        a1.setBackgroundColor(Color.parseColor("#000000"));
+                        a1.setTextColor(Color.parseColor("#ffffff"));
+                        a1.setText("+");
+                        a2.setBackgroundColor(Color.parseColor("#000000"));
+                        a2.setTextColor(Color.parseColor("#ffffff"));
+                        a2.setText("+");
+                        a3.setBackgroundColor(Color.parseColor("#000000"));
+                        a3.setTextColor(Color.parseColor("#ffffff"));
+                        a3.setText("+");
+
+                        b1.setBackgroundColor(Color.parseColor("#000000"));
+                        b1.setTextColor(Color.parseColor("#ffffff"));
+                        b1.setText("+");
+                        b2.setBackgroundColor(Color.parseColor("#000000"));
+                        b2.setTextColor(Color.parseColor("#ffffff"));
+                        b2.setText("+");
+                        b3.setBackgroundColor(Color.parseColor("#000000"));
+                        b3.setTextColor(Color.parseColor("#ffffff"));
+                        b3.setText("+");
+
+                        c1.setBackgroundColor(Color.parseColor("#000000"));
+                        c1.setTextColor(Color.parseColor("#ffffff"));
+                        c1.setText("+");
+                        c2.setBackgroundColor(Color.parseColor("#000000"));
+                        c2.setTextColor(Color.parseColor("#ffffff"));
+                        c2.setText("+");
+                        c3.setBackgroundColor(Color.parseColor("#000000"));
+                        c3.setTextColor(Color.parseColor("#ffffff"));
+                        c3.setText("+");
+
+                        a1back = 0; a1text = 0;
+                        a2back = 0; a2text = 0;
+                        a3back = 0; a3text = 0;
+                        b1back = 0; b1text = 0;
+                        b2back = 0; b2text = 0;
+                        b3back = 0; b3text = 0;
+                        c1back = 0; c1text = 0;
+                        c2back = 0; c2text = 0;
+                        c3back = 0; c3text = 0;
+
+                        backTemp = 0; textTemp = Color.parseColor("#ffffff");
+
+                        sleepID = 0;
+                        powerID = 0;
+                        gestureID = 0;
+                        voiceID = 0;
+
+                        a1timezoneID = 0; a1formatID = 0; a1format = null; a1timezone = null;
+                        a2timezoneID = 0; a2formatID = 0; a2format = null; a2timezone = null;
+                        a3timezoneID = 0; a3formatID = 0; a3format = null; a3timezone = null;
+                        b1timezoneID = 0; b1formatID = 0; b1format = null; b1timezone = null;
+                        b2timezoneID = 0; b2formatID = 0; b2format = null; b2timezone = null;
+                        b3timezoneID = 0; b3formatID = 0; b3format = null; b3timezone = null;
+                        c1timezoneID = 0; c1formatID = 0; c1format = null; c1timezone = null;
+                        c2timezoneID = 0; c2formatID = 0; c2format = null; c2timezone = null;
+                        c3timezoneID = 0; c3formatID = 0; c3format = null; c3timezone = null;
+
+                        sleepSelected = null;
+                        powerSelected = null;
+                        formatSelected = null;
+                        timezoneSelected = null;
+                        gesturesSelected = null;
+                        vcSelected = null;
+
+                        a1String = ""; a1Current = "";
+                        a2String = ""; a2Current = "";
+                        a3String = ""; a3Current = "";
+                        b1String = ""; b1Current = "";
+                        b2String = ""; b2Current = "";
+                        b3String = ""; b3Current = "";
+                        c1String = ""; c1Current = "";
+                        c2String = ""; c2Current = "";
+                        c3String = ""; c3Current = "";
+
+                        stateSelected = ""; citySelected = "";
+
+                        clearDialog.dismiss();
+                    }
+                });
+
+                clearDialog.show();
 
                 return true;
 
@@ -399,11 +536,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Creates the dialog for the textColorPicker
+    // The user has 8 options for text color, labeled text1 through text8
+    // Each option is a button whose on click listener sets textTemp to the
+    //     color chosen and then dismisses the textColorPicker
     public int textColorPicker()
     {
         final Dialog colorPicker = new Dialog(this);
 
         colorPicker.setContentView(R.layout.text_color_picker);
+
 
         text1 = (Button) colorPicker.findViewById(R.id.text1);
         text1.setOnClickListener(new View.OnClickListener() {
@@ -490,6 +632,10 @@ public class MainActivity extends AppCompatActivity {
         return textTemp;
     }
 
+    // Creates the dialog for the backgroundColorPicker
+    // The user has 8 options for background color, labeled back1 through back8
+    // Each option is a button whose on click listener sets backTemp to the
+    //     color chosen and then dismisses the textColorPicker
     public int backColorPicker()
     {
         final Dialog colorPicker = new Dialog(this);
@@ -587,9 +733,13 @@ public class MainActivity extends AppCompatActivity {
         final Dialog colorDialog = new Dialog(this);
         colorDialog.setContentView(R.layout.color_options);
 
+        backTemp = 0; textTemp = Color.parseColor("#ffffff");
+
         // Register buttons and set the default button for the background color to black
         textColor = (Button) colorDialog.findViewById(R.id.textColorButton);
         backColor = (Button) colorDialog.findViewById(R.id.backColorButton);
+
+        textColor.setBackgroundResource(R.drawable.button);
         backColor.setBackgroundColor(Color.parseColor("#000000"));
 
         // Determine the panel that is being edited
@@ -904,106 +1054,38 @@ public class MainActivity extends AppCompatActivity {
         if(rowFinal.equals("A") && columnFinal == 1)
         {
             a1.setText(current);
-//            switch(current) {
-//                case "+":
-//                    a1.setBackgroundColor(Color.parseColor("#000000"));
-//                    break;
-//                default:
-//                    //a1.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                    break;
-//            }
         }
         else if(rowFinal.equals("A") && columnFinal == 2)
         {
             a2.setText(current);
-//            switch(current) {
-//                case "+":
-//                    a2.setBackgroundColor(Color.parseColor("#000000"));
-//                    break;
-//                default:
-//                    //a2.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                    break;
-//            }
         }
         else if(rowFinal.equals("A") && columnFinal == 3)
         {
             a3.setText(current);
-//            switch(current) {
-//                case "+":
-//                    a3.setBackgroundColor(Color.parseColor("#000000"));
-//                    break;
-//                default:
-//                    //a3.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                    break;
-//            }
         }
         else if(rowFinal.equals("B") && columnFinal == 1)
         {
             b1.setText(current);
-//            switch(current) {
-//                case "+":
-//                    b1.setBackgroundColor(Color.parseColor("#000000"));
-//                    break;
-//                default:
-//                    //b1.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                    break;
-//            }
         }
         else if(rowFinal.equals("B") && columnFinal == 2)
         {
             b2.setText(current);
-//            switch(current) {
-//                case "+":
-//                    b2.setBackgroundColor(Color.parseColor("#000000"));
-//                    break;
-//                default:
-//                    //b2.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                    break;
-//            }
         }
         else if(rowFinal.equals("B") && columnFinal == 3)
         {
             b3.setText(current);
-//            switch(current) {
-//                case "+":
-//                    b3.setBackgroundColor(Color.parseColor("#000000"));
-//                    break;
-//                default:
-//                    b3.setBackgroundColor(Color.parseColor("#a90a1a"));
-//            }
         }
         else if(rowFinal.equals("C") && columnFinal == 1)
         {
             c1.setText(current);
-//            switch(current) {
-//                case "+":
-//                    c1.setBackgroundColor(Color.parseColor("#000000"));
-//                    break;
-//                default:
-//                    c1.setBackgroundColor(Color.parseColor("#a90a1a"));
-//            }
         }
         else if(rowFinal.equals("C") && columnFinal == 2)
         {
             c2.setText(current);
-//            switch(current) {
-//                case "+":
-//                    c2.setBackgroundColor(Color.parseColor("#000000"));
-//                    break;
-//                default:
-//                    c2.setBackgroundColor(Color.parseColor("#a90a1a"));
-//            }
         }
         else if(rowFinal.equals("C") && columnFinal == 3)
         {
             c3.setText(current);
-//            switch(current) {
-//                case "+":
-//                    c3.setBackgroundColor(Color.parseColor("#000000"));
-//                    break;
-//                default:
-//                    c3.setBackgroundColor(Color.parseColor("#a90a1a"));
-//            }
         }
     }
 
@@ -1043,10 +1125,18 @@ public class MainActivity extends AppCompatActivity {
                 {
                     formatRadio.toggle();
                 }
+                else if(a1formatID != 0 && i == a1formatID-1)
+                {
+                    formatRadio.toggle();
+                }
             }
             else if(row.equals("A") && column == 2)
             {
                 if(a2format != null && i == (a2format.getId()-1))
+                {
+                    formatRadio.toggle();
+                }
+                else if(a2formatID != 0 && i == a2formatID-1)
                 {
                     formatRadio.toggle();
                 }
@@ -1057,10 +1147,18 @@ public class MainActivity extends AppCompatActivity {
                 {
                     formatRadio.toggle();
                 }
+                else if(a3formatID != 0 && i == a3formatID-1)
+                {
+                    formatRadio.toggle();
+                }
             }
             else if(row.equals("B") && column == 1)
             {
                 if(b1format != null && i == (b1format.getId()-1))
+                {
+                    formatRadio.toggle();
+                }
+                else if(b1formatID != 0 && i == b1formatID-1)
                 {
                     formatRadio.toggle();
                 }
@@ -1071,10 +1169,18 @@ public class MainActivity extends AppCompatActivity {
                 {
                     formatRadio.toggle();
                 }
+                else if(b2formatID != 0 && i == b2formatID-1)
+                {
+                    formatRadio.toggle();
+                }
             }
             else if(row.equals("B") && column == 3)
             {
                 if(b3format != null && i == (b3format.getId()-1))
+                {
+                    formatRadio.toggle();
+                }
+                else if(b3formatID != 0 && i == b3formatID-1)
                 {
                     formatRadio.toggle();
                 }
@@ -1085,6 +1191,10 @@ public class MainActivity extends AppCompatActivity {
                 {
                     formatRadio.toggle();
                 }
+                else if(c1formatID != 0 && i == c1formatID-1)
+                {
+                    formatRadio.toggle();
+                }
             }
             else if(row.equals("C") && column == 2)
             {
@@ -1092,10 +1202,18 @@ public class MainActivity extends AppCompatActivity {
                 {
                     formatRadio.toggle();
                 }
+                else if(c2formatID != 0 && i == c2formatID-1)
+                {
+                    formatRadio.toggle();
+                }
             }
             else if(row.equals("C") && column == 3)
             {
                 if(c3format != null && i == (c3format.getId()-1))
+                {
+                    formatRadio.toggle();
+                }
+                else if(c3formatID != 0 && i == c3formatID-1)
                 {
                     formatRadio.toggle();
                 }
@@ -1131,10 +1249,18 @@ public class MainActivity extends AppCompatActivity {
                 {
                     zoneRadio.toggle();
                 }
+                else if(a1timezoneID != 0 && i == a1timezoneID-1)
+                {
+                    zoneRadio.toggle();
+                }
             }
             else if(row.equals("A") && column == 2)
             {
                 if(a2timezone != null && i == (a2timezone.getId()-1))
+                {
+                    zoneRadio.toggle();
+                }
+                else if(a2timezoneID != 0 && i == a2timezoneID-1)
                 {
                     zoneRadio.toggle();
                 }
@@ -1145,10 +1271,18 @@ public class MainActivity extends AppCompatActivity {
                 {
                     zoneRadio.toggle();
                 }
+                else if(a3timezoneID != 0 && i == a3timezoneID-1)
+                {
+                    zoneRadio.toggle();
+                }
             }
             else if(row.equals("B") && column == 1)
             {
                 if(b1timezone != null && i == (b1timezone.getId()-1))
+                {
+                    zoneRadio.toggle();
+                }
+                else if(b1timezoneID != 0 && i == b1timezoneID-1)
                 {
                     zoneRadio.toggle();
                 }
@@ -1159,10 +1293,18 @@ public class MainActivity extends AppCompatActivity {
                 {
                     zoneRadio.toggle();
                 }
+                else if(b2timezoneID != 0 && i == b2timezoneID-1)
+                {
+                    zoneRadio.toggle();
+                }
             }
             else if(row.equals("B") && column == 3)
             {
                 if(b3timezone != null && i == (b3timezone.getId()-1))
+                {
+                    zoneRadio.toggle();
+                }
+                else if(b3timezoneID != 0 && i == b3timezoneID-1)
                 {
                     zoneRadio.toggle();
                 }
@@ -1173,6 +1315,10 @@ public class MainActivity extends AppCompatActivity {
                 {
                     zoneRadio.toggle();
                 }
+                else if(c1timezoneID != 0 && i == c1timezoneID-1)
+                {
+                    zoneRadio.toggle();
+                }
             }
             else if(row.equals("C") && column == 2)
             {
@@ -1180,10 +1326,18 @@ public class MainActivity extends AppCompatActivity {
                 {
                     zoneRadio.toggle();
                 }
+                else if(c2timezoneID != 0 && i == c2timezoneID-1)
+                {
+                    zoneRadio.toggle();
+                }
             }
             else if(row.equals("C") && column == 3)
             {
                 if(c3timezone != null && i == (c3timezone.getId()-1))
+                {
+                    zoneRadio.toggle();
+                }
+                else if(c2timezoneID != 0 && i == c2timezoneID-1)
                 {
                     zoneRadio.toggle();
                 }
@@ -1289,6 +1443,14 @@ public class MainActivity extends AppCompatActivity {
                     {
                         a1timezone = timezoneSelected;
                     }
+                    if(a1format != null)
+                    {
+                        a1formatID = a1format.getId();
+                    }
+                    if(a1timezone != null)
+                    {
+                        a1timezoneID = a1timezone.getId();
+                    }
                 }
                 else if(rowFinal.equals("A") && columnFinal == 2)
                 {
@@ -1299,6 +1461,14 @@ public class MainActivity extends AppCompatActivity {
                     if(timezoneSelected != null)
                     {
                         a2timezone = timezoneSelected;
+                    }
+                    if(a2format != null)
+                    {
+                        a2formatID = a2format.getId();
+                    }
+                    if(a2timezone != null)
+                    {
+                        a2timezoneID = a2timezone.getId();
                     }
                 }
                 else if(rowFinal.equals("A") && columnFinal == 3)
@@ -1311,6 +1481,14 @@ public class MainActivity extends AppCompatActivity {
                     {
                         a3timezone = timezoneSelected;
                     }
+                    if(a3format != null)
+                    {
+                        a3formatID = a3format.getId();
+                    }
+                    if(a3timezone != null)
+                    {
+                        a3timezoneID = a3timezone.getId();
+                    }
                 }
                 else if(rowFinal.equals("B") && columnFinal == 1)
                 {
@@ -1321,6 +1499,14 @@ public class MainActivity extends AppCompatActivity {
                     if(timezoneSelected != null)
                     {
                         b1timezone = timezoneSelected;
+                    }
+                    if(b1format != null)
+                    {
+                        b1formatID = b1format.getId();
+                    }
+                    if(b1timezone != null)
+                    {
+                        b1timezoneID = b1timezone.getId();
                     }
                 }
                 else if(rowFinal.equals("B") && columnFinal == 2)
@@ -1333,6 +1519,14 @@ public class MainActivity extends AppCompatActivity {
                     {
                         b2timezone = timezoneSelected;
                     }
+                    if(b2format != null)
+                    {
+                        b2formatID = b2format.getId();
+                    }
+                    if(b2timezone != null)
+                    {
+                        b2timezoneID = b2timezone.getId();
+                    }
                 }
                 else if(rowFinal.equals("B") && columnFinal == 3)
                 {
@@ -1343,6 +1537,14 @@ public class MainActivity extends AppCompatActivity {
                     if(timezoneSelected != null)
                     {
                         b3timezone = timezoneSelected;
+                    }
+                    if(b3format != null)
+                    {
+                        b3formatID = b3format.getId();
+                    }
+                    if(b3timezone != null)
+                    {
+                        b3timezoneID = b3timezone.getId();
                     }
                 }
                 else if(rowFinal.equals("C") && columnFinal == 1)
@@ -1355,6 +1557,14 @@ public class MainActivity extends AppCompatActivity {
                     {
                         c1timezone = timezoneSelected;
                     }
+                    if(c1format != null)
+                    {
+                        c1formatID = c1format.getId();
+                    }
+                    if(c1timezone != null)
+                    {
+                        c1timezoneID = c1timezone.getId();
+                    }
                 }
                 else if(rowFinal.equals("C") && columnFinal == 2)
                 {
@@ -1365,6 +1575,14 @@ public class MainActivity extends AppCompatActivity {
                     if(timezoneSelected != null)
                     {
                         c2timezone = timezoneSelected;
+                    }
+                    if(c2format != null)
+                    {
+                        c2formatID = c2format.getId();
+                    }
+                    if(c2timezone != null)
+                    {
+                        c2timezoneID = c2timezone.getId();
                     }
                 }
                 else if(rowFinal.equals("C") && columnFinal == 3)
@@ -1377,12 +1595,21 @@ public class MainActivity extends AppCompatActivity {
                     {
                         c3timezone = timezoneSelected;
                     }
+                    if(c3format != null)
+                    {
+                        c3formatID = c3format.getId();
+                    }
+                    if(c3timezone != null)
+                    {
+                        c3timezoneID = c3timezone.getId();
+                    }
                 }
                 else
                 {
                     Log.d("CRAP", "Why are you here?");
                 }
 
+                // Make sure the user selects one radio button in each group
                 if(formatSelected != null && timezoneSelected != null)
                 {
                     Toast.makeText(getApplicationContext(), toastStr, Toast.LENGTH_SHORT).show();
@@ -1447,7 +1674,7 @@ public class MainActivity extends AppCompatActivity {
                 {
                     Toast.makeText(getApplicationContext(), "Please Select City", Toast.LENGTH_LONG).show();
                 }
-                else if(citySelected != null && stateSelected == null)
+                else if(citySelected != null)
                 {
                     Toast.makeText(getApplicationContext(), "Please Select State", Toast.LENGTH_LONG).show();
                 }
@@ -1553,7 +1780,58 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        if(savedInstanceState != null)
+        {
+            sleepID = savedInstanceState.getInt("sleepID");
+            powerID = savedInstanceState.getInt("powerID");
+            gestureID = savedInstanceState.getInt("gestureID");
+            voiceID = savedInstanceState.getInt("voiceID");
+
+            a1formatID = savedInstanceState.getInt("a1formatID");
+            a2formatID = savedInstanceState.getInt("a2formatID");
+            a3formatID = savedInstanceState.getInt("a3formatID");
+            b1formatID = savedInstanceState.getInt("b1formatID");
+            b2formatID = savedInstanceState.getInt("b2formatID");
+            b3formatID = savedInstanceState.getInt("b3formatID");
+            c1formatID = savedInstanceState.getInt("c1formatID");
+            c2formatID = savedInstanceState.getInt("c2formatID");
+            c3formatID = savedInstanceState.getInt("c3formatID");
+
+            a1timezoneID = savedInstanceState.getInt("a1timezoneID");
+            a2timezoneID = savedInstanceState.getInt("a2timezoneID");
+            a3timezoneID = savedInstanceState.getInt("a3timezoneID");
+            b1timezoneID = savedInstanceState.getInt("b1timezoneID");
+            b2timezoneID = savedInstanceState.getInt("b2timezoneID");
+            b3timezoneID = savedInstanceState.getInt("b3timezoneID");
+            c1timezoneID = savedInstanceState.getInt("c1timezoneID");
+            c2timezoneID = savedInstanceState.getInt("c2timezoneID");
+            c3timezoneID = savedInstanceState.getInt("c3timezoneID");
+        }
+
         a1 = (Button) findViewById(R.id.A1);
+
+        if(savedInstanceState != null)
+        {
+            a1String = savedInstanceState.getString("a1String");
+            Log.d("-----a1Text------", a1String);
+            if(a1String != null)
+            {
+                a1.setText(a1String);
+            }
+
+            a1back = savedInstanceState.getInt("a1back");
+            if(a1back != 0)
+            {
+                a1.setBackgroundColor(a1back);
+            }
+
+            a1text = savedInstanceState.getInt("a1text");
+            if(a1text != 0)
+            {
+                a1.setTextColor(a1text);
+            }
+        }
+
         a1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1571,6 +1849,14 @@ public class MainActivity extends AppCompatActivity {
                             case "Clear Panel":
                                 a1timezone = null;
                                 a1format = null;
+                                a1timezoneID = 0;
+                                a1formatID = 0;
+
+                                a1back = Color.parseColor("#000000");
+                                a1text = Color.parseColor("#ffffff");
+
+                                a1.setBackgroundColor(Color.parseColor("#000000"));
+                                a1.setTextColor(Color.parseColor("#ffffff"));
                                 a1.setText("+");
                                 break;
                             case "Color Options":
@@ -1600,27 +1886,6 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         a1.setBackgroundColor(a1back);
-//                        switch (a1String) {
-//                            case "Clear Panel":
-//                                a1.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "":
-//                                a1.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "Color Options":
-//                                if(a1.getText().equals("+"))
-//                                {
-//                                    a1.setBackgroundColor(Color.parseColor("#000000"));
-//                                }
-//                                else
-//                                {
-//                                    a1.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                }
-//                                break;
-//                            default:
-//                                a1.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                break;
-//                        }
                     }
                 });
 
@@ -1651,6 +1916,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         a2 = (Button) findViewById(R.id.A2);
+
+        if(savedInstanceState != null)
+        {
+            a2String = savedInstanceState.getString("a2String");
+            Log.d("-----a2Text------", a2String);
+            if(a2String != null)
+            {
+                a2.setText(a2String);
+            }
+
+            a2back = savedInstanceState.getInt("a2back");
+            if(a2back != 0)
+            {
+                a2.setBackgroundColor(a2back);
+            }
+
+            a2text = savedInstanceState.getInt("a2text");
+            if(a2text != 0)
+            {
+                a2.setTextColor(a2text);
+            }
+        }
+
         a2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1668,6 +1956,14 @@ public class MainActivity extends AppCompatActivity {
                             case "Clear Panel":
                                 a2timezone = null;
                                 a2format = null;
+                                a2timezoneID = 0;
+                                a2formatID = 0;
+
+                                a2back = Color.parseColor("#000000");
+                                a2text = Color.parseColor("#ffffff");
+
+                                a2.setBackgroundColor(Color.parseColor("#000000"));
+                                a2.setTextColor(Color.parseColor("#ffffff"));
                                 a2.setText("+");
                                 break;
                             case "Color Options":
@@ -1697,27 +1993,6 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         a2.setBackgroundColor(a2back);
-//                        switch (a2String) {
-//                            case "Clear Panel":
-//                                a2.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "":
-//                                a2.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "Color Options":
-//                                if(a2.getText().equals("+"))
-//                                {
-//                                    a2.setBackgroundColor(Color.parseColor("#000000"));
-//                                }
-//                                else
-//                                {
-//                                    a2.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                }
-//                                break;
-//                            default:
-//                                a2.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                break;
-//                        }
                     }
                 });
 
@@ -1747,6 +2022,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         a3 = (Button) findViewById(R.id.A3);
+
+        if(savedInstanceState != null)
+        {
+            a3String = savedInstanceState.getString("a3String");
+            Log.d("-----a3Text------", a3String);
+            if(a3String != null)
+            {
+                a3.setText(a3String);
+            }
+
+            a3back = savedInstanceState.getInt("a3back");
+            if(a3back != 0)
+            {
+                a3.setBackgroundColor(a3back);
+            }
+
+            a3text = savedInstanceState.getInt("a3text");
+            if(a3text != 0)
+            {
+                a3.setTextColor(a3text);
+            }
+        }
+
         a3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1764,6 +2062,14 @@ public class MainActivity extends AppCompatActivity {
                             case "Clear Panel":
                                 a3timezone = null;
                                 a3format = null;
+                                a3timezoneID = 0;
+                                a3formatID = 0;
+
+                                a3back = Color.parseColor("#000000");
+                                a3text = Color.parseColor("#ffffff");
+
+                                a3.setBackgroundColor(Color.parseColor("#000000"));
+                                a3.setTextColor(Color.parseColor("#ffffff"));
                                 a3.setText("+");
                                 break;
                             case "Color Options":
@@ -1793,27 +2099,6 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         a3.setBackgroundColor(a3back);
-//                        switch (a3String) {
-//                            case "Clear Panel":
-//                                a3.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "":
-//                                a3.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "Color Options":
-//                                if(a3.getText().equals("+"))
-//                                {
-//                                    a3.setBackgroundColor(Color.parseColor("#000000"));
-//                                }
-//                                else
-//                                {
-//                                    a3.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                }
-//                                break;
-//                            default:
-//                                a3.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                break;
-//                        }
                     }
                 });
 
@@ -1843,6 +2128,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         b1 = (Button) findViewById(R.id.B1);
+
+        if(savedInstanceState != null)
+        {
+            b1String = savedInstanceState.getString("b1String");
+            Log.d("-----b1Text------", b1String);
+            if(b1String != null)
+            {
+                b1.setText(b1String);
+            }
+
+            b1back = savedInstanceState.getInt("b1back");
+            if(b1back != 0)
+            {
+                b1.setBackgroundColor(b1back);
+            }
+
+            b1text = savedInstanceState.getInt("b1text");
+            if(b1text != 0)
+            {
+                b1.setTextColor(b1text);
+            }
+        }
+
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1860,6 +2168,14 @@ public class MainActivity extends AppCompatActivity {
                             case "Clear Panel":
                                 b1timezone = null;
                                 b1format = null;
+                                b1timezoneID = 0;
+                                b1formatID = 0;
+
+                                b1back = Color.parseColor("#000000");
+                                b1text = Color.parseColor("#ffffff");
+
+                                b1.setBackgroundColor(Color.parseColor("#000000"));
+                                b1.setTextColor(Color.parseColor("#ffffff"));
                                 b1.setText("+");
                                 break;
                             case "Color Options":
@@ -1889,27 +2205,6 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         b1.setBackgroundColor(b1back);
-//                        switch (b1String) {
-//                            case "Clear Panel":
-//                                b1.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "":
-//                                b1.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "Color Options":
-//                                if(b1.getText().equals("+"))
-//                                {
-//                                    b1.setBackgroundColor(Color.parseColor("#000000"));
-//                                }
-//                                else
-//                                {
-//                                    b1.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                }
-//                                break;
-//                            default:
-//                                b1.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                break;
-//                        }
                     }
                 });
 
@@ -1939,6 +2234,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         b2 = (Button) findViewById(R.id.B2);
+
+        if(savedInstanceState != null)
+        {
+            b2String = savedInstanceState.getString("b2String");
+            Log.d("-----b2Text------", b2String);
+            if(b2String != null)
+            {
+                b2.setText(b2String);
+            }
+
+            b2back = savedInstanceState.getInt("b2back");
+            if(b2back != 0)
+            {
+                b2.setBackgroundColor(b2back);
+            }
+
+            b2text = savedInstanceState.getInt("b2text");
+            if(b2text != 0)
+            {
+                b2.setTextColor(b2text);
+            }
+        }
+
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1956,6 +2274,14 @@ public class MainActivity extends AppCompatActivity {
                             case "Clear Panel":
                                 b2timezone = null;
                                 b2format = null;
+                                b2timezoneID = 0;
+                                b2formatID = 0;
+
+                                b2back = Color.parseColor("#000000");
+                                b2text = Color.parseColor("#ffffff");
+
+                                b2.setBackgroundColor(Color.parseColor("#000000"));
+                                b2.setTextColor(Color.parseColor("#ffffff"));
                                 b2.setText("+");
                                 break;
                             case "Color Options":
@@ -1985,27 +2311,6 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         b2.setBackgroundColor(b2back);
-//                        switch (b2String) {
-//                            case "Clear Panel":
-//                                b2.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "":
-//                                b2.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "Color Options":
-//                                if(b2.getText().equals("+"))
-//                                {
-//                                    b2.setBackgroundColor(Color.parseColor("#000000"));
-//                                }
-//                                else
-//                                {
-//                                    b2.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                }
-//                                break;
-//                            default:
-//                                b2.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                break;
-//                        }
                     }
                 });
 
@@ -2035,6 +2340,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         b3 = (Button) findViewById(R.id.B3);
+
+        if(savedInstanceState != null)
+        {
+            b3String = savedInstanceState.getString("b3String");
+            Log.d("-----b3Text------", b3String);
+            if(b3String != null)
+            {
+                b3.setText(b3String);
+            }
+
+            b3back = savedInstanceState.getInt("b3back");
+            if(b3back != 0)
+            {
+                b3.setBackgroundColor(b3back);
+            }
+
+            b3text = savedInstanceState.getInt("b3text");
+            if(b3text != 0)
+            {
+                b3.setTextColor(b3text);
+            }
+        }
+
         b3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2052,6 +2380,14 @@ public class MainActivity extends AppCompatActivity {
                             case "Clear Panel":
                                 b3timezone = null;
                                 b3format = null;
+                                b3timezoneID = 0;
+                                b3formatID = 0;
+
+                                b3back = Color.parseColor("#000000");
+                                b3text = Color.parseColor("#ffffff");
+
+                                b3.setBackgroundColor(Color.parseColor("#000000"));
+                                b3.setTextColor(Color.parseColor("#ffffff"));
                                 b3.setText("+");
                                 break;
                             case "Color Options":
@@ -2081,27 +2417,6 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         b3.setBackgroundColor(b3back);
-//                        switch (b3String) {
-//                            case "Clear Panel":
-//                                b3.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "":
-//                                b3.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "Color Options":
-//                                if(b3.getText().equals("+"))
-//                                {
-//                                    b3.setBackgroundColor(Color.parseColor("#000000"));
-//                                }
-//                                else
-//                                {
-//                                    b3.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                }
-//                                break;
-//                            default:
-//                                b3.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                break;
-//                        }
                     }
                 });
 
@@ -2131,6 +2446,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         c1 = (Button) findViewById(R.id.C1);
+
+        if(savedInstanceState != null)
+        {
+            c1String = savedInstanceState.getString("c1String");
+            Log.d("-----c1Text------", c1String);
+            if(c1String != null)
+            {
+                c1.setText(c1String);
+            }
+
+            c1back = savedInstanceState.getInt("c1back");
+            if(c1back != 0)
+            {
+                c1.setBackgroundColor(c1back);
+            }
+
+            c1text = savedInstanceState.getInt("c1text");
+            if(c1text != 0)
+            {
+                c1.setTextColor(c1text);
+            }
+        }
+
         c1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2148,6 +2486,14 @@ public class MainActivity extends AppCompatActivity {
                             case "Clear Panel":
                                 c1timezone = null;
                                 c1format = null;
+                                c1timezoneID = 0;
+                                c1formatID = 0;
+
+                                c1back = Color.parseColor("#000000");
+                                c1text = Color.parseColor("#ffffff");
+
+                                c1.setBackgroundColor(Color.parseColor("#000000"));
+                                c1.setTextColor(Color.parseColor("#ffffff"));
                                 c1.setText("+");
                                 break;
                             case "Color Options":
@@ -2177,27 +2523,6 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         c1.setBackgroundColor(c1back);
-//                        switch (c1String) {
-//                            case "Clear Panel":
-//                                c1.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "":
-//                                c1.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "Color Options":
-//                                if(c1.getText().equals("+"))
-//                                {
-//                                    c1.setBackgroundColor(Color.parseColor("#000000"));
-//                                }
-//                                else
-//                                {
-//                                    c1.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                }
-//                                break;
-//                            default:
-//                                c1.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                break;
-//                        }
                     }
                 });
 
@@ -2227,6 +2552,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         c2 = (Button) findViewById(R.id.C2);
+
+        if(savedInstanceState != null)
+        {
+            c2String = savedInstanceState.getString("c2String");
+            Log.d("-----c2Text------", c2String);
+            if(c2String != null)
+            {
+                c2.setText(c2String);
+            }
+
+            c2back = savedInstanceState.getInt("c2back");
+            if(c2back != 0)
+            {
+                c2.setBackgroundColor(c2back);
+            }
+
+            c2text = savedInstanceState.getInt("c2text");
+            if(c2text != 0)
+            {
+                c2.setTextColor(c2text);
+            }
+        }
+
         c2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2244,6 +2592,14 @@ public class MainActivity extends AppCompatActivity {
                             case "Clear Panel":
                                 c2timezone = null;
                                 c2format = null;
+                                c2timezoneID = 0;
+                                c2formatID = 0;
+
+                                c2back = Color.parseColor("#000000");
+                                c2text = Color.parseColor("#ffffff");
+
+                                c2.setBackgroundColor(Color.parseColor("#000000"));
+                                c2.setTextColor(Color.parseColor("#ffffff"));
                                 c2.setText("+");
                                 break;
                             case "Color Options":
@@ -2273,27 +2629,6 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         c2.setBackgroundColor(c2back);
-//                        switch (c2String) {
-//                            case "Clear Panel":
-//                                c2.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "":
-//                                c2.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "Color Options":
-//                                if(c2.getText().equals("+"))
-//                                {
-//                                    c2.setBackgroundColor(Color.parseColor("#000000"));
-//                                }
-//                                else
-//                                {
-//                                    c2.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                }
-//                                break;
-//                            default:
-//                                c2.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                break;
-//                        }
                     }
                 });
 
@@ -2323,6 +2658,29 @@ public class MainActivity extends AppCompatActivity {
         });
 
         c3 = (Button) findViewById(R.id.C3);
+
+        if(savedInstanceState != null)
+        {
+            c3String = savedInstanceState.getString("c3String");
+            Log.d("-----c3Text------", c3String);
+            if(c3String != null)
+            {
+                c3.setText(c3String);
+            }
+
+            c3back = savedInstanceState.getInt("c3back");
+            if(c3back != 0)
+            {
+                c3.setBackgroundColor(c3back);
+            }
+
+            c3text = savedInstanceState.getInt("c3text");
+            if(c3text != 0)
+            {
+                c3.setTextColor(c3text);
+            }
+        }
+
         c3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -2340,6 +2698,14 @@ public class MainActivity extends AppCompatActivity {
                             case "Clear Panel":
                                 c3timezone = null;
                                 c3format = null;
+                                c3timezoneID = 0;
+                                c3formatID = 0;
+
+                                c3back = Color.parseColor("#000000");
+                                c3text = Color.parseColor("#ffffff");
+
+                                c3.setBackgroundColor(Color.parseColor("#000000"));
+                                c3.setTextColor(Color.parseColor("#ffffff"));
                                 c3.setText("+");
                                 break;
                             case "Color Options":
@@ -2369,27 +2735,6 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         c3.setBackgroundColor(c3back);
-//                        switch (c3String) {
-//                            case "Clear Panel":
-//                                c3.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "":
-//                                c3.setBackgroundColor(Color.parseColor("#000000"));
-//                                break;
-//                            case "Color Options":
-//                                if(c3.getText().equals("+"))
-//                                {
-//                                    c3.setBackgroundColor(Color.parseColor("#000000"));
-//                                }
-//                                else
-//                                {
-//                                    c3.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                }
-//                                break;
-//                            default:
-//                                c3.setBackgroundColor(Color.parseColor("#a90a1a"));
-//                                break;
-//                        }
                     }
                 });
 
@@ -2416,23 +2761,330 @@ public class MainActivity extends AppCompatActivity {
                 popup.show();
             }
         });
+
+        getprefs();
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
-        super.onSaveInstanceState(savedInstanceState);
+        a1String = a1.getText().toString();
+        a2String = a2.getText().toString();
+        a3String = a3.getText().toString();
+        b1String = b1.getText().toString();
+        b2String = b2.getText().toString();
+        b3String = b3.getText().toString();
+        c1String = c1.getText().toString();
+        c2String = c2.getText().toString();
+        c3String = c3.getText().toString();
 
-        savedInstanceState.putString("A1Text", a1.getText().toString());
+        savedInstanceState.putString("a1String", a1String);
+        savedInstanceState.putString("a2String", a2String);
+        savedInstanceState.putString("a3String", a3String);
+        savedInstanceState.putString("b1String", b1String);
+        savedInstanceState.putString("b2String", b2String);
+        savedInstanceState.putString("b3String", b3String);
+        savedInstanceState.putString("c1String", c1String);
+        savedInstanceState.putString("c2String", c2String);
+        savedInstanceState.putString("c3String", c3String);
+
+        savedInstanceState.putInt("a1back", a1back);
+        savedInstanceState.putInt("a2back", a2back);
+        savedInstanceState.putInt("a3back", a3back);
+        savedInstanceState.putInt("b1back", b1back);
+        savedInstanceState.putInt("b2back", b2back);
+        savedInstanceState.putInt("b3back", b3back);
+        savedInstanceState.putInt("c1back", c1back);
+        savedInstanceState.putInt("c2back", c2back);
+        savedInstanceState.putInt("c3back", c3back);
+
+        savedInstanceState.putInt("a1text", a1text);
+        savedInstanceState.putInt("a2text", a2text);
+        savedInstanceState.putInt("a3text", a3text);
+        savedInstanceState.putInt("b1text", b1text);
+        savedInstanceState.putInt("b2text", b2text);
+        savedInstanceState.putInt("b3text", b3text);
+        savedInstanceState.putInt("c1text", c1text);
+        savedInstanceState.putInt("c2text", c2text);
+        savedInstanceState.putInt("c3text", c3text);
+
+        savedInstanceState.putInt("sleepID", sleepID);
+        savedInstanceState.putInt("powerID", powerID);
+        savedInstanceState.putInt("gestureID", gestureID);
+        savedInstanceState.putInt("voiceID", voiceID);
+
+        savedInstanceState.putInt("a1formatID", a1formatID);
+        savedInstanceState.putInt("a2formatID", a2formatID);
+        savedInstanceState.putInt("a3formatID", a3formatID);
+        savedInstanceState.putInt("b1formatID", b1formatID);
+        savedInstanceState.putInt("b2formatID", b2formatID);
+        savedInstanceState.putInt("b3formatID", b3formatID);
+        savedInstanceState.putInt("c1formatID", c1formatID);
+        savedInstanceState.putInt("c2formatID", c2formatID);
+        savedInstanceState.putInt("c3formatID", c3formatID);
+
+        savedInstanceState.putInt("a1timezoneID", a1timezoneID);
+        savedInstanceState.putInt("a2timezoneID", a2timezoneID);
+        savedInstanceState.putInt("a3timezoneID", a3timezoneID);
+        savedInstanceState.putInt("b1timezoneID", b1timezoneID);
+        savedInstanceState.putInt("b2timezoneID", b2timezoneID);
+        savedInstanceState.putInt("b3timezoneID", b3timezoneID);
+        savedInstanceState.putInt("c1timezoneID", c1timezoneID);
+        savedInstanceState.putInt("c2timezoneID", c2timezoneID);
+        savedInstanceState.putInt("c3timezoneID", c3timezoneID);
+
+        super.onSaveInstanceState(savedInstanceState);
     }
 
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
+    void getprefs()
     {
-        super.onRestoreInstanceState(savedInstanceState);
+        SharedPreferences prefs = getSharedPreferences("name", MODE_PRIVATE);
 
-        String a1Text = savedInstanceState.getString("A1Text");
-        a1.setText(a1Text);
+        sleepID = prefs.getInt("sleepID", 0);
+        powerID = prefs.getInt("powerID", 0);
+        gestureID = prefs.getInt("gestureID", 0);
+        voiceID = prefs.getInt("voiceID", 0);
+
+        a1formatID = prefs.getInt("a1formatID", 0);
+        a2formatID = prefs.getInt("a2formatID", 0);
+        a3formatID = prefs.getInt("a3formatID", 0);
+        b1formatID = prefs.getInt("b1formatID", 0);
+        b2formatID = prefs.getInt("b2formatID", 0);
+        b3formatID = prefs.getInt("b3formatID", 0);
+        c1formatID = prefs.getInt("c1formatID", 0);
+        c2formatID = prefs.getInt("c2formatID", 0);
+        c3formatID = prefs.getInt("c3formatID", 0);
+
+        a1timezoneID = prefs.getInt("a1timezoneID", 0);
+        a2timezoneID = prefs.getInt("a2timezoneID", 0);
+        a3timezoneID = prefs.getInt("a3timezoneID", 0);
+        b1timezoneID = prefs.getInt("b1timezoneID", 0);
+        b2timezoneID = prefs.getInt("b2timezoneID", 0);
+        b3timezoneID = prefs.getInt("b3timezoneID", 0);
+        c1timezoneID = prefs.getInt("c1timezoneID", 0);
+        c2timezoneID = prefs.getInt("c2timezoneID", 0);
+        c3timezoneID = prefs.getInt("c3timezoneID", 0);
+
+        a1String = prefs.getString("a1String", "");
+        a2String = prefs.getString("a2String", "");
+        a3String = prefs.getString("a3String", "");
+        b1String = prefs.getString("b1String", "");
+        b2String = prefs.getString("b2String", "");
+        b3String = prefs.getString("b3String", "");
+        c1String = prefs.getString("c1String", "");
+        c2String = prefs.getString("c2String", "");
+        c3String = prefs.getString("c3String", "");
+
+        a1back = prefs.getInt("a1back", Color.parseColor("#000000"));
+        a2back = prefs.getInt("a2back", Color.parseColor("#000000"));
+        a3back = prefs.getInt("a3back", Color.parseColor("#000000"));
+        b1back = prefs.getInt("b1back", Color.parseColor("#000000"));
+        b2back = prefs.getInt("b2back", Color.parseColor("#000000"));
+        b3back = prefs.getInt("b3back", Color.parseColor("#000000"));
+        c1back = prefs.getInt("c1back", Color.parseColor("#000000"));
+        c2back = prefs.getInt("c2back", Color.parseColor("#000000"));
+        c3back = prefs.getInt("c3back", Color.parseColor("#000000"));
+
+        a1text = prefs.getInt("a1text", Color.parseColor("#ffffff"));
+        a2text = prefs.getInt("a2text", Color.parseColor("#ffffff"));
+        a3text = prefs.getInt("a3text", Color.parseColor("#ffffff"));
+        b1text = prefs.getInt("b1text", Color.parseColor("#ffffff"));
+        b2text = prefs.getInt("b2text", Color.parseColor("#ffffff"));
+        b3text = prefs.getInt("b3text", Color.parseColor("#ffffff"));
+        c1text = prefs.getInt("c1text", Color.parseColor("#ffffff"));
+        c2text = prefs.getInt("c2text", Color.parseColor("#ffffff"));
+        c3text = prefs.getInt("c3text", Color.parseColor("#ffffff"));
+
+        if(a1String!=null){
+            a1.setText(a1String);
+        }
+        if(a1String.equals("")){
+            a1.setText("+");
+        }
+
+        if(a2String!=null){
+            a2.setText(a2String);
+        }
+        if(a2String.equals("")){
+            a2.setText("+");
+        }
+
+        if(a3String!=null){
+            a3.setText(a3String);
+        }
+        if(a3String.equals("")){
+            a3.setText("+");
+        }
+
+        if(b1String!=null){
+            b1.setText(b1String);
+        }
+        if(b1String.equals("")){
+            b1.setText("+");
+        }
+
+        if(b2String!=null){
+            b2.setText(b2String);
+        }
+        if(b2String.equals("")){
+            b2.setText("+");
+        }
+
+        if(b3String!=null){
+            b3.setText(b3String);
+        }
+        if(b3String.equals("")){
+            b3.setText("+");
+        }
+
+        if(c1String!=null){
+            c1.setText(c1String);
+        }
+        if(c1String.equals("")){
+            c1.setText("+");
+        }
+
+        if(c2String!=null){
+            c2.setText(c2String);
+        }
+        if(c2String.equals("")){
+            c2.setText("+");
+        }
+
+        if(c3String!=null){
+            c3.setText(c3String);
+        }
+        if(c3String.equals("")){
+            c3.setText("+");
+        }
+
+        if(a1back!=0){
+            a1.setBackgroundColor(a1back);
+        }
+        if(a1back==0){
+            a1.setBackgroundColor(Color.parseColor("#000000"));
+        }
+
+        if(a2back!=0)
+        {
+            a2.setBackgroundColor(a2back);
+        }
+        if(a2back==0){
+            a2.setBackgroundColor(Color.parseColor("#000000"));
+        }
+
+        if(a3back!=0){
+            a3.setBackgroundColor(a3back);
+        }
+        if(a3back==0){
+            a3.setBackgroundColor(Color.parseColor("#000000"));
+        }
+
+        if(b1back!=0){
+            b1.setBackgroundColor(b1back);
+        }
+        if(b1back==0){
+            b1.setBackgroundColor(Color.parseColor("#000000"));
+        }
+
+        if(b2back!=0){
+            b2.setBackgroundColor(b2back);
+        }
+        if(b2back==0){
+            b2.setBackgroundColor(Color.parseColor("#000000"));
+        }
+
+        if(b3back!=0){
+            b3.setBackgroundColor(b3back);
+        }
+        if(b3back==0){
+            b3.setBackgroundColor(Color.parseColor("#000000"));
+        }
+
+        if(c1back!=0){
+            c1.setBackgroundColor(c1back);
+        }
+        if(c1back==0){
+            c1.setBackgroundColor(Color.parseColor("#000000"));
+        }
+
+        if(c2back!=0){
+            c2.setBackgroundColor(c2back);
+        }
+        if(c2back==0){
+            c2.setBackgroundColor(Color.parseColor("#000000"));
+        }
+
+        if(c3back!=0){
+            c3.setBackgroundColor(c3back);
+        }
+        if(c3back==0){
+            c3.setBackgroundColor(Color.parseColor("#000000"));
+        }
+
+        if(a1text!=0){
+            a1.setTextColor(a1text);
+        }
+        if(a1text==0){
+            a1.setTextColor(Color.parseColor("#ffffff"));
+        }
+
+        if(a2text!=0)
+        {
+            a2.setTextColor(a2text);
+        }
+        if(a2text==0){
+            a2.setTextColor(Color.parseColor("#ffffff"));
+        }
+
+        if(a3text!=0){
+            a3.setTextColor(a3text);
+        }
+        if(a3text==0){
+            a3.setTextColor(Color.parseColor("#ffffff"));
+        }
+
+        if(b1text!=0){
+            b1.setTextColor(b1text);
+        }
+        if(b1text==0){
+            b1.setTextColor(Color.parseColor("#ffffff"));
+        }
+
+        if(b2text!=0){
+            b2.setTextColor(b2text);
+        }
+        if(b2text==0){
+            b2.setTextColor(Color.parseColor("#ffffff"));
+        }
+
+        if(b3text!=0){
+            b3.setTextColor(b3text);
+        }
+        if(b3text==0){
+            b3.setTextColor(Color.parseColor("#ffffff"));
+        }
+
+        if(c1text!=0){
+            c1.setTextColor(c1text);
+        }
+        if(c1text==0){
+            c1.setTextColor(Color.parseColor("#ffffff"));
+        }
+
+        if(c2text!=0){
+            c2.setTextColor(c2text);
+        }
+        if(c2text==0){
+            c2.setTextColor(Color.parseColor("#ffffff"));
+        }
+
+        if(c3text!=0){
+            c3.setTextColor(c3text);
+        }
+        if(c3text==0){
+            c3.setTextColor(Color.parseColor("#ffffff"));
+        }
     }
 
     @Override
@@ -2440,6 +3092,76 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onPause();
         Log.d("PAUSE", "Not in focus");
+
+        SharedPreferences prefs = getSharedPreferences("name", MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putInt("sleepID", sleepID);
+        editor.putInt("powerID", powerID);
+        editor.putInt("gestureID", gestureID);
+        editor.putInt("voiceID", voiceID);
+
+        editor.putInt("a1formatID", a1formatID);
+        editor.putInt("a2formatID", a2formatID);
+        editor.putInt("a3formatID", a3formatID);
+        editor.putInt("b1formatID", b1formatID);
+        editor.putInt("b2formatID", b2formatID);
+        editor.putInt("b3formatID", b3formatID);
+        editor.putInt("c1formatID", c1formatID);
+        editor.putInt("c2formatID", c2formatID);
+        editor.putInt("c3formatID", c3formatID);
+
+        editor.putInt("a1timezoneID", a1timezoneID);
+        editor.putInt("a2timezoneID", a2timezoneID);
+        editor.putInt("a3timezoneID", a3timezoneID);
+        editor.putInt("b1timezoneID", b1timezoneID);
+        editor.putInt("b2timezoneID", b2timezoneID);
+        editor.putInt("b3timezoneID", b3timezoneID);
+        editor.putInt("c1timezoneID", c1timezoneID);
+        editor.putInt("c2timezoneID", c2timezoneID);
+        editor.putInt("c3timezoneID", c3timezoneID);
+
+        editor.putInt("a1back", a1back);
+        editor.putInt("a2back", a2back);
+        editor.putInt("a3back", a3back);
+        editor.putInt("b1back", b1back);
+        editor.putInt("b2back", b2back);
+        editor.putInt("b3back", b3back);
+        editor.putInt("c1back", c1back);
+        editor.putInt("c2back", c2back);
+        editor.putInt("c3back", c3back);
+
+        editor.putInt("a1text", a1text);
+        editor.putInt("a2text", a2text);
+        editor.putInt("a3text", a3text);
+        editor.putInt("b1text", b1text);
+        editor.putInt("b2text", b2text);
+        editor.putInt("b3text", b3text);
+        editor.putInt("c1text", c1text);
+        editor.putInt("c2text", c2text);
+        editor.putInt("c3text", c3text);
+
+        a1String = a1.getText().toString();
+        a2String = a2.getText().toString();
+        a3String = a3.getText().toString();
+        b1String = b1.getText().toString();
+        b2String = b2.getText().toString();
+        b3String = b3.getText().toString();
+        c1String = c1.getText().toString();
+        c2String = c2.getText().toString();
+        c3String = c3.getText().toString();
+
+        editor.putString("a1String", a1String);
+        editor.putString("a2String", a2String);
+        editor.putString("a3String", a3String);
+        editor.putString("b1String", b1String);
+        editor.putString("b2String", b2String);
+        editor.putString("b3String", b3String);
+        editor.putString("c1String", c1String);
+        editor.putString("c2String", c2String);
+        editor.putString("c3String", c3String);
+
+        editor.commit();
     }
 
     @Override
@@ -2447,29 +3169,7 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onResume();
         Log.d("RESUME", "Became visible");
+        getprefs();
     }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        Log.d("START", "About to become visible");
-    }
-
-    @Override
-    public void onStop()
-    {
-        super.onStop();
-        Log.d("STOP", "No longer visible");
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-
-        Log.d("DESTROY", "System destroyed");
-    }
-
 
 }
