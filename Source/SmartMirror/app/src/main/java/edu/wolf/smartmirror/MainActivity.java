@@ -1,8 +1,12 @@
 package edu.wolf.smartmirror;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
@@ -12,8 +16,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -46,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button connect, sleepCancel, sleepOk, powerCancel, powerOk, clearCancel, clearOk, clockCancel, clockOk,
             gesturesCancel, gesturesOk, vcCancel, vcOk, colorCancel, colorOk, textColor, backColor,
-            weatherCancel, weatherOk, addReminder, reminderCancel, reminderOk, addRCancel, addROk;
+            weatherCancel, weatherOk, addReminder, reminderCancel, reminderOk, addRCancel, addROk, addRDelete;
     Button text1, text2, text3, text4, text5, text6, text7, text8;
     Button back1, back2, back3, back4, back5, back6, back7, back8;
 
@@ -63,10 +71,14 @@ public class MainActivity extends AppCompatActivity {
     int a1timezoneID, a2timezoneID, a3timezoneID, b1timezoneID, b2timezoneID, b3timezoneID, c1timezoneID, c2timezoneID, c3timezoneID;
     int a1formatID, a2formatID, a3formatID, b1formatID, b2formatID, b3formatID, c1formatID, c2formatID, c3formatID;
 
-
     Spinner stateSpinner, citySpinner;
 
     TimePicker timePick;
+    TextView reminderText;
+    ReminderDatabase db;
+    String rTime, rText;
+
+    SimpleCursorAdapter dataAdapter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -540,12 +552,11 @@ public class MainActivity extends AppCompatActivity {
     // The user has 8 options for text color, labeled text1 through text8
     // Each option is a button whose on click listener sets textTemp to the
     //     color chosen and then dismisses the textColorPicker
-    public int textColorPicker()
+    public void textColorPicker()
     {
         final Dialog colorPicker = new Dialog(this);
 
         colorPicker.setContentView(R.layout.text_color_picker);
-
 
         text1 = (Button) colorPicker.findViewById(R.id.text1);
         text1.setOnClickListener(new View.OnClickListener() {
@@ -629,14 +640,14 @@ public class MainActivity extends AppCompatActivity {
 
         colorPicker.show();
 
-        return textTemp;
+        //return textTemp;
     }
 
     // Creates the dialog for the backgroundColorPicker
     // The user has 8 options for background color, labeled back1 through back8
     // Each option is a button whose on click listener sets backTemp to the
     //     color chosen and then dismisses the textColorPicker
-    public int backColorPicker()
+    public void backColorPicker()
     {
         final Dialog colorPicker = new Dialog(this);
 
@@ -724,16 +735,14 @@ public class MainActivity extends AppCompatActivity {
 
         colorPicker.show();
 
-        return backTemp;
+        //return backTemp;
     }
 
-    public void colorOptions(String row, int column)
+    public void colorOptions(final String row, final int column)
     {
         // Create a dialog and set the content to color_options.xml
         final Dialog colorDialog = new Dialog(this);
         colorDialog.setContentView(R.layout.color_options);
-
-        backTemp = 0; textTemp = Color.parseColor("#ffffff");
 
         // Register buttons and set the default button for the background color to black
         textColor = (Button) colorDialog.findViewById(R.id.textColorButton);
@@ -752,8 +761,9 @@ public class MainActivity extends AppCompatActivity {
             if(a1text != 0)
             {
                 textColor.setBackgroundColor(a1text);
+                Log.d("A1", "a1text != 0");
             }
-            else
+            if(a1text == -1)
             {
                 textColor.setBackgroundResource(R.drawable.button);
             }
@@ -769,6 +779,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 textColor.setBackgroundColor(a2text);
             }
+            if(a2text == -1)
+            {
+                textColor.setBackgroundResource(R.drawable.button);
+            }
             if(a2back != 0)
             {
                 backColor.setBackgroundColor(a2back);
@@ -780,6 +794,10 @@ public class MainActivity extends AppCompatActivity {
             if(a3text != 0)
             {
                 textColor.setBackgroundColor(a3text);
+            }
+            if(a3text == -1)
+            {
+                textColor.setBackgroundResource(R.drawable.button);
             }
             if(a3back != 0)
             {
@@ -793,6 +811,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 textColor.setBackgroundColor(b1text);
             }
+            if(b1text == -1)
+            {
+                textColor.setBackgroundResource(R.drawable.button);
+            }
             if(b1back != 0)
             {
                 backColor.setBackgroundColor(b1back);
@@ -804,6 +826,10 @@ public class MainActivity extends AppCompatActivity {
             if(b2text != 0)
             {
                 textColor.setBackgroundColor(b2text);
+            }
+            if(b2text == -1)
+            {
+                textColor.setBackgroundResource(R.drawable.button);
             }
             if(b2back != 0)
             {
@@ -817,6 +843,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 textColor.setBackgroundColor(b3text);
             }
+            if(b3text == -1)
+            {
+                textColor.setBackgroundResource(R.drawable.button);
+            }
             if(b3back != 0)
             {
                 backColor.setBackgroundColor(b3back);
@@ -828,6 +858,10 @@ public class MainActivity extends AppCompatActivity {
             if(c1text != 0)
             {
                 textColor.setBackgroundColor(c1text);
+            }
+            if(c1text == -1)
+            {
+                textColor.setBackgroundResource(R.drawable.button);
             }
             if(c1back != 0)
             {
@@ -841,6 +875,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 textColor.setBackgroundColor(c2text);
             }
+            if(c2text == -1)
+            {
+                textColor.setBackgroundResource(R.drawable.button);
+            }
             if(c2back != 0)
             {
                 backColor.setBackgroundColor(c2back);
@@ -852,6 +890,10 @@ public class MainActivity extends AppCompatActivity {
             if(c3text != 0)
             {
                 textColor.setBackgroundColor(c3text);
+            }
+            if(c3text == -1)
+            {
+                textColor.setBackgroundResource(R.drawable.button);
             }
             if(c3back != 0)
             {
@@ -870,7 +912,7 @@ public class MainActivity extends AppCompatActivity {
         textColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                textTemp = textColorPicker();
+                textColorPicker();
                 Log.d("textTemp", String.valueOf(textTemp));
             }
         });
@@ -881,7 +923,7 @@ public class MainActivity extends AppCompatActivity {
         backColor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                backTemp = backColorPicker();
+                backColorPicker();
                 Log.d("backTemp", String.valueOf(backTemp));
             }
         });
@@ -907,136 +949,87 @@ public class MainActivity extends AppCompatActivity {
         // Log colors for debugging purposes.
         colorOk = (Button) colorDialog.findViewById(R.id.colorOk);
 
-        if(row.equals("A") && column == 1)
-        {
-            colorOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+        colorOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(row.equals("A") && column == 1)
+                {
                     a1text = textTemp;
                     a1.setTextColor(a1text);
                     a1back = backTemp;
                     a1.setBackgroundColor(a1back);
                     colorDialog.dismiss();
                 }
-            });
-            Log.d("A1_ColorOptions", String.valueOf(a1text));
-        }
-        else if(row.equals("A") && column == 2)
-        {
-            colorOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                else if(row.equals("A") && column == 2)
+                {
                     a2text = textTemp;
                     a2.setTextColor(a2text);
                     a2back = backTemp;
                     a2.setBackgroundColor(a2back);
                     colorDialog.dismiss();
                 }
-            });
-            Log.d("A2_ColorOptions", String.valueOf(a1text));
-        }
-        else if(row.equals("A") && column == 3)
-        {
-            colorOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                else if(row.equals("A") && column == 3)
+                {
                     a3text = textTemp;
                     a3.setTextColor(a3text);
                     a3back = backTemp;
                     a3.setBackgroundColor(a3back);
                     colorDialog.dismiss();
                 }
-            });
-            Log.d("A3_ColorOptions", String.valueOf(a1text));
-        }
-        else if(row.equals("B") && column == 1)
-        {
-            colorOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                else if(row.equals("B") && column == 1)
+                {
                     b1text = textTemp;
                     b1.setTextColor(b1text);
                     b1back = backTemp;
                     b1.setBackgroundColor(b1back);
                     colorDialog.dismiss();
                 }
-            });
-            Log.d("B1_ColorOptions", String.valueOf(a1text));
-        }
-        else if(row.equals("B") && column == 2)
-        {
-            colorOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                else if(row.equals("B") && column == 2)
+                {
                     b2text = textTemp;
                     b2.setTextColor(b2text);
                     b2back = backTemp;
                     b2.setBackgroundColor(b2back);
                     colorDialog.dismiss();
                 }
-            });
-            Log.d("B2_ColorOptions", String.valueOf(a1text));
-        }
-        else if(row.equals("B") && column == 3)
-        {
-            colorOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                else if(row.equals("B") && column == 3)
+                {
                     b3text = textTemp;
                     b3.setTextColor(b3text);
                     b3back = backTemp;
                     b3.setBackgroundColor(b3back);
                     colorDialog.dismiss();
                 }
-            });
-            Log.d("B3_ColorOptions", String.valueOf(a1text));
-        }
-        else if(row.equals("C") && column == 1)
-        {
-            colorOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                else if(row.equals("C") && column == 1)
+                {
                     c1text = textTemp;
                     c1.setTextColor(c1text);
                     c1back = backTemp;
                     c1.setBackgroundColor(c1back);
                     colorDialog.dismiss();
                 }
-            });
-            Log.d("C1_ColorOptions", String.valueOf(a1text));
-        }
-        else if(row.equals("C") && column == 2)
-        {
-            colorOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                else if(row.equals("C") && column == 2)
+                {
                     c2text = textTemp;
                     c2.setTextColor(c2text);
                     c2back = backTemp;
                     c2.setBackgroundColor(c2back);
                     colorDialog.dismiss();
                 }
-            });
-            Log.d("C2_ColorOptions", String.valueOf(a1text));
-        }
-        else if(row.equals("C") && column == 3)
-        {
-            colorOk.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+                else if(row.equals("C") && column == 3)
+                {
                     c3text = textTemp;
                     c3.setTextColor(c3text);
                     c3back = backTemp;
                     c3.setBackgroundColor(c3back);
                     colorDialog.dismiss();
                 }
-            });
-            Log.d("C3_ColorOptions", String.valueOf(a1text));
-        }
-        else
-        {
-            Log.d("CRAP", "Why are you here?");
-        }
+                else
+                {
+                    Log.d("CRAP", "Why are you here?");
+                }
+            }
+        });
 
         // If the text color is white, surround the textColor
         // button with a black outline.
@@ -1047,6 +1040,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Display the dialog.
         colorDialog.show();
+
+        //backTemp = 0; textTemp = Color.parseColor("#ffffff");
     }
 
     public void dismissOption(String rowFinal, int columnFinal, String current)
@@ -1700,13 +1695,51 @@ public class MainActivity extends AppCompatActivity {
 
         reminderDialog.setContentView(R.layout.reminder_options);
         addReminderDialog.setContentView(R.layout.add_reminder);
+        timePick = (TimePicker) addReminderDialog.findViewById(R.id.timePicker);
+        reminderText = (EditText) addReminderDialog.findViewById(R.id.reminderText);
+        //final ReminderDatabase db;
+        //final SimpleCursorAdapter dataAdapter;
 
-        addReminder = (Button) reminderDialog.findViewById(R.id.addReminder);
-        addReminder.setOnClickListener(new View.OnClickListener(){
+        db = new ReminderDatabase(this);
+        db.open();
+
+        Cursor c = db.getAllReminders();
+
+        if (c == null) {
+            Log.i("CAA", "cursor is null...");
+        }
+
+        // The desired columns to be bound
+        final String[] columns = new String[]{
+                mySQLiteHelper.KEY_TIME,
+                mySQLiteHelper.KEY_TITLE
+        };
+
+        // the XML defined views which the data will be bound to
+        final int[] to = new int[]{
+                R.id.time,
+                R.id.title
+        };
+
+        // create the adapter using the cursor pointing to the desired data
+        //as well as the layout information
+        dataAdapter = new SimpleCursorAdapter(
+                this, R.layout.reminder, c, columns, to, 0);
+
+        final ListView listView = (ListView) reminderDialog.findViewById(R.id.reminderList);
+        listView.setAdapter(dataAdapter);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view)
-            {
-                timePick = (TimePicker) addReminderDialog.findViewById(R.id.timePicker);
+            public void onItemClick(AdapterView<?> lView, View view,
+                                    int position, long id) {
+
+                final int posFinal = position;
+
+                Log.d("CURRENT TITLE", db.getTitle(id));
+
+                final long dataid = id;
 
                 addRCancel = (Button) addReminderDialog.findViewById(R.id.reminderCancel);
                 addRCancel.setOnClickListener(new View.OnClickListener(){
@@ -1717,18 +1750,163 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+                addRDelete = (Button) addReminderDialog.findViewById(R.id.reminderDelete);
+                addRDelete.setVisibility(View.VISIBLE);
+                addRDelete.setClickable(true);
+                addRDelete.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        db.removeReminder(dataid);
+                        addReminderDialog.dismiss();
+                        Cursor cursor = db.getAllReminders();
+                        dataAdapter.changeCursor(cursor);
+                    }
+                });
+
                 addROk = (Button) addReminderDialog.findViewById(R.id.reminderOk);
                 addROk.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v)
                     {
-                        // if the reminder list is not empty
+                        appendthis("Start of database code.");
+
+                        int militaryHour = timePick.getHour();
+                        String ampm;
+                        if(militaryHour < 12)
+                        {
+                            ampm = " AM";
+                        }
+                        else
+                        {
+                            ampm = " PM";
+                        }
+
+                        militaryHour = militaryHour % 12;
+                        if (militaryHour == 0)
+                        {
+                            militaryHour = 12;
+                        }
+                        String hour = Integer.toString(militaryHour);
+                        if(militaryHour < 10)
+                        {
+                            hour = "0" + hour;
+                        }
+
+                        int mins = timePick.getMinute();
+                        String minutes = Integer.toString(mins);
+                        if(mins < 10)
+                        {
+                            minutes = "0" + minutes;
+                        }
+
+                        rTime = "";
+                        rText = "";
+
+                        rTime = hour + ":" + minutes + ampm;
+                        rText = reminderText.getText().toString();
+
+                        db.removeReminder(dataid);
+                        db.insertReminder(rTime, rText);
+
+                        Cursor cursor = db.getAllReminders();
+                        dataAdapter.changeCursor(cursor);
+
+                        //dataAdapter.notifyDataSetChanged();
+                        //listView.setAdapter(dataAdapter);
+
                         addReminderDialog.dismiss();
-                        // else Toast.makeText(getApplicationContext(), "Please Set at Least One Reminder", Toast.LENGTH_LONG).show();
+
                     }
                 });
 
                 addReminderDialog.show();
+
+
+                // display the name in a toast.
+                //String time = cursor.getString(cursor.getColumnIndexOrThrow(mySQLiteHelper.KEY_TIME));
+                //Toast.makeText(getApplicationContext(), time, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        addReminder = (Button) reminderDialog.findViewById(R.id.addReminder);
+        addReminder.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view)
+            {
+                Log.d("DEBUG", "Before Cancel");
+                addRCancel = (Button) addReminderDialog.findViewById(R.id.reminderCancel);
+                addRCancel.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        addReminderDialog.dismiss();
+                    }
+                });
+
+                addRDelete = (Button) addReminderDialog.findViewById(R.id.reminderDelete);
+                addRDelete.setVisibility(View.INVISIBLE);
+                //addRDelete.setClickable(false);
+
+                addROk = (Button) addReminderDialog.findViewById(R.id.reminderOk);
+                addROk.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        appendthis("Start of database code.");
+
+                        int militaryHour = timePick.getHour();
+                        String ampm;
+                        if(militaryHour < 12)
+                        {
+                            ampm = " AM";
+                        }
+                        else
+                        {
+                            ampm = " PM";
+                        }
+
+                        militaryHour = militaryHour % 12;
+                        if(militaryHour == 0)
+                        {
+                            militaryHour = 12;
+                        }
+                        String hour = Integer.toString(militaryHour);
+                        if(militaryHour < 10)
+                        {
+                            hour = "0" + hour;
+                        }
+
+                        int mins = timePick.getMinute();
+                        String minutes = Integer.toString(mins);
+                        if(mins < 10)
+                        {
+                            minutes = "0" + minutes;
+                        }
+
+                        rTime = "";
+                        rText = "";
+
+                        rTime = hour + ":" + minutes + ampm;
+                        rText = reminderText.getText().toString();
+
+                        db.insertReminder(rTime, rText);
+
+                        Cursor cursor = db.getAllReminders();
+                        dataAdapter.changeCursor(cursor);
+
+                        //dataAdapter.notifyDataSetChanged();
+                        //listView.setAdapter(dataAdapter);
+
+                        addReminderDialog.dismiss();
+
+                    }
+                });
+
+                addReminderDialog.show();
+                // else Toast.makeText(getApplicationContext(), "Please Set at Least One Reminder", Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -1742,6 +1920,7 @@ public class MainActivity extends AppCompatActivity {
                     dismissOption(rowFinal, columnFinal, currentSetting);
                 }
                 reminderDialog.dismiss();
+                db.close();
             }
         });
 
@@ -1751,10 +1930,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 reminderDialog.dismiss();
+                db.close();
             }
         });
 
         reminderDialog.show();
+    }
+
+    public void appendthis(String item) {
+        Log.d("TAG", item + "\n");
     }
 
 

@@ -1,3 +1,6 @@
+// All database related code from Jim Ward
+// https://github.com/JimSeker/Android-Examples/tree/master/sqliteDemo/src/edu/cs4730/sqlitedemo
+
 package edu.wolf.smartmirror;
 
 import android.content.Context;

@@ -41,10 +41,22 @@
         android:layout_gravity="center_horizontal"/>
 
     <EditText
+        android:id="@+id/reminderText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
+        android:hint="Remind me to..."
         android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:id="@+id/reminderDelete"
+        android:layout_margin="10sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorWhite"
+        android:layout_gravity="center_horizontal"
+        android:text="Delete"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -67,7 +79,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:textColor="@color/colorWhite"
-            android:text="Add"/>
+            android:text="OK"/>
 
     </LinearLayout>
 
