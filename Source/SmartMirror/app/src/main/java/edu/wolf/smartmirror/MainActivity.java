@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button connect, sleepCancel, sleepOk, powerCancel, powerOk, clearCancel, clearOk, clockCancel, clockOk,
             gesturesCancel, gesturesOk, vcCancel, vcOk, colorCancel, colorOk, textColor, backColor,
-            weatherCancel, weatherOk, addReminder, reminderCancel, reminderOk, addRCancel, addROk, addRDelete;
+            weatherCancel, weatherOk, addReminder, reminderCancel, reminderOk, addRCancel, addROk, addRDelete,
+            addAlarm, alarmCancel, alarmOk, addACancel, addAOk, addADelete;
     Button text1, text2, text3, text4, text5, text6, text7, text8;
     Button back1, back2, back3, back4, back5, back6, back7, back8;
 
@@ -78,7 +79,12 @@ public class MainActivity extends AppCompatActivity {
     ReminderDatabase db;
     String rTime, rText;
 
+    TextView alarmText;
+    AlarmDatabase adb;
+    String aTime, aText;
+
     SimpleCursorAdapter dataAdapter;
+    SimpleCursorAdapter alarmDataAdapter;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -1838,9 +1844,6 @@ public class MainActivity extends AppCompatActivity {
                         Cursor cursor = db.getAllReminders();
                         dataAdapter.changeCursor(cursor);
 
-                        //dataAdapter.notifyDataSetChanged();
-                        //listView.setAdapter(dataAdapter);
-
                         addReminderDialog.dismiss();
 
                     }
@@ -1970,6 +1973,290 @@ public class MainActivity extends AppCompatActivity {
         reminderDialog.show();
     }
 
+    public void alarmOptions(String row, int column, Boolean longC, final String currentSetting)
+    {
+        final String rowFinal = row;
+        final int columnFinal = column;
+        final Boolean longClick = longC;
+
+        // Create a dialog and set the content to clock_options.xml
+        final Dialog alarmDialog = new Dialog(this);
+        final Dialog addAlarmDialog = new Dialog(this);
+
+        alarmDialog.setContentView(R.layout.alarm_options);
+        addAlarmDialog.setContentView(R.layout.add_alarm);
+        timePick = (TimePicker) addAlarmDialog.findViewById(R.id.timePicker);
+        alarmText = (EditText) addAlarmDialog.findViewById(R.id.alarmText);
+
+        adb = new AlarmDatabase(this);
+        adb.open();
+
+        Cursor c = adb.getAllAlarms();
+
+        if (c == null) {
+            Log.i("CAA", "cursor is null...");
+        }
+
+        // The desired columns to be bound
+        final String[] columns = new String[]{
+                myAlarmSQLiteHelper.KEY_TIME,
+                myAlarmSQLiteHelper.KEY_TITLE
+        };
+
+        // the XML defined views which the data will be bound to
+        final int[] to = new int[]{
+                R.id.time,
+                R.id.title
+        };
+
+        // create the adapter using the cursor pointing to the desired data
+        //as well as the layout information
+        alarmDataAdapter = new SimpleCursorAdapter(
+                this, R.layout.alarm, c, columns, to, 0);
+
+        final ListView listView = (ListView) alarmDialog.findViewById(R.id.alarmList);
+        listView.setAdapter(alarmDataAdapter);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> lView, View view,
+                                    int position, long id) {
+
+                Log.d("CURRENT TITLE", adb.getTitle(id));
+                alarmText.setText(adb.getTitle(id));
+
+                int hour;
+                int minute;
+
+                Log.d("CURRENT TIME", adb.getTime(id));
+                String time = adb.getTime(id);
+                String sHour;
+                String sMinute;
+                String sAmPm;
+
+                String[] timeBreak = time.split("\\s+");
+                String[] hourMinuteBreak = timeBreak[0].split("[:]");
+
+                sHour = hourMinuteBreak[0];
+                sMinute = hourMinuteBreak[1];
+                sAmPm = timeBreak[1];
+
+                hour = Integer.parseInt(sHour);
+                minute = Integer.parseInt(sMinute);
+
+                if(sAmPm.equals("PM"))
+                {
+                    hour = hour + 12;
+                }
+
+                timePick.setHour(hour);
+                timePick.setMinute(minute);
+
+                final long dataid = id;
+
+                addACancel = (Button) addAlarmDialog.findViewById(R.id.alarmCancel);
+                addACancel.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        addAlarmDialog.dismiss();
+                    }
+                });
+
+                addADelete = (Button) addAlarmDialog.findViewById(R.id.alarmDelete);
+                addADelete.setVisibility(View.VISIBLE);
+                addADelete.setClickable(true);
+                addADelete.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        adb.removeAlarm(dataid);
+                        addAlarmDialog.dismiss();
+                        Cursor cursor = adb.getAllAlarms();
+                        dataAdapter.changeCursor(cursor);
+                    }
+                });
+
+                addAOk = (Button) addAlarmDialog.findViewById(R.id.alarmOk);
+                addAOk.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        appendthis("Start of database code.");
+
+                        int militaryHour = timePick.getHour();
+                        String ampm;
+                        if(militaryHour < 12)
+                        {
+                            ampm = " AM";
+                        }
+                        else
+                        {
+                            ampm = " PM";
+                        }
+
+                        militaryHour = militaryHour % 12;
+                        if (militaryHour == 0)
+                        {
+                            militaryHour = 12;
+                        }
+                        String hour = Integer.toString(militaryHour);
+                        if(militaryHour < 10)
+                        {
+                            hour = "0" + hour;
+                        }
+
+                        int mins = timePick.getMinute();
+                        String minutes = Integer.toString(mins);
+                        if(mins < 10)
+                        {
+                            minutes = "0" + minutes;
+                        }
+
+                        aTime = "";
+                        aText = "";
+
+                        aTime = hour + ":" + minutes + ampm;
+                        aText = alarmText.getText().toString();
+
+                        adb.removeAlarm(dataid);
+                        adb.insertAlarm(rTime, rText);
+
+                        Cursor cursor = adb.getAllAlarms();
+                        alarmDataAdapter.changeCursor(cursor);
+
+                        //dataAdapter.notifyDataSetChanged();
+                        //listView.setAdapter(dataAdapter);
+
+                        addAlarmDialog.dismiss();
+
+                    }
+                });
+
+                addAlarmDialog.show();
+
+
+                // display the name in a toast.
+                //String time = cursor.getString(cursor.getColumnIndexOrThrow(mySQLiteHelper.KEY_TIME));
+                //Toast.makeText(getApplicationContext(), time, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        addAlarm = (Button) alarmDialog.findViewById(R.id.addAlarm);
+        addAlarm.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view)
+            {
+                alarmText.setText("");
+
+                int hour = 0;
+                int minute = 0;
+
+                timePick.setHour(hour);
+                timePick.setMinute(minute);
+
+                addACancel = (Button) addAlarmDialog.findViewById(R.id.alarmCancel);
+                addACancel.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        addAlarmDialog.dismiss();
+                    }
+                });
+
+                addADelete = (Button) addAlarmDialog.findViewById(R.id.alarmDelete);
+                addADelete.setVisibility(View.INVISIBLE);
+
+                addAOk = (Button) addAlarmDialog.findViewById(R.id.alarmOk);
+                addAOk.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        appendthis("Start of database code.");
+
+                        int militaryHour = timePick.getHour();
+                        String ampm;
+                        if(militaryHour < 12)
+                        {
+                            ampm = " AM";
+                        }
+                        else
+                        {
+                            ampm = " PM";
+                        }
+
+                        militaryHour = militaryHour % 12;
+                        if(militaryHour == 0)
+                        {
+                            militaryHour = 12;
+                        }
+                        String hour = Integer.toString(militaryHour);
+                        if(militaryHour < 10)
+                        {
+                            hour = "0" + hour;
+                        }
+
+                        int mins = timePick.getMinute();
+                        String minutes = Integer.toString(mins);
+                        if(mins < 10)
+                        {
+                            minutes = "0" + minutes;
+                        }
+
+                        aTime = "";
+                        aText = "";
+
+                        aTime = hour + ":" + minutes + ampm;
+                        aText = alarmText.getText().toString();
+
+                        adb.insertAlarm(aTime, aText);
+
+                        Cursor cursor = adb.getAllAlarms();
+                        alarmDataAdapter.changeCursor(cursor);
+
+                        //dataAdapter.notifyDataSetChanged();
+                        //listView.setAdapter(dataAdapter);
+
+                        addAlarmDialog.dismiss();
+
+                    }
+                });
+
+                addAlarmDialog.show();
+                // else Toast.makeText(getApplicationContext(), "Please Set at Least One Reminder", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        alarmCancel = (Button) alarmDialog.findViewById(R.id.alarmCancel);
+        alarmCancel.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view)
+            {
+                if(!longClick)
+                {
+                    dismissOption(rowFinal, columnFinal, currentSetting);
+                }
+                alarmDialog.dismiss();
+                adb.close();
+            }
+        });
+
+        alarmOk = (Button) alarmDialog.findViewById(R.id.alarmOk);
+        alarmOk.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view)
+            {
+                alarmDialog.dismiss();
+                adb.close();
+            }
+        });
+
+        alarmDialog.show();
+    }
+
     public void appendthis(String item) {
         Log.d("TAG", item + "\n");
     }
@@ -2092,6 +2379,10 @@ public class MainActivity extends AppCompatActivity {
                                 a1.setText(item.getTitle());
                                 reminderOptions("A", 1, false, a1Current);
                                 break;
+                            case "Alarm":
+                                a1.setText(item.getTitle());
+                                alarmOptions("A", 1, false, a1Current);
+                                break;
                             default:
                                 a1.setText(item.getTitle());
                                 break;
@@ -2127,6 +2418,10 @@ public class MainActivity extends AppCompatActivity {
                 else if(a1.getText().equals("Reminder"))
                 {
                     reminderOptions("A", 1, true, a1Current);
+                }
+                else if(a1.getText().equals("Alarm"))
+                {
+                    alarmOptions("A", 1, true, a1Current);
                 }
                 return true;
             }
@@ -2199,6 +2494,10 @@ public class MainActivity extends AppCompatActivity {
                                 a2.setText(item.getTitle());
                                 reminderOptions("A", 2, false, a2Current);
                                 break;
+                            case "Alarm":
+                                a2.setText(item.getTitle());
+                                alarmOptions("A", 2, false, a2Current);
+                                break;
                             default:
                                 a2.setText(item.getTitle());
                                 break;
@@ -2233,6 +2532,10 @@ public class MainActivity extends AppCompatActivity {
                 else if(a2.getText().equals("Reminder"))
                 {
                     reminderOptions("A", 2, true, a2Current);
+                }
+                else if(a2.getText().equals("Alarm"))
+                {
+                    alarmOptions("A", 2, true, a2Current);
                 }
                 return true;
             }
@@ -2305,6 +2608,10 @@ public class MainActivity extends AppCompatActivity {
                                 a3.setText(item.getTitle());
                                 reminderOptions("A", 3, false, a3Current);
                                 break;
+                            case "Alarm":
+                                a3.setText(item.getTitle());
+                                alarmOptions("A", 3, false, a3Current);
+                                break;
                             default:
                                 a3.setText(item.getTitle());
                                 break;
@@ -2339,6 +2646,10 @@ public class MainActivity extends AppCompatActivity {
                 else if(a3.getText().equals("Reminder"))
                 {
                     reminderOptions("A", 3, true, a3Current);
+                }
+                else if(a3.getText().equals("Alarm"))
+                {
+                    alarmOptions("A", 3, true, a3Current);
                 }
                 return true;
             }
@@ -2411,6 +2722,10 @@ public class MainActivity extends AppCompatActivity {
                                 b1.setText(item.getTitle());
                                 reminderOptions("B", 1, false, b1Current);
                                 break;
+                            case "Alarm":
+                                b1.setText(item.getTitle());
+                                alarmOptions("B", 1, false, b1Current);
+                                break;
                             default:
                                 b1.setText(item.getTitle());
                                 break;
@@ -2445,6 +2760,10 @@ public class MainActivity extends AppCompatActivity {
                 else if(b1.getText().equals("Reminder"))
                 {
                     reminderOptions("B", 1, true, b1Current);
+                }
+                else if(b1.getText().equals("Alarm"))
+                {
+                    alarmOptions("B", 1, true, b1Current);
                 }
                 return true;
             }
@@ -2517,6 +2836,10 @@ public class MainActivity extends AppCompatActivity {
                                 b2.setText(item.getTitle());
                                 reminderOptions("B", 2, false, b2Current);
                                 break;
+                            case "Alarm":
+                                b2.setText(item.getTitle());
+                                alarmOptions("B", 2, false, b2Current);
+                                break;
                             default:
                                 b2.setText(item.getTitle());
                                 break;
@@ -2551,6 +2874,10 @@ public class MainActivity extends AppCompatActivity {
                 else if(b2.getText().equals("Reminder"))
                 {
                     reminderOptions("B", 2, true, b2Current);
+                }
+                else if(b2.getText().equals("Alarm"))
+                {
+                    alarmOptions("B", 2, true, b2Current);
                 }
                 return true;
             }
@@ -2623,6 +2950,10 @@ public class MainActivity extends AppCompatActivity {
                                 b3.setText(item.getTitle());
                                 reminderOptions("B", 3, false, b3Current);
                                 break;
+                            case "Alarm":
+                                b3.setText(item.getTitle());
+                                alarmOptions("B", 3, false, b3Current);
+                                break;
                             default:
                                 b3.setText(item.getTitle());
                                 break;
@@ -2657,6 +2988,10 @@ public class MainActivity extends AppCompatActivity {
                 else if(b3.getText().equals("Reminder"))
                 {
                     reminderOptions("B", 3, true, b3Current);
+                }
+                else if(b3.getText().equals("Alarm"))
+                {
+                    alarmOptions("B", 3, true, b3Current);
                 }
                 return true;
             }
@@ -2729,6 +3064,10 @@ public class MainActivity extends AppCompatActivity {
                                 c1.setText(item.getTitle());
                                 reminderOptions("C", 1, false, c1Current);
                                 break;
+                            case "Alarm":
+                                c1.setText(item.getTitle());
+                                alarmOptions("C", 1, false, c1Current);
+                                break;
                             default:
                                 c1.setText(item.getTitle());
                                 break;
@@ -2763,6 +3102,10 @@ public class MainActivity extends AppCompatActivity {
                 else if(c1.getText().equals("Reminder"))
                 {
                     reminderOptions("C", 1, true, c1Current);
+                }
+                else if(c1.getText().equals("Alarm"))
+                {
+                    alarmOptions("C", 1, true, c1Current);
                 }
                 return true;
             }
@@ -2835,6 +3178,10 @@ public class MainActivity extends AppCompatActivity {
                                 c2.setText(item.getTitle());
                                 reminderOptions("C", 2, false, c2Current);
                                 break;
+                            case "Alarm":
+                                c2.setText(item.getTitle());
+                                alarmOptions("C", 2, false, c2Current);
+                                break;
                             default:
                                 c2.setText(item.getTitle());
                                 break;
@@ -2869,6 +3216,10 @@ public class MainActivity extends AppCompatActivity {
                 else if(c2.getText().equals("Reminder"))
                 {
                     reminderOptions("C", 2, true, c2Current);
+                }
+                else if(c2.getText().equals("Alarm"))
+                {
+                    alarmOptions("C", 2, true, c2Current);
                 }
                 return true;
             }
@@ -2941,6 +3292,10 @@ public class MainActivity extends AppCompatActivity {
                                 c3.setText(item.getTitle());
                                 reminderOptions("C", 3, false, c3Current);
                                 break;
+                            case "Alarm":
+                                c3.setText(item.getTitle());
+                                alarmOptions("C", 3, false, c3Current);
+                                break;
                             default:
                                 c3.setText(item.getTitle());
                                 break;
@@ -2971,6 +3326,10 @@ public class MainActivity extends AppCompatActivity {
                         else if(c3.getText().equals("Reminder"))
                         {
                             reminderOptions("C", 3, true, c3Current);
+                        }
+                        else if(c3.getText().equals("Alarm"))
+                        {
+                            alarmOptions("C", 3, true, c3Current);
                         }
                         return true;
                     }
