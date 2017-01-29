@@ -1735,9 +1735,35 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> lView, View view,
                                     int position, long id) {
 
-                final int posFinal = position;
-
                 Log.d("CURRENT TITLE", db.getTitle(id));
+                reminderText.setText(db.getTitle(id));
+
+                int hour = 0;
+                int minute = 0;
+
+                Log.d("CURRENT TIME", db.getTime(id));
+                String time = db.getTime(id);
+                String sHour;
+                String sMinute;
+                String sAmPm;
+
+                String[] timeBreak = time.split("\\s+");
+                String [] hourMinuteBreak = timeBreak[0].split("[:]");
+
+                sHour = hourMinuteBreak[0];
+                sMinute = hourMinuteBreak[1];
+                sAmPm = timeBreak[1];
+
+                hour = Integer.parseInt(sHour);
+                minute = Integer.parseInt(sMinute);
+
+                if(sAmPm.equals("PM"))
+                {
+                    hour = hour + 12;
+                }
+
+                timePick.setHour(hour);
+                timePick.setMinute(minute);
 
                 final long dataid = id;
 
@@ -1835,7 +1861,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                Log.d("DEBUG", "Before Cancel");
+                reminderText.setText("");
+
+                int hour = 0;
+                int minute = 0;
+
+                timePick.setHour(hour);
+                timePick.setMinute(minute);
+
                 addRCancel = (Button) addReminderDialog.findViewById(R.id.reminderCancel);
                 addRCancel.setOnClickListener(new View.OnClickListener(){
                     @Override

@@ -61,16 +61,32 @@ public class ReminderDatabase {
 
     public String getTitle(long id) throws SQLException
     {
-        String idString = String.valueOf(id);
+        //String idString = String.valueOf(id);
+        Cursor mCursor = db.query(true, mySQLiteHelper.DATABASE_TABLE,
+               new String[] {mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE, },
+                mySQLiteHelper.KEY_ROWID + "=\'" + id + "\'", null,null,null,null,null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        Log.d("MCURSOR", mCursor.toString());
+
+        String title = mCursor.getString(1);
+        Log.d("TITLE", title);
+        return title;
+    }
+
+    public String getTime(long id) throws SQLException
+    {
+        //String idString = String.valueOf(id);
         Cursor mCursor = db.query(true, mySQLiteHelper.DATABASE_TABLE,
                 new String[] {mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE, },
                 mySQLiteHelper.KEY_ROWID + "=\'" + id + "\'", null,null,null,null,null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        Log.d("MCURSOR", mCursor.toString());
 
-        //String sqlString = "SELECT row FROM " + mySQLiteHelper.DATABASE_TABLE
-        //        + " WHERE " + mySQLiteHelper.KEY_ROWID + " = " + idString;
-
-        int titleColIndex = mCursor.getColumnIndex(mySQLiteHelper.KEY_TITLE);
-        String title = mCursor.getString(titleColIndex);
+        String title = mCursor.getString(0);
         Log.d("TITLE", title);
         return title;
     }
