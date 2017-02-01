@@ -2121,7 +2121,7 @@ public class MainActivity extends AppCompatActivity {
                         aText = alarmText.getText().toString();
 
                         adb.removeAlarm(dataid);
-                        adb.insertAlarm(rTime, rText);
+                        adb.insertAlarm(aTime, aText);
 
                         Cursor cursor = adb.getAllAlarms();
                         alarmDataAdapter.changeCursor(cursor);
