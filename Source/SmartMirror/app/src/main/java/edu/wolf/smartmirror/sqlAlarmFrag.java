@@ -14,32 +14,32 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import edu.wolf.smartmirror.mySQLiteHelper;
-import edu.wolf.smartmirror.ReminderDatabase;
+import edu.wolf.smartmirror.myAlarmSQLiteHelper;
+import edu.wolf.smartmirror.AlarmDatabase;
 
-public class sqlFrag extends Fragment {
-    String TAG = "sqlFrag";
+public class sqlAlarmFrag extends Fragment {
+    String TAG = "sqlAlarmFrag";
     Context myContext;
     Button runAgain;
 
     TextView output;
-    ReminderDatabase db;
+    AlarmDatabase db;
 
-    public sqlFrag() {
+    public sqlAlarmFrag() {
         // Empty
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View myView = inflater.inflate(R.layout.add_reminder, container, false);
+        View myView = inflater.inflate(R.layout.add_alarm, container, false);
 
-        db = new ReminderDatabase(myContext);
+        db = new AlarmDatabase(myContext);
         db.open();
 
         method();
 
-        runAgain = (Button) myView.findViewById(R.id.reminderOk);
+        runAgain = (Button) myView.findViewById(R.id.alarmOk);
         runAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +58,7 @@ public class sqlFrag extends Fragment {
     public void onResume() {
         super.onResume();
         if (db == null)
-            db = new ReminderDatabase(myContext);
+            db = new AlarmDatabase(myContext);
         if (!db.isOpen())
             db.open();
     }
@@ -81,22 +81,22 @@ public class sqlFrag extends Fragment {
         appendthis("Start of Demo code.");
 
         Cursor c;
-        c = db.getAllReminders();
+        c = db.getAllAlarms();
 
         if (c == null) {
             //nothing in the database ?  maybe the database query failed.
             appendthis("No DB found, creating and inserting data");
             //insert data.
-            db.insertReminder("01/01/2017", "12:00", "Fix this");
-            db.insertReminder("01/01/2017", "12:01", "And this");
+            db.insertAlarm("12:00", "Fix this");
+            db.insertAlarm("12:01", "And this");
             return;
         }
         //check to see if no data?
         if (c.getCount() == 0) {
             //no data return
             appendthis("empty DB, inserting data");
-            db.insertReminder("01/01/2017", "12:00", "Fix this");
-            db.insertReminder("01/01/2017", "12:01", "And this");
+            db.insertAlarm("12:00", "Fix this");
+            db.insertAlarm("12:01", "And this");
             return;
         }
         appendthis("There is already data, so just displaying it.");
@@ -108,14 +108,13 @@ public class sqlFrag extends Fragment {
             //not very readable and if we were change the DB, then this could would not work
             //instead using a longer, but more readable and DB change method.
             //so not using this appendthis(	c.getString(1) + " " + c.getInt(2));
-            appendthis(c.getString(c.getColumnIndex(mySQLiteHelper.KEY_DATE)) + " " +
-                    c.getString(c.getColumnIndex(mySQLiteHelper.KEY_TIME)) + " " +
-                    c.getString(c.getColumnIndex(mySQLiteHelper.KEY_TITLE)));
+            appendthis(c.getString(c.getColumnIndex(myAlarmSQLiteHelper.KEY_TIME)) + " " +
+                    c.getString(c.getColumnIndex(myAlarmSQLiteHelper.KEY_TITLE)));
         }
         c.close();  //release the resources, before I use it again.
         //test on return 1 item.
 
-        c = db.get1reminder("12:00");  //test of query for 1.
+        c = db.get1alarm("12:00");  //test of query for 1.
         //A note, get1name only returns two columns, name and score.  while getall returns three
         //columns.
 
@@ -124,12 +123,12 @@ public class sqlFrag extends Fragment {
             appendthis("failed on select 1 item.");
         } else {
             appendthis("Select on 12:00 returned: " +
-                    c.getString(c.getColumnIndex(mySQLiteHelper.KEY_DATE)) + " " +  //column 0
-                    c.getString(c.getColumnIndex(mySQLiteHelper.KEY_TIME)) + " " +  //column 1
-                    c.getString(c.getColumnIndex(mySQLiteHelper.KEY_TITLE))         //column 2
+                    c.getString(c.getColumnIndex(myAlarmSQLiteHelper.KEY_TIME)) + " " +  //column 0
+                    c.getString(c.getColumnIndex(myAlarmSQLiteHelper.KEY_TITLE))            //column 1
             );
         }
         c.close(); //release the resources
         c = null;
     }
 }
+

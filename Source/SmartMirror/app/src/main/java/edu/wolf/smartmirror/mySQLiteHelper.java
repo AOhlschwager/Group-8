@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class mySQLiteHelper extends SQLiteOpenHelper{
+    public static final String KEY_DATE = "Date";
     public static final String KEY_TIME = "Time";
     public static final String KEY_TITLE = "Reminder";
     public static final String KEY_ROWID = "_id";
@@ -18,11 +19,12 @@ public class mySQLiteHelper extends SQLiteOpenHelper{
     private static final String DATABASE_NAME = "reminder.db";
     public static final String DATABASE_TABLE = "Reminders";
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String DATABASE_CREATE =
-            "CREATE TABLE Reminders (" +
-                    KEY_ROWID + " integer PRIMARY KEY autoincrement," +
+            "CREATE TABLE Reminders ( " +
+                    KEY_ROWID + " integer PRIMARY KEY autoincrement, " +
+                    KEY_DATE + " TEXT, " +
                     KEY_TIME + " TEXT, " +
                     KEY_TITLE + " TEXT );";
 

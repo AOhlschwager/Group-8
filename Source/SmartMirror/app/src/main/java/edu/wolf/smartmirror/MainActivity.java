@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -30,7 +31,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -55,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
     Button connect, sleepCancel, sleepOk, powerCancel, powerOk, clearCancel, clearOk, clockCancel, clockOk,
             gesturesCancel, gesturesOk, vcCancel, vcOk, colorCancel, colorOk, textColor, backColor,
             weatherCancel, weatherOk, addReminder, reminderCancel, reminderOk, addRCancel, addROk, addRDelete,
-            addAlarm, alarmCancel, alarmOk, addACancel, addAOk, addADelete;
+            addAlarm, alarmCancel, alarmOk, addACancel, addAOk, addADelete, dateButton, timeButton,
+            timePickCancel, timePickOk, datePickCancel, datePickOk;
     Button text1, text2, text3, text4, text5, text6, text7, text8;
     Button back1, back2, back3, back4, back5, back6, back7, back8;
 
@@ -75,9 +80,10 @@ public class MainActivity extends AppCompatActivity {
     Spinner stateSpinner, citySpinner;
 
     TimePicker timePick;
-    TextView reminderText;
+    DatePicker datePick;
+    TextView timePicked, datePicked, reminderText;
     ReminderDatabase db;
-    String rTime, rText;
+    String rDate, rTime, rText;
 
     TextView alarmText;
     AlarmDatabase adb;
@@ -1698,11 +1704,20 @@ public class MainActivity extends AppCompatActivity {
         // Create a dialog and set the content to clock_options.xml
         final Dialog reminderDialog = new Dialog(this);
         final Dialog addReminderDialog = new Dialog(this);
+        final Dialog timePickDialog = new Dialog(this);
+        final Dialog datePickDialog = new Dialog(this);
 
         reminderDialog.setContentView(R.layout.reminder_options);
         addReminderDialog.setContentView(R.layout.add_reminder);
-        timePick = (TimePicker) addReminderDialog.findViewById(R.id.timePicker);
+        timePickDialog.setContentView(R.layout.time_pick);
+        datePickDialog.setContentView(R.layout.date_pick);
+
+        timePick = (TimePicker) timePickDialog.findViewById(R.id.timePicker);
+        timePicked = (TextView) addReminderDialog.findViewById(R.id.timePicked);
         reminderText = (EditText) addReminderDialog.findViewById(R.id.reminderText);
+        datePick = (DatePicker) datePickDialog.findViewById(R.id.datePicker);
+        datePicked = (TextView) addReminderDialog.findViewById(R.id.datePicked);
+
         //final ReminderDatabase db;
         //final SimpleCursorAdapter dataAdapter;
 
@@ -1717,12 +1732,14 @@ public class MainActivity extends AppCompatActivity {
 
         // The desired columns to be bound
         final String[] columns = new String[]{
+                mySQLiteHelper.KEY_DATE,
                 mySQLiteHelper.KEY_TIME,
                 mySQLiteHelper.KEY_TITLE
         };
 
         // the XML defined views which the data will be bound to
         final int[] to = new int[]{
+                R.id.date,
                 R.id.time,
                 R.id.title
         };
@@ -1739,39 +1756,147 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> lView, View view,
-                                    int position, long id) {
+                                    int position, final long id) {
+
+                Log.d("CURRENT TIME", db.getTime(id));
+                timePicked.setText(db.getTime(id));
+
+                Log.d("CURRENT DATE", db.getDate(id));
+                datePicked.setText(db.getDate(id));
 
                 Log.d("CURRENT TITLE", db.getTitle(id));
                 reminderText.setText(db.getTitle(id));
 
-                int hour = 0;
-                int minute = 0;
-
-                Log.d("CURRENT TIME", db.getTime(id));
-                String time = db.getTime(id);
-                String sHour;
-                String sMinute;
-                String sAmPm;
-
-                String[] timeBreak = time.split("\\s+");
-                String [] hourMinuteBreak = timeBreak[0].split("[:]");
-
-                sHour = hourMinuteBreak[0];
-                sMinute = hourMinuteBreak[1];
-                sAmPm = timeBreak[1];
-
-                hour = Integer.parseInt(sHour);
-                minute = Integer.parseInt(sMinute);
-
-                if(sAmPm.equals("PM"))
-                {
-                    hour = hour + 12;
-                }
-
-                timePick.setHour(hour);
-                timePick.setMinute(minute);
-
                 final long dataid = id;
+
+                timeButton = (Button) addReminderDialog.findViewById(R.id.timeButton);
+                timeButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        int hour = 0;
+                        int minute = 0;
+
+                        Log.d("CURRENT TIME", db.getTime(id));
+                        String time = db.getTime(id);
+                        String sHour;
+                        String sMinute;
+                        String sAmPm;
+
+                        String[] timeBreak = time.split("\\s+");
+                        String[] hourMinuteBreak = timeBreak[0].split("[:]");
+
+                        Log.d("TIME SET", timeBreak[0]);
+
+                        sHour = hourMinuteBreak[0];
+                        sMinute = hourMinuteBreak[1];
+                        sAmPm = timeBreak[1];
+
+                        hour = Integer.parseInt(sHour);
+                        minute = Integer.parseInt(sMinute);
+
+                        if(sAmPm.equals("PM"))
+                        {
+                            hour = hour + 12;
+                        }
+                        if(sAmPm.equals("AM") && hour == 12)
+                        {
+                            hour = 0;
+                        }
+
+                        timePick.setHour(hour);
+                        timePick.setMinute(minute);
+
+                        timePickCancel = (Button) timePickDialog.findViewById(R.id.timePickCancel);
+                        timePickCancel.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v)
+                            {
+                                timePickDialog.dismiss();
+                            }
+                        });
+
+                        timePickOk = (Button) timePickDialog.findViewById(R.id.timePickOk);
+                        timePickOk.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v)
+                            {
+                                int militaryHour = timePick.getHour();
+                                String ampm;
+
+                                if(militaryHour < 12)
+                                {
+                                    ampm = " AM";
+                                }
+                                else
+                                {
+                                    ampm = " PM";
+                                }
+
+                                militaryHour = militaryHour % 12;
+                                if(militaryHour == 0)
+                                {
+                                    militaryHour = 12;
+                                }
+                                String hour = Integer.toString(militaryHour);
+                                if(militaryHour < 10)
+                                {
+                                    hour = "0" + hour;
+                                }
+
+                                int mins = timePick.getMinute();
+                                String minutes = Integer.toString(mins);
+                                if(mins < 10)
+                                {
+                                    minutes = "0" + minutes;
+                                }
+
+                                rTime = "";
+                                rTime = hour + ":" + minutes + ampm;
+
+                                timePicked.setText(rTime);
+
+                                timePickDialog.dismiss();
+                            }
+                        });
+
+                        timePickDialog.show();
+                    }
+                });
+
+                dateButton = (Button) addReminderDialog.findViewById(R.id.dateButton);
+                dateButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        datePickCancel = (Button) datePickDialog.findViewById(R.id.datePickCancel);
+                        datePickCancel.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v)
+                            {
+                                datePickDialog.dismiss();
+                            }
+                        });
+
+                        datePickOk = (Button) datePickDialog.findViewById(R.id.datePickOk);
+                        datePickOk.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v)
+                            {
+                                int month = datePick.getMonth() + 1;
+                                int day = datePick.getDayOfMonth();
+                                int year = datePick.getYear();
+
+                                String date = month + "/" + day + "/" + year;
+                                datePicked.setText(date);
+
+                                datePickDialog.dismiss();
+                            }
+                        });
+
+                        datePickDialog.show();
+                    }
+                });
 
                 addRCancel = (Button) addReminderDialog.findViewById(R.id.reminderCancel);
                 addRCancel.setOnClickListener(new View.OnClickListener(){
@@ -1803,6 +1928,10 @@ public class MainActivity extends AppCompatActivity {
                     {
                         appendthis("Start of database code.");
 
+                        int rmonth = datePick.getMonth() + 1;
+                        int rday = datePick.getDayOfMonth();
+                        int ryear = datePick.getYear();
+
                         int militaryHour = timePick.getHour();
                         String ampm;
                         if(militaryHour < 12)
@@ -1832,14 +1961,16 @@ public class MainActivity extends AppCompatActivity {
                             minutes = "0" + minutes;
                         }
 
+                        rDate = "";
                         rTime = "";
                         rText = "";
 
+                        rDate = rmonth + "/" + rday + "/" + ryear;
                         rTime = hour + ":" + minutes + ampm;
                         rText = reminderText.getText().toString();
 
                         db.removeReminder(dataid);
-                        db.insertReminder(rTime, rText);
+                        db.insertReminder(rDate, rTime, rText);
 
                         Cursor cursor = db.getAllReminders();
                         dataAdapter.changeCursor(cursor);
@@ -1851,11 +1982,6 @@ public class MainActivity extends AppCompatActivity {
 
                 addReminderDialog.show();
 
-
-                // display the name in a toast.
-                //String time = cursor.getString(cursor.getColumnIndexOrThrow(mySQLiteHelper.KEY_TIME));
-                //Toast.makeText(getApplicationContext(), time, Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -1866,11 +1992,132 @@ public class MainActivity extends AppCompatActivity {
             {
                 reminderText.setText("");
 
-                int hour = 0;
-                int minute = 0;
+                timePicked.setText("12:00 AM");
+                timePick.setHour(0);
+                timePick.setMinute(0);
 
-                timePick.setHour(hour);
-                timePick.setMinute(minute);
+                String date = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+                datePicked.setText(date);
+
+                timeButton = (Button) addReminderDialog.findViewById(R.id.timeButton);
+                timeButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        int hour = 0;
+                        int minute = 0;
+
+                        String[] hourMinuteBreak = timePicked.getText().toString().split("[:]");
+                        String[] minuteBreak = hourMinuteBreak[1].split("\\s+");
+
+                        hour = Integer.parseInt(hourMinuteBreak[0]);
+                        minute = Integer.parseInt(minuteBreak[0]);
+                        String sAmPm = minuteBreak[1];
+
+                        Log.d("DEBUG", sAmPm);
+
+                        if(sAmPm.equals("PM"))
+                        {
+                            hour = hour + 12;
+                        }
+                        if(sAmPm.equals("AM") && hour == 12)
+                        {
+                            hour = 0;
+                        }
+
+                        timePick.setHour(hour);
+                        timePick.setMinute(minute);
+
+                        timePickCancel = (Button) timePickDialog.findViewById(R.id.timePickCancel);
+                        timePickCancel.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v)
+                            {
+                                timePickDialog.dismiss();
+                            }
+                        });
+
+                        timePickOk = (Button) timePickDialog.findViewById(R.id.timePickOk);
+                        timePickOk.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v)
+                            {
+                                int militaryHour = timePick.getHour();
+                                String ampm;
+
+                                if(militaryHour < 12)
+                                {
+                                    ampm = " AM";
+                                }
+                                else
+                                {
+                                    ampm = " PM";
+                                }
+
+                                militaryHour = militaryHour % 12;
+                                if(militaryHour == 0)
+                                {
+                                    militaryHour = 12;
+                                }
+                                String hour = Integer.toString(militaryHour);
+                                if(militaryHour < 10)
+                                {
+                                    hour = "0" + hour;
+                                }
+
+                                int mins = timePick.getMinute();
+                                String minutes = Integer.toString(mins);
+                                if(mins < 10)
+                                {
+                                    minutes = "0" + minutes;
+                                }
+
+                                rTime = "";
+                                rTime = hour + ":" + minutes + ampm;
+
+                                timePicked.setText(rTime);
+
+                                timePickDialog.dismiss();
+                            }
+                        });
+
+                        timePickDialog.show();
+                    }
+                });
+
+                dateButton = (Button) addReminderDialog.findViewById(R.id.dateButton);
+                dateButton.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v)
+                    {
+                        datePickCancel = (Button) datePickDialog.findViewById(R.id.datePickCancel);
+                        datePickCancel.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v)
+                            {
+                                datePickDialog.dismiss();
+                            }
+                        });
+
+                        datePickOk = (Button) datePickDialog.findViewById(R.id.datePickOk);
+                        datePickOk.setOnClickListener(new View.OnClickListener(){
+                            @Override
+                            public void onClick(View v)
+                            {
+                                int month = datePick.getMonth() + 1;
+                                int day = datePick.getDayOfMonth();
+                                int year = datePick.getYear();
+
+                                String date = month + "/" + day + "/" + year;
+                                datePicked.setText(date);
+
+                                datePickDialog.dismiss();
+                            }
+                        });
+
+                        datePickDialog.show();
+                    }
+                });
 
                 addRCancel = (Button) addReminderDialog.findViewById(R.id.reminderCancel);
                 addRCancel.setOnClickListener(new View.OnClickListener(){
@@ -1883,7 +2130,6 @@ public class MainActivity extends AppCompatActivity {
 
                 addRDelete = (Button) addReminderDialog.findViewById(R.id.reminderDelete);
                 addRDelete.setVisibility(View.INVISIBLE);
-                //addRDelete.setClickable(false);
 
                 addROk = (Button) addReminderDialog.findViewById(R.id.reminderOk);
                 addROk.setOnClickListener(new View.OnClickListener(){
@@ -1892,42 +2138,12 @@ public class MainActivity extends AppCompatActivity {
                     {
                         appendthis("Start of database code.");
 
-                        int militaryHour = timePick.getHour();
-                        String ampm;
-                        if(militaryHour < 12)
-                        {
-                            ampm = " AM";
-                        }
-                        else
-                        {
-                            ampm = " PM";
-                        }
-
-                        militaryHour = militaryHour % 12;
-                        if(militaryHour == 0)
-                        {
-                            militaryHour = 12;
-                        }
-                        String hour = Integer.toString(militaryHour);
-                        if(militaryHour < 10)
-                        {
-                            hour = "0" + hour;
-                        }
-
-                        int mins = timePick.getMinute();
-                        String minutes = Integer.toString(mins);
-                        if(mins < 10)
-                        {
-                            minutes = "0" + minutes;
-                        }
-
-                        rTime = "";
                         rText = "";
-
-                        rTime = hour + ":" + minutes + ampm;
                         rText = reminderText.getText().toString();
 
-                        db.insertReminder(rTime, rText);
+                        rDate = datePicked.getText().toString();
+
+                        db.insertReminder(rDate, rTime, rText);
 
                         Cursor cursor = db.getAllReminders();
                         dataAdapter.changeCursor(cursor);
@@ -2074,7 +2290,7 @@ public class MainActivity extends AppCompatActivity {
                         adb.removeAlarm(dataid);
                         addAlarmDialog.dismiss();
                         Cursor cursor = adb.getAllAlarms();
-                        dataAdapter.changeCursor(cursor);
+                        alarmDataAdapter.changeCursor(cursor);
                     }
                 });
 

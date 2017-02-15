@@ -31,8 +31,9 @@ public class ReminderDatabase {
         db.close();
     }
 
-    public long insertReminder(String time, String reminder) {
+    public long insertReminder(String date, String time, String reminder) {
         ContentValues initialValues = new ContentValues();
+        initialValues.put(mySQLiteHelper.KEY_DATE, date);
         initialValues.put(mySQLiteHelper.KEY_TIME, time);
         initialValues.put(mySQLiteHelper.KEY_TITLE, reminder);
         return db.insert(mySQLiteHelper.DATABASE_TABLE, null, initialValues);
@@ -40,9 +41,9 @@ public class ReminderDatabase {
 
     public Cursor getAllReminders() {
         Cursor c = db.query(mySQLiteHelper.DATABASE_TABLE,
-                new String[] {mySQLiteHelper.KEY_ROWID, mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE},
+                new String[] {mySQLiteHelper.KEY_ROWID, mySQLiteHelper.KEY_DATE, mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE},
                 null, null, null, null,
-                mySQLiteHelper.KEY_TIME);
+                mySQLiteHelper.KEY_DATE);
         if (c != null )
             c.moveToFirst();
         return c;
@@ -51,7 +52,7 @@ public class ReminderDatabase {
     public Cursor get1reminder(String time) throws SQLException  {
         Cursor mCursor =
                 db.query(true, mySQLiteHelper.DATABASE_TABLE,
-                        new String[] { mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE, },
+                        new String[] { mySQLiteHelper.KEY_DATE, mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE, },
                         mySQLiteHelper.KEY_TIME + "=\'" + time +"\'", null, null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -63,32 +64,48 @@ public class ReminderDatabase {
     {
         //String idString = String.valueOf(id);
         Cursor mCursor = db.query(true, mySQLiteHelper.DATABASE_TABLE,
-               new String[] {mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE, },
+               new String[] {mySQLiteHelper.KEY_DATE, mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE, },
                 mySQLiteHelper.KEY_ROWID + "=\'" + id + "\'", null,null,null,null,null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
         Log.d("MCURSOR", mCursor.toString());
 
-        String title = mCursor.getString(1);
+        String title = mCursor.getString(2);
         Log.d("TITLE", title);
         return title;
+    }
+
+    public String getDate(long id) throws SQLException
+    {
+        //String idString = String.valueOf(id);
+        Cursor mCursor = db.query(true, mySQLiteHelper.DATABASE_TABLE,
+                new String[] {mySQLiteHelper.KEY_DATE, mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE, },
+                mySQLiteHelper.KEY_ROWID + "=\'" + id + "\'", null,null,null,null,null);
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+        }
+        Log.d("MCURSOR", mCursor.toString());
+
+        String date = mCursor.getString(0);
+        Log.d("DATE", date);
+        return date;
     }
 
     public String getTime(long id) throws SQLException
     {
         //String idString = String.valueOf(id);
         Cursor mCursor = db.query(true, mySQLiteHelper.DATABASE_TABLE,
-                new String[] {mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE, },
+                new String[] {mySQLiteHelper.KEY_DATE, mySQLiteHelper.KEY_TIME, mySQLiteHelper.KEY_TITLE, },
                 mySQLiteHelper.KEY_ROWID + "=\'" + id + "\'", null,null,null,null,null);
         if (mCursor != null) {
             mCursor.moveToFirst();
         }
         Log.d("MCURSOR", mCursor.toString());
 
-        String title = mCursor.getString(0);
-        Log.d("TITLE", title);
-        return title;
+        String time = mCursor.getString(1);
+        Log.d("TIME", time);
+        return time;
     }
 
     public void removeReminder(long id) throws SQLException
@@ -100,8 +117,9 @@ public class ReminderDatabase {
     }
 
 
-    public boolean updateRow(String time, String title) {
+    public boolean updateRow(String date, String time, String title) {
         ContentValues args = new ContentValues();
+        args.put(mySQLiteHelper.KEY_DATE, date);
         args.put(mySQLiteHelper.KEY_TIME, time);
         return db.update(mySQLiteHelper.DATABASE_TABLE, args, mySQLiteHelper.KEY_TITLE + "= \'" + title +"\'", null) > 0;
     }
