@@ -8,16 +8,19 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -59,8 +62,6 @@ public class MainActivity extends AppCompatActivity {
     String c2String = ""; String c2Current = "";
     String c3String = ""; String c3Current = "";
 
-    String stateSelected, citySelected;
-
     Button connect, sleepCancel, sleepOk, powerCancel, powerOk, clearCancel, clearOk, clockCancel, clockOk,
             gesturesCancel, gesturesOk, vcCancel, vcOk, colorCancel, colorOk, textColor, backColor,
             weatherCancel, weatherOk, addReminder, reminderCancel, reminderOk, addRCancel, addROk, addRDelete,
@@ -84,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
 
     Spinner stateSpinner, citySpinner;
     CitiesDatabase citydb;
+    TextView cityText;
+    String stateSelected, citySelected;
+    String a1state, a2state, a3state, b1state, b2state, b3state, c1state, c2state, c3state;
+    Cursor a1city, a2city, a3city, b1city, b2city, b3city, c1city, c2city, c3city;
 
     TimePicker timePick;
     DatePicker datePick;
@@ -550,6 +555,16 @@ public class MainActivity extends AppCompatActivity {
                         c1String = ""; c1Current = "";
                         c2String = ""; c2Current = "";
                         c3String = ""; c3Current = "";
+
+                        a1city = null; a1state = "";
+                        a2city = null; a2state = "";
+                        a3city = null; a3state = "";
+                        b1city = null; b1state = "";
+                        b2city = null; b2state = "";
+                        b3city = null; b3state = "";
+                        c1city = null; c1state = "";
+                        c2city = null; c2state = "";
+                        c3city = null; c3state = "";
 
                         stateSelected = ""; citySelected = "";
 
@@ -1647,11 +1662,10 @@ public class MainActivity extends AppCompatActivity {
         clockDialog.show();
     }
 
-    public void weatherOptions(String row, int column, Boolean longC, final String currentSetting)
+    public void weatherOptions(final String row, final int column, final Boolean longC, final String currentSetting)
     {
-        final String rowFinal = row;
-        final int columnFinal = column;
-        final Boolean longClick = longC;
+        final String finalCity;
+        final Cursor finalCursor;
 
         // Create a dialog and set the content to clock_options.xml
         final Dialog weatherDialog = new Dialog(this);
@@ -1659,23 +1673,89 @@ public class MainActivity extends AppCompatActivity {
 
         stateSpinner = (Spinner) weatherDialog.findViewById(R.id.stateSpinner);
         citySpinner = (Spinner) weatherDialog.findViewById(R.id.citySpinner);
+        cityText = (TextView) weatherDialog.findViewById(R.id.cityText);
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.states_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(),
+                R.array.states_array, R.layout.spinner_item);
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
 
-        stateSpinner.setPrompt("Select State");
         stateSpinner.setAdapter(adapter);
+        stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String state = stateSpinner.getSelectedItem().toString();
+                stateConverter sc = new stateConverter(state);
+
+                Cursor c = citydb.getCitiesByState(sc.getId());
+
+                CursorAdapter cAdapt = new CursorAdapter(getApplicationContext(), c, 0) {
+                    @Override
+                    public View newView(Context context, Cursor cursor, ViewGroup parent) {
+                        return LayoutInflater.from(context).inflate(R.layout.spinner_item, parent, false);
+                        //return null;
+                    }
+
+                    @Override
+                    public void bindView(View view, Context context, Cursor cursor) {
+                        TextView textWeather = (TextView) view.findViewById(R.id.textWeather);
+                        String city = cursor.getString(cursor.getColumnIndexOrThrow("City"));
+                        if(city.startsWith("\""))
+                        {
+                            city = city.substring(1);
+                        }
+                        if(city.endsWith("\""))
+                        {
+                            city = city.substring(0, city.length()-1);
+                        }
+                        textWeather.setText(city);
+                    }
+                };
+
+                citySpinner.setAdapter(cAdapt);
+
+                //citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                //    @Override
+                //    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //        finalCity = c.getString(citySpinner.getSelectedItemId());
+                //    }
+
+                //    @Override
+                //    public void onNothingSelected(AdapterView<?> adapterView) {
+                        // Do Nothing
+                //   }
+                //});
+
+                //SimpleCursorAdapter cityAdapter = new SimpleCursorAdapter(getApplicationContext(),
+                //       android.R.layout.simple_spinner_dropdown_item, c,
+                //        new String[] {myCitiesSQLiteHelper.KEY_CITY},
+                //        new int[] {R.id.textWeather}, 0);
+
+                //cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                //citySpinner.setAdapter(cityAdapter);
+
+                if(!stateSpinner.getSelectedItem().toString().equals("Select State"))
+                {
+                    cityText.setVisibility(View.VISIBLE);
+                    citySpinner.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                cityText.setVisibility(View.INVISIBLE);
+                citySpinner.setVisibility(View.INVISIBLE);
+            }
+        });
 
         weatherCancel = (Button) weatherDialog.findViewById(R.id.weatherCancel);
         weatherCancel.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view)
             {
-                if(!longClick)
+                if(!longC)
                 {
-                    dismissOption(rowFinal, columnFinal, currentSetting);
+                    dismissOption(row, column, currentSetting);
                 }
                 weatherDialog.dismiss();
             }
@@ -1686,9 +1766,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
+                citySelected = citySpinner.getSelectedItem().toString();
+                stateSelected = stateSpinner.getSelectedItem().toString();
+
                 if(citySelected != null && stateSelected != null)
                 {
-                    Toast.makeText(getApplicationContext(), "These weather options selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
                     weatherDialog.dismiss();
                 }
                 else if(citySelected == null && stateSelected != null)
@@ -1703,6 +1786,8 @@ public class MainActivity extends AppCompatActivity {
                 {
                     Toast.makeText(getApplicationContext(), "Please Select Weather Settings", Toast.LENGTH_LONG).show();
                 }
+
+                // Add code here for saving purposes
             }
         });
 
@@ -2514,39 +2599,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        citydb = new CitiesDatabase(this);
-//        citydb.open();
-//
-//        Cursor c = citydb.getAllCities();
-//
-//        BufferedReader br = null;
-//        String[] cityArr;
-//        try {
-//            br = new BufferedReader(
-//                    new InputStreamReader(getAssets().open("citiesOut.txt")));
-//
-//            String city;
-//            int i = 0;
-//            while ((city = br.readLine()) != null) {
-//                cityArr = city.split(",");
-//                citydb.insertCity(cityArr[1], cityArr[2]);
-//                cityArr[0] = "";
-//                cityArr[1] = "";
-//                cityArr[2] = "";
-//                Log.d("WEATHER", Integer.toString(i));
-//                i++;
-//            }
-//        } catch (IOException e) {
-//            Log.i("IOException", e.toString());
-//        } finally {
-//            if (br != null) {
-//                try {
-//                    br.close();
-//                } catch (IOException e) {
-//                    Log.i("IOException", e.toString());
-//                }
-//            }
-//        }
+        String prefs = "MyPrefs";
+        SharedPreferences settings = getSharedPreferences(prefs, 0);
+
+        citydb = new CitiesDatabase(this);
+        citydb.open();
+
+        if(settings.getBoolean("firstRun", true)) {
+            Cursor c = citydb.getAllCities();
+
+            BufferedReader br = null;
+            String[] cityArr;
+            try {
+                br = new BufferedReader(
+                        new InputStreamReader(getAssets().open("citiesOut.txt")));
+
+                String city;
+                int i = 0;
+                while ((city = br.readLine()) != null) {
+                    cityArr = city.split(",");
+                    citydb.insertCity(cityArr[1], cityArr[2]);
+                    cityArr[0] = "";
+                    cityArr[1] = "";
+                    cityArr[2] = "";
+                    Log.d("WEATHER", Integer.toString(i));
+                    i++;
+                }
+            } catch (IOException e) {
+                Log.i("IOException", e.toString());
+            } finally {
+                if (br != null) {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        Log.i("IOException", e.toString());
+                    }
+                }
+            }
+
+            settings.edit().putBoolean("firstRun", false).apply();
+        }
 
         if(savedInstanceState != null)
         {

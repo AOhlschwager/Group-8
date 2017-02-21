@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Weather Options"
-        android:textSize="20sp"
+        android:textSize="25sp"
         android:layout_margin="10dp"
         android:textColor="@color/colorPrimaryDark"
         android:layout_gravity="center_horizontal"/>
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:padding="10sp"
         android:text="State"
-        android:textSize="15sp"
+        android:textSize="20sp"
         android:textColor="@color/colorPrimary"
         android:layout_gravity="center_horizontal"/>
 
@@ -27,25 +27,27 @@
         android:id="@+id/stateSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:prompt="@string/statePrompt"
-        android:layout_marginRight="5sp"
         android:padding="10sp"
         android:layout_margin="10dp">
     </Spinner>
 
     <TextView
+        android:id="@+id/cityText"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10sp"
         android:text="City"
-        android:textSize="15sp"
+        android:textSize="20sp"
         android:textColor="@color/colorPrimary"
         android:layout_gravity="center_horizontal"/>
 
     <Spinner
         android:id="@+id/citySpinner"
+        android:visibility="invisible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="10sp"
         android:layout_margin="10dp">
     </Spinner>
 

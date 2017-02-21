@@ -5,6 +5,7 @@
     <string name="statePrompt">Select State</string>
 
     <string-array name="states_array">
+        <item>Select State</item>
         <item>Alabama</item>
         <item>Alaska</item>
         <item>Arizona</item>

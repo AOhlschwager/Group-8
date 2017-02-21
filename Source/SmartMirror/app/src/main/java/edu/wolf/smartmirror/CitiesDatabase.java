@@ -40,7 +40,7 @@ public class CitiesDatabase {
     public Cursor getCitiesByState(String stateid) throws SQLException {
         Cursor mCursor =
                 db.query(true, myCitiesSQLiteHelper.DATABASE_TABLE,
-                        new String[] {myCitiesSQLiteHelper.KEY_ROWID, myCitiesSQLiteHelper.KEY_CITY, myCitiesSQLiteHelper.KEY_STATE},
+                        new String[] {myCitiesSQLiteHelper.KEY_ROWID, myCitiesSQLiteHelper.KEY_CITY},
                         myCitiesSQLiteHelper.KEY_STATE + "=\'" + stateid + "\'", null, null, null, null, null);
 
         if(mCursor != null)
