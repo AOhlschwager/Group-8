@@ -1,3 +1,5 @@
+// Used: http://stackoverflow.com/questions/9544737/read-file-from-assets
+
 package edu.wolf.smartmirror;
 
 import android.app.Dialog;
@@ -31,6 +33,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -78,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     int a1formatID, a2formatID, a3formatID, b1formatID, b2formatID, b3formatID, c1formatID, c2formatID, c3formatID;
 
     Spinner stateSpinner, citySpinner;
+    CitiesDatabase citydb;
 
     TimePicker timePick;
     DatePicker datePick;
@@ -1654,6 +1660,14 @@ public class MainActivity extends AppCompatActivity {
         stateSpinner = (Spinner) weatherDialog.findViewById(R.id.stateSpinner);
         citySpinner = (Spinner) weatherDialog.findViewById(R.id.citySpinner);
 
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.states_array, android.R.layout.simple_spinner_item);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        stateSpinner.setPrompt("Select State");
+        stateSpinner.setAdapter(adapter);
+
         weatherCancel = (Button) weatherDialog.findViewById(R.id.weatherCancel);
         weatherCancel.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -2499,6 +2513,40 @@ public class MainActivity extends AppCompatActivity {
                 switcher.showNext();
             }
         });
+
+//        citydb = new CitiesDatabase(this);
+//        citydb.open();
+//
+//        Cursor c = citydb.getAllCities();
+//
+//        BufferedReader br = null;
+//        String[] cityArr;
+//        try {
+//            br = new BufferedReader(
+//                    new InputStreamReader(getAssets().open("citiesOut.txt")));
+//
+//            String city;
+//            int i = 0;
+//            while ((city = br.readLine()) != null) {
+//                cityArr = city.split(",");
+//                citydb.insertCity(cityArr[1], cityArr[2]);
+//                cityArr[0] = "";
+//                cityArr[1] = "";
+//                cityArr[2] = "";
+//                Log.d("WEATHER", Integer.toString(i));
+//                i++;
+//            }
+//        } catch (IOException e) {
+//            Log.i("IOException", e.toString());
+//        } finally {
+//            if (br != null) {
+//                try {
+//                    br.close();
+//                } catch (IOException e) {
+//                    Log.i("IOException", e.toString());
+//                }
+//            }
+//        }
 
         if(savedInstanceState != null)
         {

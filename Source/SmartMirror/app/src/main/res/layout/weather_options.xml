@@ -27,6 +27,9 @@
         android:id="@+id/stateSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:prompt="@string/statePrompt"
+        android:layout_marginRight="5sp"
+        android:padding="10sp"
         android:layout_margin="10dp">
     </Spinner>
 
