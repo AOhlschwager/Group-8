@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     TextView cityText;
     String stateSelected, citySelected;
     String a1state, a2state, a3state, b1state, b2state, b3state, c1state, c2state, c3state;
-    Cursor a1city, a2city, a3city, b1city, b2city, b3city, c1city, c2city, c3city;
+    int a1city = -1, a2city = -1, a3city = -1, b1city = -1, b2city = -1, b3city = -1, c1city = -1, c2city = -1, c3city = -1;
 
     TimePicker timePick;
     DatePicker datePick;
@@ -556,15 +556,15 @@ public class MainActivity extends AppCompatActivity {
                         c2String = ""; c2Current = "";
                         c3String = ""; c3Current = "";
 
-                        a1city = null; a1state = "";
-                        a2city = null; a2state = "";
-                        a3city = null; a3state = "";
-                        b1city = null; b1state = "";
-                        b2city = null; b2state = "";
-                        b3city = null; b3state = "";
-                        c1city = null; c1state = "";
-                        c2city = null; c2state = "";
-                        c3city = null; c3state = "";
+                        a1city = -1; a1state = "";
+                        a2city = -1; a2state = "";
+                        a3city = -1; a3state = "";
+                        b1city = -1; b1state = "";
+                        b2city = -1; b2state = "";
+                        b3city = -1; b3state = "";
+                        c1city = -1; c1state = "";
+                        c2city = -1; c2state = "";
+                        c3city = -1; c3state = "";
 
                         stateSelected = ""; citySelected = "";
 
@@ -1664,10 +1664,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void weatherOptions(final String row, final int column, final Boolean longC, final String currentSetting)
     {
-        final String finalCity;
-        final Cursor finalCursor;
-
-        // Create a dialog and set the content to clock_options.xml
         final Dialog weatherDialog = new Dialog(this);
         weatherDialog.setContentView(R.layout.weather_options);
 
@@ -1680,14 +1676,61 @@ public class MainActivity extends AppCompatActivity {
 
         adapter.setDropDownViewResource(R.layout.spinner_item);
 
+        stateConverter statec = null;
+
+        if(row.equals("A") && column == 1)
+        {
+            statec = new stateConverter(a1state);
+        }
+        else if(row.equals("A") && column == 2)
+        {
+            statec = new stateConverter(a2state);
+        }
+        else if(row.equals("A") && column == 3)
+        {
+            statec = new stateConverter(a3state);
+        }
+        else if(row.equals("B") && column == 1)
+        {
+            statec = new stateConverter(b1state);
+        }
+        else if(row.equals("B") && column == 2)
+        {
+            statec = new stateConverter(b2state);
+        }
+        else if(row.equals("B") && column == 3)
+        {
+            statec = new stateConverter(b3state);
+        }
+        else if(row.equals("C") && column == 1)
+        {
+            statec = new stateConverter(c1state);
+        }
+        else if(row.equals("C") && column == 2)
+        {
+            statec = new stateConverter(c2state);
+        }
+        else if(row.equals("C") && column == 3)
+        {
+            statec = new stateConverter(c3state);
+        }
+        else
+        {
+            Log.d("CRAP", "How did I get here?");
+        }
+
         stateSpinner.setAdapter(adapter);
+        if(statec != null)
+        {
+            stateSpinner.setSelection(statec.getRelativeId());
+        }
         stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 String state = stateSpinner.getSelectedItem().toString();
                 stateConverter sc = new stateConverter(state);
 
-                Cursor c = citydb.getCitiesByState(sc.getId());
+                final Cursor c = citydb.getCitiesByState(sc.getId());
 
                 CursorAdapter cAdapt = new CursorAdapter(getApplicationContext(), c, 0) {
                     @Override
@@ -1712,19 +1755,107 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };
 
+                int savedCityId = -1;
+                if(row.equals("A") && column == 1)
+                {
+                    savedCityId = a1city;
+                }
+                else if(row.equals("A") && column == 2)
+                {
+                    savedCityId = a2city;
+                }
+                else if(row.equals("A") && column == 3)
+                {
+                    savedCityId = a3city;
+                }
+                else if(row.equals("B") && column == 1)
+                {
+                    savedCityId = b1city;
+                }
+                else if(row.equals("B") && column == 2)
+                {
+                    savedCityId = b2city;
+                }
+                else if(row.equals("B") && column == 3)
+                {
+                    savedCityId = b3city;
+                }
+                else if(row.equals("C") && column == 1)
+                {
+                    savedCityId = c1city;
+                }
+                else if(row.equals("C") && column == 2)
+                {
+                    savedCityId = c2city;
+                }
+                else if(row.equals("C") && column == 3)
+                {
+                    savedCityId = c3city;
+                }
+                else
+                {
+                    Log.d("CRAP", "How did I get here?");
+                }
+
                 citySpinner.setAdapter(cAdapt);
 
-                //citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                //    @Override
-                //    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                //        finalCity = c.getString(citySpinner.getSelectedItemId());
-                //    }
+                if(savedCityId != -1)
+                {
+                    citySpinner.setSelection(savedCityId);
+                }
 
-                //    @Override
-                //    public void onNothingSelected(AdapterView<?> adapterView) {
+                citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        //String cityid = c.getString((int)citySpinner.getSelectedItemId());
+                        int cid = c.getPosition();
+                        if(row.equals("A") && column == 1)
+                        {
+                            a1city = cid;
+                        }
+                        else if(row.equals("A") && column == 2)
+                        {
+                            a2city = cid;
+                        }
+                        else if(row.equals("A") && column == 3)
+                        {
+                            a3city = cid;
+                        }
+                        else if(row.equals("B") && column == 1)
+                        {
+                            b1city = cid;
+                        }
+                        else if(row.equals("B") && column == 2)
+                        {
+                            b2city = cid;
+                        }
+                        else if(row.equals("B") && column == 3)
+                        {
+                            b3city = cid;
+                        }
+                        else if(row.equals("C") && column == 1)
+                        {
+                            c1city = cid;
+                        }
+                        else if(row.equals("C") && column == 2)
+                        {
+                            c2city = cid;
+                        }
+                        else if(row.equals("C") && column == 3)
+                        {
+                            c3city = cid;
+                        }
+                        else
+                        {
+                            Log.d("CRAP", "How did I get here?");
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
                         // Do Nothing
-                //   }
-                //});
+                   }
+                });
 
                 //SimpleCursorAdapter cityAdapter = new SimpleCursorAdapter(getApplicationContext(),
                 //       android.R.layout.simple_spinner_dropdown_item, c,
@@ -1787,7 +1918,46 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Please Select Weather Settings", Toast.LENGTH_LONG).show();
                 }
 
-                // Add code here for saving purposes
+                if(row.equals("A") && column == 1)
+                {
+                    a1state = stateSelected;
+                }
+                else if(row.equals("A") && column == 2)
+                {
+                    a2state = stateSelected;
+                }
+                else if(row.equals("A") && column == 3)
+                {
+                    a3state = stateSelected;
+                }
+                else if(row.equals("B") && column == 1)
+                {
+                    b1state = stateSelected;
+                }
+                else if(row.equals("B") && column == 2)
+                {
+                    b2state = stateSelected;
+                }
+                else if(row.equals("B") && column == 3)
+                {
+                    b3state = stateSelected;
+                }
+                else if(row.equals("C") && column == 1)
+                {
+                    c1state = stateSelected;
+                }
+                else if(row.equals("C") && column == 2)
+                {
+                    c2state = stateSelected;
+                }
+                else if(row.equals("C") && column == 3)
+                {
+                    c3state = stateSelected;
+                }
+                else
+                {
+                    Log.d("CRAP", "How did I get here?");
+                }
             }
         });
 
@@ -2666,6 +2836,26 @@ public class MainActivity extends AppCompatActivity {
             c1timezoneID = savedInstanceState.getInt("c1timezoneID");
             c2timezoneID = savedInstanceState.getInt("c2timezoneID");
             c3timezoneID = savedInstanceState.getInt("c3timezoneID");
+
+            a1city = savedInstanceState.getInt("a1city");
+            a2city = savedInstanceState.getInt("a2city");
+            a3city = savedInstanceState.getInt("a3city");
+            b1city = savedInstanceState.getInt("b1city");
+            b2city = savedInstanceState.getInt("b2city");
+            b3city = savedInstanceState.getInt("b3city");
+            c1city = savedInstanceState.getInt("c1city");
+            c2city = savedInstanceState.getInt("c2city");
+            c3city = savedInstanceState.getInt("c3city");
+
+            a1state = savedInstanceState.getString("a1state");
+            a2state = savedInstanceState.getString("a2state");
+            a3state = savedInstanceState.getString("a3state");
+            b1state = savedInstanceState.getString("b1state");
+            b2state = savedInstanceState.getString("b2state");
+            b3state = savedInstanceState.getString("b3state");
+            c1state = savedInstanceState.getString("c1state");
+            c2state = savedInstanceState.getString("c2state");
+            c3state = savedInstanceState.getString("c3state");
         }
 
         a1 = (Button) findViewById(R.id.A1);
@@ -2711,6 +2901,8 @@ public class MainActivity extends AppCompatActivity {
                                 a1format = null;
                                 a1timezoneID = 0;
                                 a1formatID = 0;
+                                a1city = -1;
+                                a1state = "";
 
                                 a1back = Color.parseColor("#000000");
                                 a1text = Color.parseColor("#ffffff");
@@ -2826,6 +3018,8 @@ public class MainActivity extends AppCompatActivity {
                                 a2format = null;
                                 a2timezoneID = 0;
                                 a2formatID = 0;
+                                a2city = -1;
+                                a2state = "";
 
                                 a2back = Color.parseColor("#000000");
                                 a2text = Color.parseColor("#ffffff");
@@ -2940,6 +3134,8 @@ public class MainActivity extends AppCompatActivity {
                                 a3format = null;
                                 a3timezoneID = 0;
                                 a3formatID = 0;
+                                a3city = -1;
+                                a3state = "";
 
                                 a3back = Color.parseColor("#000000");
                                 a3text = Color.parseColor("#ffffff");
@@ -3054,6 +3250,8 @@ public class MainActivity extends AppCompatActivity {
                                 b1format = null;
                                 b1timezoneID = 0;
                                 b1formatID = 0;
+                                b1city = -1;
+                                b1state = "";
 
                                 b1back = Color.parseColor("#000000");
                                 b1text = Color.parseColor("#ffffff");
@@ -3168,6 +3366,8 @@ public class MainActivity extends AppCompatActivity {
                                 b2format = null;
                                 b2timezoneID = 0;
                                 b2formatID = 0;
+                                b2city = -1;
+                                b2state = "";
 
                                 b2back = Color.parseColor("#000000");
                                 b2text = Color.parseColor("#ffffff");
@@ -3282,6 +3482,8 @@ public class MainActivity extends AppCompatActivity {
                                 b3format = null;
                                 b3timezoneID = 0;
                                 b3formatID = 0;
+                                b3city = -1;
+                                b3state = "";
 
                                 b3back = Color.parseColor("#000000");
                                 b3text = Color.parseColor("#ffffff");
@@ -3396,6 +3598,8 @@ public class MainActivity extends AppCompatActivity {
                                 c1format = null;
                                 c1timezoneID = 0;
                                 c1formatID = 0;
+                                c1city = -1;
+                                c1state = "";
 
                                 c1back = Color.parseColor("#000000");
                                 c1text = Color.parseColor("#ffffff");
@@ -3510,6 +3714,8 @@ public class MainActivity extends AppCompatActivity {
                                 c2format = null;
                                 c2timezoneID = 0;
                                 c2formatID = 0;
+                                c2city = -1;
+                                c2state = "";
 
                                 c2back = Color.parseColor("#000000");
                                 c2text = Color.parseColor("#ffffff");
@@ -3624,6 +3830,8 @@ public class MainActivity extends AppCompatActivity {
                                 c3format = null;
                                 c3timezoneID = 0;
                                 c3formatID = 0;
+                                c3city = -1;
+                                c3state = "";
 
                                 c3back = Color.parseColor("#000000");
                                 c3text = Color.parseColor("#ffffff");
@@ -3765,6 +3973,26 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putInt("c2timezoneID", c2timezoneID);
         savedInstanceState.putInt("c3timezoneID", c3timezoneID);
 
+        savedInstanceState.putInt("a1city", a1city);
+        savedInstanceState.putInt("a2city", a2city);
+        savedInstanceState.putInt("a3city", a3city);
+        savedInstanceState.putInt("b1city", b1city);
+        savedInstanceState.putInt("b2city", b2city);
+        savedInstanceState.putInt("b3city", b3city);
+        savedInstanceState.putInt("c1city", c1city);
+        savedInstanceState.putInt("c2city", c2city);
+        savedInstanceState.putInt("c3city", c3city);
+
+        savedInstanceState.putString("a1state", a1state);
+        savedInstanceState.putString("a2state", a2state);
+        savedInstanceState.putString("a3state", a3state);
+        savedInstanceState.putString("b1state", b1state);
+        savedInstanceState.putString("b2state", b2state);
+        savedInstanceState.putString("b3state", b3state);
+        savedInstanceState.putString("c1state", c1state);
+        savedInstanceState.putString("c2state", c2state);
+        savedInstanceState.putString("c3state", c3state);
+
         super.onSaveInstanceState(savedInstanceState);
     }
 
@@ -3796,6 +4024,26 @@ public class MainActivity extends AppCompatActivity {
         c1timezoneID = prefs.getInt("c1timezoneID", 0);
         c2timezoneID = prefs.getInt("c2timezoneID", 0);
         c3timezoneID = prefs.getInt("c3timezoneID", 0);
+
+        a1city = prefs.getInt("a1city", -1);
+        a2city = prefs.getInt("a2city", -1);
+        a3city = prefs.getInt("a3city", -1);
+        b1city = prefs.getInt("b1city", -1);
+        b2city = prefs.getInt("b2city", -1);
+        b3city = prefs.getInt("b3city", -1);
+        c1city = prefs.getInt("c1city", -1);
+        c2city = prefs.getInt("c2city", -1);
+        c3city = prefs.getInt("c3city", -1);
+
+        a1state = prefs.getString("a1state", "");
+        a2state = prefs.getString("a2state", "");
+        a3state = prefs.getString("a3state", "");
+        b1state = prefs.getString("b1state", "");
+        b2state = prefs.getString("b2state", "");
+        b3state = prefs.getString("b3state", "");
+        c1state = prefs.getString("c1state", "");
+        c2state = prefs.getString("c2state", "");
+        c3state = prefs.getString("c3state", "");
 
         a1String = prefs.getString("a1String", "");
         a2String = prefs.getString("a2String", "");
@@ -4052,6 +4300,26 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("c1timezoneID", c1timezoneID);
         editor.putInt("c2timezoneID", c2timezoneID);
         editor.putInt("c3timezoneID", c3timezoneID);
+
+        editor.putInt("a1city", a1city);
+        editor.putInt("a2city", a2city);
+        editor.putInt("a3city", a3city);
+        editor.putInt("b1city", b1city);
+        editor.putInt("b2city", b2city);
+        editor.putInt("b3city", b3city);
+        editor.putInt("c1city", c1city);
+        editor.putInt("c2city", c2city);
+        editor.putInt("c3city", c3city);
+
+        editor.putString("a1state", a1state);
+        editor.putString("a2state", a2state);
+        editor.putString("a3state", a3state);
+        editor.putString("b1state", b1state);
+        editor.putString("b2state", b2state);
+        editor.putString("b3state", b3state);
+        editor.putString("c1state", c1state);
+        editor.putString("c2state", c2state);
+        editor.putString("c3state", c3state);
 
         editor.putInt("a1back", a1back);
         editor.putInt("a2back", a2back);
