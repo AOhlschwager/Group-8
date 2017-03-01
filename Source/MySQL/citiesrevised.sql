@@ -9,10 +9,15 @@ ENCLOSED BY '"'
 ESCAPED BY '"'
 LINES TERMINATED BY 'Active';
 
-SELECT id, name, stateid 
+SELECT * 
 FROM citiesrevised
+WHERE target = 'city'
+GROUP BY stateid
+
+
 WHERE target != 'Postal Code' 
 AND target != 'Congressional District'
+AND target != 'County'
 AND stateid != 0;
 INTO OUTFILE 'C:/Users/Shaya/Desktop/Senior Design/citiesOut.txt'
 FIELDS TERMINATED BY ','
