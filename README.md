@@ -17,9 +17,7 @@ Brief Project Description:
 Files : 
 There are 3 files in the source directory. 
 	
-MySQL : This folder contains the SQL queries used to create the cities table for the weather option.
-		
-SmartMirror : This folder contains the android app for the mirror
-		
-PhoneApp : This folder contains the android app for the phone controls. 
+1.MySQL : This folder contains the SQL queries used to create the cities table for the weather option.
+2.SmartMirror : This folder contains the android app for the mirror
+3.PhoneApp : This folder contains the android app for the phone controls. 
 
