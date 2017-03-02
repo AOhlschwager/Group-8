@@ -2,8 +2,12 @@
 
 package edu.wolf.smartmirror;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -41,12 +45,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     ViewSwitcher switcher;
 
     EditText ip, port;
     String ipString, portString;
+
+    MyReceiver mReceiver;
+    public static final String ACTION = "edu.wolf.smartmirror.MainActivity";
 
     String a1String = ""; String a1Current = "";
     String a2String = ""; String a2Current = "";
@@ -800,6 +807,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 backColor.setBackgroundColor(a1back);
             }
+            textTemp = a1text;
+            backTemp = a1back;
             Log.d("A1_ColorOptions", String.valueOf(a1text) + " " + String.valueOf(a1back));
         }
         else if(row.equals("A") && column == 2)
@@ -816,6 +825,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 backColor.setBackgroundColor(a2back);
             }
+            textTemp = a2text;
+            backTemp = a2back;
             Log.d("A2_ColorOptions", String.valueOf(a2text) + " " + String.valueOf(a2back));
         }
         else if(row.equals("A") && column == 3)
@@ -832,6 +843,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 backColor.setBackgroundColor(a3back);
             }
+            textTemp = a3text;
+            backTemp = a3back;
             Log.d("A3_ColorOptions", String.valueOf(a3text) + " " + String.valueOf(a3back));
         }
         else if(row.equals("B") && column == 1)
@@ -848,6 +861,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 backColor.setBackgroundColor(b1back);
             }
+            textTemp = b1text;
+            backTemp = b1back;
             Log.d("B1_ColorOptions", String.valueOf(b1text) + " " + String.valueOf(b1back));
         }
         else if(row.equals("B") && column == 2)
@@ -864,6 +879,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 backColor.setBackgroundColor(b2back);
             }
+            textTemp = b2text;
+            backTemp = b2back;
             Log.d("B2_ColorOptions", String.valueOf(b2text) + " " + String.valueOf(b2back));
         }
         else if(row.equals("B") && column == 3)
@@ -880,6 +897,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 backColor.setBackgroundColor(b3back);
             }
+            textTemp = b3text;
+            backTemp = b3back;
             Log.d("B3_ColorOptions", String.valueOf(b3text) + " " + String.valueOf(b3back));
         }
         else if(row.equals("C") && column == 1)
@@ -896,6 +915,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 backColor.setBackgroundColor(c1back);
             }
+            textTemp = c1text;
+            backTemp = c1back;
             Log.d("C1_ColorOptions", String.valueOf(c1text) + " " + String.valueOf(c1back));
         }
         else if(row.equals("C") && column == 2)
@@ -912,6 +933,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 backColor.setBackgroundColor(c2back);
             }
+            textTemp = c2text;
+            backTemp = c2back;
             Log.d("C2_ColorOptions", String.valueOf(c2text) + " " + String.valueOf(c2back));
         }
         else if(row.equals("C") && column == 3)
@@ -928,6 +951,8 @@ public class MainActivity extends AppCompatActivity {
             {
                 backColor.setBackgroundColor(c3back);
             }
+            textTemp = c3text;
+            backTemp = c3back;
             Log.d("C3_ColorOptions", String.valueOf(c3text) + " " + String.valueOf(c3back));
         }
         else
@@ -1112,7 +1137,6 @@ public class MainActivity extends AppCompatActivity {
             c3.setText(current);
         }
     }
-
 
     public void clockOptions(String row, int column, Boolean longC, final String currentSetting)
     {
@@ -2745,12 +2769,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d("TAG", item + "\n");
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mReceiver = new MyReceiver();
 
         switcher = (ViewSwitcher) findViewById(R.id.activity_main);
 
@@ -2885,6 +2910,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 a1.setBackgroundColor(Color.parseColor("#fa6f04"));
+                a1.setTextColor(Color.WHITE);
 
                 a1Current = a1.getText().toString();
 
@@ -2941,6 +2967,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         a1.setBackgroundColor(a1back);
+                        a1.setTextColor(a1text);
                     }
                 });
 
@@ -3002,6 +3029,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 a2.setBackgroundColor(Color.parseColor("#fa6f04"));
+                a2.setTextColor(Color.WHITE);
 
                 a2Current = a2.getText().toString();
 
@@ -3058,6 +3086,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         a2.setBackgroundColor(a2back);
+                        a2.setTextColor(a2text);
                     }
                 });
 
@@ -3118,6 +3147,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 a3.setBackgroundColor(Color.parseColor("#fa6f04"));
+                a3.setTextColor(Color.WHITE);
 
                 a3Current = a3.getText().toString();
 
@@ -3174,6 +3204,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         a3.setBackgroundColor(a3back);
+                        a3.setTextColor(a3text);
                     }
                 });
 
@@ -3234,6 +3265,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 b1.setBackgroundColor(Color.parseColor("#fa6f04"));
+                b1.setTextColor(Color.WHITE);
 
                 b1Current = b1.getText().toString();
 
@@ -3290,6 +3322,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         b1.setBackgroundColor(b1back);
+                        b1.setTextColor(b1text);
                     }
                 });
 
@@ -3350,6 +3383,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 b2.setBackgroundColor(Color.parseColor("#fa6f04"));
+                b2.setTextColor(Color.WHITE);
 
                 b2Current = b2.getText().toString();
 
@@ -3406,6 +3440,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         b2.setBackgroundColor(b2back);
+                        b2.setTextColor(b2text);
                     }
                 });
 
@@ -3466,6 +3501,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 b3.setBackgroundColor(Color.parseColor("#fa6f04"));
+                b3.setTextColor(Color.WHITE);
 
                 b3Current = b3.getText().toString();
 
@@ -3522,6 +3558,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         b3.setBackgroundColor(b3back);
+                        b3.setTextColor(b3text);
                     }
                 });
 
@@ -3582,6 +3619,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 c1.setBackgroundColor(Color.parseColor("#fa6f04"));
+                c1.setTextColor(Color.WHITE);
 
                 c1Current = c1.getText().toString();
 
@@ -3638,6 +3676,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         c1.setBackgroundColor(c1back);
+                        c1.setTextColor(c1text);
                     }
                 });
 
@@ -3698,6 +3737,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 c2.setBackgroundColor(Color.parseColor("#fa6f04"));
+                c2.setTextColor(Color.WHITE);
 
                 c2Current = c2.getText().toString();
 
@@ -3754,6 +3794,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         c2.setBackgroundColor(c2back);
+                        c2.setTextColor(c2text);
                     }
                 });
 
@@ -3814,6 +3855,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 c3.setBackgroundColor(Color.parseColor("#fa6f04"));
+                c3.setTextColor(Color.WHITE);
 
                 c3Current = c3.getText().toString();
 
@@ -3870,6 +3912,7 @@ public class MainActivity extends AppCompatActivity {
                 popup.setOnDismissListener(new PopupMenu.OnDismissListener(){
                     public void onDismiss(PopupMenu menu) {
                         c3.setBackgroundColor(c3back);
+                        c3.setTextColor(c3text);
                     }
                 });
 
@@ -4268,7 +4311,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onPause()
-    {
+     {
+        getBaseContext().unregisterReceiver(mReceiver);
+
         super.onPause();
         Log.d("PAUSE", "Not in focus");
 
@@ -4369,6 +4414,13 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.d("RESUME", "Became visible");
         getprefs();
+        getBaseContext().registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
     }
+
+    //@Override
+    //protected void onNewIntent(Intent intent) {
+        //super.onNewIntent(intent);
+    //}
+
 
 }
