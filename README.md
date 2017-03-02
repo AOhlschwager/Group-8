@@ -1,4 +1,4 @@
-#Group 8 Readme
+Group 8 Readme
 =========================================
 
 **Group Name:** Group 8
