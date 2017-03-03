@@ -52,8 +52,8 @@ public class MainActivity extends Activity {
     EditText ip, port;
     String ipString, portString;
 
-    MyReceiver mReceiver;
-    public static final String ACTION = "edu.wolf.smartmirror.MainActivity";
+    //MyReceiver mReceiver;
+    //public static final String ACTION = "edu.wolf.smartmirror.MainActivity";
 
     String a1String = ""; String a1Current = "";
     String a2String = ""; String a2Current = "";
@@ -2775,7 +2775,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mReceiver = new MyReceiver();
+        //mReceiver = new MyReceiver();
 
         switcher = (ViewSwitcher) findViewById(R.id.activity_main);
 
@@ -4312,7 +4312,7 @@ public class MainActivity extends Activity {
     @Override
     public void onPause()
      {
-        getBaseContext().unregisterReceiver(mReceiver);
+        //getBaseContext().unregisterReceiver(mReceiver);
 
         super.onPause();
         Log.d("PAUSE", "Not in focus");
@@ -4414,13 +4414,11 @@ public class MainActivity extends Activity {
         super.onResume();
         Log.d("RESUME", "Became visible");
         getprefs();
-        getBaseContext().registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
+        //getBaseContext().registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
     }
 
     //@Override
     //protected void onNewIntent(Intent intent) {
         //super.onNewIntent(intent);
     //}
-
-
 }
