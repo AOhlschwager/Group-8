@@ -5,12 +5,14 @@ package edu.wolf.smartmirror;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.PopupMenu;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -2788,7 +2791,7 @@ public class MainActivity extends AppCompatActivity {
         switcher = (ViewSwitcher) findViewById(R.id.activity_main);
 
         ip = (EditText) findViewById(R.id.ipEdit);
-        ipString = ip.getText().toString();
+        ip.setText("10.121.174.200"); //computer local host
 
         port = (EditText) findViewById(R.id.portEdit);
         portString = port.getText().toString();
@@ -2954,7 +2957,7 @@ public class MainActivity extends AppCompatActivity {
                             case "Clock":
                                 a1.setText(item.getTitle());
                                 clockOptions("A", 1, false, a1Current);
-                                sendMessage = "A1 clock ";// + a1formatID + a1timezoneID;
+                                sendMessage = "A1 clock";// + a1formatID + a1timezoneID;
                                 break;
                             case "Weather":
                                 a1.setText(item.getTitle());
@@ -3962,7 +3965,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            //output.append(msg.getData().getString("msg"));
+            Log.d("Handler", msg.getData().getString("msg"));
             return true;
         }
 
@@ -3990,10 +3993,10 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
 
 
-            int p = Integer.parseInt(port.getText().toString());
+            int p = 3012;
             String h = ipString;
             mkmsg("host is " + h + "\n");
-            mkmsg(" Port is " + p + "\n");
+            mkmsg(" Port is " + portString + "\n");
             try {
                 InetAddress serverAddr = InetAddress.getByName(h);
                 mkmsg("Attempt Connecting..." + h + "\n");
@@ -4016,7 +4019,9 @@ public class MainActivity extends AppCompatActivity {
                     String str = in.readLine();
                     mkmsg("received a message:\n" + str + "\n");
 
+                    mkmsg("Attempting to send message ...\n");
                     out.println(sendMessage);
+                    mkmsg("Message sent...\n");
 
                     mkmsg("We are done, closing connection\n");
                 } catch (Exception e) {
