@@ -4010,8 +4010,11 @@ public class MainActivity extends AppCompatActivity {
                 //now send a message to the server and then read back the response.
                 try {
                     //write a message to the server
+                    //Shaya, the protocol was a little messy here, It would break before it ever did anything because it was sending message instead of
+                    //sending sendMessage. I don't know where sendMessage is created but on the server side it is also looking for the sendMessage to
+                    //contain "A1 clock" in order to display the text "Clock" so if we can get that to work then we can simply change it to display a widget instead
                     mkmsg("Attempting to send message ...\n");
-                    out.println(message);
+                    out.println(sendMessage);
                     mkmsg("Message sent...\n");
 
                     //read back a message from the server.
@@ -4019,9 +4022,9 @@ public class MainActivity extends AppCompatActivity {
                     String str = in.readLine();
                     mkmsg("received a message:\n" + str + "\n");
 
-                    mkmsg("Attempting to send message ...\n");
-                    out.println(sendMessage);
-                    mkmsg("Message sent...\n");
+//                    mkmsg("Attempting to send message ...\n");
+//                    out.println(sendMessage);
+//                    mkmsg("Message sent...\n");
 
                     mkmsg("We are done, closing connection\n");
                 } catch (Exception e) {
