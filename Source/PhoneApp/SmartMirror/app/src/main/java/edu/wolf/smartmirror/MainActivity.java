@@ -55,13 +55,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Button.OnClickListener {
 
     ViewSwitcher switcher;
 
     EditText ip, port;
     String ipString, portString, sendMessage;
     Thread myNet;
+    Boolean paused = false;
 
     //MyReceiver mReceiver;
     public static final String ACTION = "edu.wolf.smartmirror.MainActivity";
@@ -2791,13 +2792,14 @@ public class MainActivity extends AppCompatActivity {
         switcher = (ViewSwitcher) findViewById(R.id.activity_main);
 
         ip = (EditText) findViewById(R.id.ipEdit);
-        ip.setText("10.121.174.200"); //computer local host
+        ip.setText("192.168.1.122");
 
         port = (EditText) findViewById(R.id.portEdit);
-        portString = port.getText().toString();
+        port.setText("3012");
 
         connect = (Button) findViewById(R.id.connect);
-        connect.setOnClickListener(new View.OnClickListener() {
+        connect.setOnClickListener(this);
+        /*connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 doNetwork stuff = new doNetwork();
@@ -2805,7 +2807,7 @@ public class MainActivity extends AppCompatActivity {
                 myNet.start();
                 switcher.showNext();
             }
-        });
+        });*/
 
         String prefs = "MyPrefs";
         SharedPreferences settings = getSharedPreferences(prefs, 0);
@@ -2962,14 +2964,17 @@ public class MainActivity extends AppCompatActivity {
                             case "Weather":
                                 a1.setText(item.getTitle());
                                 weatherOptions("A", 1, false, a1Current);
+                                sendMessage = "A1 weather";//
                                 break;
                             case "Reminder":
                                 a1.setText(item.getTitle());
                                 reminderOptions("A", 1, false, a1Current);
+                                sendMessage = "A1 reminder";//
                                 break;
                             case "Alarm":
                                 a1.setText(item.getTitle());
                                 alarmOptions("A", 1, false, a1Current);
+                                sendMessage = "A1 alarm";//
                                 break;
                             default:
                                 a1.setText(item.getTitle());
@@ -3962,6 +3967,14 @@ public class MainActivity extends AppCompatActivity {
         getprefs();
     }
 
+    @Override
+    public void onClick(View v) {
+        doNetwork stuff = new doNetwork();
+        myNet = new Thread(stuff);
+        myNet.start();
+        switcher.showNext();
+    }
+
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -3980,12 +3993,6 @@ public class MainActivity extends AppCompatActivity {
         handler.sendMessage(msg);
     }
 
-    public void onClick(View v) {
-        doNetwork stuff = new doNetwork();
-        myNet = new Thread(stuff);
-        myNet.start();
-    }
-
     class doNetwork implements Runnable {
         public PrintWriter out;
         public BufferedReader in;
@@ -3993,26 +4000,26 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
 
 
-            int p = 3012;
-            String h = ipString;
+            int p = Integer.parseInt(port.getText().toString());
+            String h = ip.getText().toString();
+            //String h = ipString;
             mkmsg("host is " + h + "\n");
-            mkmsg(" Port is " + portString + "\n");
+            mkmsg("Port is " + p + "\n");
             try {
                 InetAddress serverAddr = InetAddress.getByName(h);
                 mkmsg("Attempt Connecting..." + h + "\n");
                 Socket socket = new Socket(serverAddr, p);
-                String message = "Hello from Client android emulator";
+                mkmsg("Connected");
+                //String message = "Hello";
 
                 //made connection, setup the read (in) and write (out)
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
+                mkmsg("Connected: " + "in is " + in.toString() + "and out it " + out.toString());
                 //now send a message to the server and then read back the response.
                 try {
-                    //write a message to the server
-                    //Shaya, the protocol was a little messy here, It would break before it ever did anything because it was sending message instead of
-                    //sending sendMessage. I don't know where sendMessage is created but on the server side it is also looking for the sendMessage to
-                    //contain "A1 clock" in order to display the text "Clock" so if we can get that to work then we can simply change it to display a widget instead
+                    /*//write a message to the server
                     mkmsg("Attempting to send message ...\n");
                     out.println(sendMessage);
                     mkmsg("Message sent...\n");
@@ -4020,7 +4027,20 @@ public class MainActivity extends AppCompatActivity {
                     //read back a message from the server.
                     mkmsg("Attempting to receive a message ...\n");
                     String str = in.readLine();
-                    mkmsg("received a message:\n" + str + "\n");
+                    mkmsg("received a message:\n" + str + "\n");*/
+
+                    String str = "";
+                    while (! str.equals("close"))
+                    {
+                        mkmsg("Attempting to send message ...\n");
+                        out.println(sendMessage);
+                        mkmsg("Message sent...\n");
+
+                        //read back a message from the server.
+                        mkmsg("Attempting to receive a message ...\n");
+                        str = in.readLine();
+                        mkmsg("received a message:\n" + str + "\n");
+                    }
 
 //                    mkmsg("Attempting to send message ...\n");
 //                    out.println(sendMessage);
@@ -4038,10 +4058,19 @@ public class MainActivity extends AppCompatActivity {
 
             } catch (Exception e) {
                 mkmsg("Unable to connect...\n");
+                if(!paused)
+                {
+                    run();
+                }
+            }
+            finally {
+                if(!paused)
+                {
+                    run();
+                }
             }
         }
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
@@ -4405,11 +4434,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+/*    @Override
+    public void onStop()
+    {
+        paused = true;
+        super.onStop();
+        Log.d("STOP", "Application out of view");
+    }*/
+
     @Override
     public void onPause()
      {
         //getBaseContext().unregisterReceiver(mReceiver);
-
+        paused = true;
         super.onPause();
         Log.d("PAUSE", "Not in focus");
 
@@ -4508,15 +4545,14 @@ public class MainActivity extends AppCompatActivity {
     public void onResume()
     {
         super.onResume();
-        Log.d("RESUME", "Became visible");
         getprefs();
+
+        paused = false;
+        doNetwork stuff = new doNetwork();
+        myNet = new Thread(stuff);
+        myNet.start();
+
+        Log.d("RESUME", "Became visible");
         //getBaseContext().registerReceiver(mReceiver, new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
     }
-
-    //@Override
-    //protected void onNewIntent(Intent intent) {
-        //super.onNewIntent(intent);
-    //}
-
-
 }
