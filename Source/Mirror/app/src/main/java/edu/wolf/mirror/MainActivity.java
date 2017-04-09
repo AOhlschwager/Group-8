@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
     TextView ip;
     ViewSwitcher switcher;
-    Button a1;
+    Button a1, a2, a3, b1, b2, b3, c1, c2, c3;
 
     String a1String;
 
@@ -57,6 +57,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         ip.setText(display);
 
         a1 = (Button) findViewById(R.id.A1);
+        a2 = (Button) findViewById(R.id.A2);
+        a3 = (Button) findViewById(R.id.A3);
+        b1 = (Button) findViewById(R.id.B1);
+        b2 = (Button) findViewById(R.id.B2);
+        b3 = (Button) findViewById(R.id.B3);
+        c1 = (Button) findViewById(R.id.C1);
+        c2 = (Button) findViewById(R.id.C2);
+        c3 = (Button) findViewById(R.id.C3);
 
         doNetwork stuff = new doNetwork();
         myNet = new Thread(stuff);
@@ -128,6 +136,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 a1.setText("Clock");
                                 // This toast never pops up on the pi
                                 //Toast.makeText(MainActivity.this, "I'm TRYING", Toast.LENGTH_SHORT).show();
+                                in.close();
+                                out.close();
+                                break;
+                            }
+                            else if(str.equals("C3 reminder"))
+                            {
+                                out.println("close");
+                                c3.setText("Reminder");
                                 in.close();
                                 out.close();
                                 break;
