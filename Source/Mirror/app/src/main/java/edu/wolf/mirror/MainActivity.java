@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 //message = "Closed";
                                 out.println("close");
                                 a1.setText("Clock");
+                                // This toast never pops up on the pi
+                                //Toast.makeText(MainActivity.this, "I'm TRYING", Toast.LENGTH_SHORT).show();
                                 in.close();
                                 out.close();
                                 break;
@@ -168,11 +170,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
                         in.close();
                         out.close();
+                        //Toast.makeText(MainActivity.this, "I'm TRYING 2", Toast.LENGTH_SHORT).show();
 
                     } catch (Exception e) {
                         mkmsg("Error happened sending/receiving\n");
                         client.close();
                         serverSocket.close();
+
+                        //findViewById(R.id.activity_main).performContextClick();
+
+                        //Toast.makeText(MainActivity.this, "I'm TRYING 5", Toast.LENGTH_SHORT).show();
                         run();
 
                     } finally {
@@ -181,15 +188,17 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         //message = "Done";
                         client.close();  //close the client connection
                         serverSocket.close();  //finally close down the server side as well.
+
+                        //Toast.makeText(MainActivity.this, "I'm TRYING 4", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
                     mkmsg("Unable to connect...\n");
+                    //Toast.makeText(MainActivity.this, "I'm TRYING 3", Toast.LENGTH_SHORT).show();
                     //message = "Done";
                     //run();
                 }
             }
-
         }
     }
 }

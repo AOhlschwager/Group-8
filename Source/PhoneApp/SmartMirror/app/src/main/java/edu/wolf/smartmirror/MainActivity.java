@@ -1694,6 +1694,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         clockDialog.show();
     }
 
+    // Opens the weather Dialog and sets
     public void weatherOptions(final String row, final int column, final Boolean longC, final String currentSetting)
     {
         final Dialog weatherDialog = new Dialog(this);
@@ -1708,6 +1709,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         adapter.setDropDownViewResource(R.layout.spinner_item);
 
+        // Callback -- Set the state dropdown if button is being edited
+        // rather than set
         stateConverter statec = null;
 
         if(row.equals("A") && column == 1)
@@ -1832,10 +1835,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 citySpinner.setAdapter(cAdapt);
 
                 // BUG
-                if(sc.getId() != stateSelected)
-                {
-                    savedCityId = -1;
-                }
+                //if(sc.getId() != stateSelected)
+                //{
+                //    savedCityId = -1;
+                //}
 
                 if(savedCityId != -1)
                 {
@@ -1935,6 +1938,17 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             @Override
             public void onClick(View view)
             {
+                /*if(stateSpinner.getSelectedItem() == null)
+                {
+                    Toast.makeText(getApplicationContext(), "Please Select State", Toast.LENGTH_LONG).show();
+                    return;
+                }*/
+                if(citySpinner.getSelectedItem() == null)
+                {
+                    Toast.makeText(getApplicationContext(), "Please Select State", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 citySelected = citySpinner.getSelectedItem().toString();
                 stateSelected = stateSpinner.getSelectedItem().toString();
 
@@ -1946,14 +1960,17 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 else if(citySelected == null && stateSelected != null)
                 {
                     Toast.makeText(getApplicationContext(), "Please Select City", Toast.LENGTH_LONG).show();
+                    return;
                 }
                 else if(citySelected != null)
                 {
                     Toast.makeText(getApplicationContext(), "Please Select State", Toast.LENGTH_LONG).show();
+                    return;
                 }
                 else
                 {
                     Toast.makeText(getApplicationContext(), "Please Select Weather Settings", Toast.LENGTH_LONG).show();
+                    return;
                 }
 
                 if(row.equals("A") && column == 1)
@@ -4002,7 +4019,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
             int p = Integer.parseInt(port.getText().toString());
             String h = ip.getText().toString();
-            //String h = ipString;
+
             mkmsg("host is " + h + "\n");
             mkmsg("Port is " + p + "\n");
             try {
@@ -4010,7 +4027,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 mkmsg("Attempt Connecting..." + h + "\n");
                 Socket socket = new Socket(serverAddr, p);
                 mkmsg("Connected");
-                //String message = "Hello";
 
                 //made connection, setup the read (in) and write (out)
                 out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
@@ -4019,16 +4035,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 mkmsg("Connected: " + "in is " + in.toString() + "and out it " + out.toString());
                 //now send a message to the server and then read back the response.
                 try {
-                    /*//write a message to the server
-                    mkmsg("Attempting to send message ...\n");
-                    out.println(sendMessage);
-                    mkmsg("Message sent...\n");
-
-                    //read back a message from the server.
-                    mkmsg("Attempting to receive a message ...\n");
-                    String str = in.readLine();
-                    mkmsg("received a message:\n" + str + "\n");*/
-
                     String str = "";
                     while (! str.equals("close"))
                     {
@@ -4042,15 +4048,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         str = in.readLine();
                         mkmsg("received a message:\n" + str + "\n");
                     }
-
-//                    mkmsg("Attempting to send message ...\n");
-//                    out.println(sendMessage);
-//                    mkmsg("Message sent...\n");
-
                     mkmsg("We are done, closing connection\n");
                 } catch (Exception e) {
                     mkmsg("Error happened sending/receiving\n");
-
                 } finally {
                     in.close();
                     out.close();
@@ -4434,14 +4434,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             c3.setTextColor(Color.parseColor("#ffffff"));
         }
     }
-
-/*    @Override
-    public void onStop()
-    {
-        paused = true;
-        super.onStop();
-        Log.d("STOP", "Application out of view");
-    }*/
 
     @Override
     public void onPause()
