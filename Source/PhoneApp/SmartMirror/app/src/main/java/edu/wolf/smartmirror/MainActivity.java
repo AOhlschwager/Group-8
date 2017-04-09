@@ -4035,6 +4035,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         mkmsg("Attempting to send message ...\n");
                         out.println(sendMessage);
                         mkmsg("Message sent...\n");
+                        sendMessage = "Wait";
 
                         //read back a message from the server.
                         mkmsg("Attempting to receive a message ...\n");

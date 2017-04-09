@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
     String TAG = "TCPServer", message = "State of Mirror";
     Thread myNet;
-    Boolean first = true;
 
     TextView ip;
     ViewSwitcher switcher;
@@ -74,7 +73,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
     });
 
+    @Override
     public void onClick(View v) {
+        //Toast.makeText(MainActivity.this, "OnClick Happened", Toast.LENGTH_SHORT).show();
         doNetwork stuff = new doNetwork();
         myNet = new Thread(stuff);
         myNet.start();
@@ -161,15 +162,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 message = "State of Mirror";
                                 out.println(message);
                             }
-
-                            //now send a message.
-                            //message = "State of mirror";
-                            //mkmsg("Attempting to send message ...\n");
-                            //out.println(message);
-                            //mkmsg("Message sent...\n");
-                        }
+                        } // end of while
 
                         //now close down the send/receive streams.
+
                         in.close();
                         out.close();
 
@@ -189,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
                 } catch (Exception e) {
                     mkmsg("Unable to connect...\n");
+                    //message = "Done";
                     //run();
                 }
             }
