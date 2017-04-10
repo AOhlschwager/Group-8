@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     ViewSwitcher switcher;
     Button a1, a2, a3, b1, b2, b3, c1, c2, c3;
 
-    String a1String;
+    Boolean clear = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,52 +128,306 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                             //Toast.makeText(MainActivity.this, "I'm TRYING", Toast.LENGTH_SHORT).show();
                             String str = in.readLine();
                             mkmsg("received a message:\n" + str + "\n");
+                            String[] strArray = str.split("\\s+");
 
-                            if(str.equals("A1 clock"))
+                            if(str.equals("clear mirror"))
                             {
-                                //message = "Closed";
                                 out.println("close");
-                                a1.setText("Clock");
-                                // This toast never pops up on the pi
-                                //Toast.makeText(MainActivity.this, "I'm TRYING", Toast.LENGTH_SHORT).show();
+
+                                clear = true;
+
                                 in.close();
                                 out.close();
                                 break;
                             }
-                            else if(str.equals("C3 reminder"))
+
+                            if(strArray[0].equals("A1"))
                             {
-                                out.println("close");
-                                c3.setText("Reminder");
-                                in.close();
-                                out.close();
-                                break;
+                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
+                                {
+                                    int back; int text;
+                                    if(strArray[1].equals("clear"))
+                                    {
+                                        back = Color.parseColor("#000000");
+                                        text = Color.parseColor("#ffffff");
+                                        a1.setText("");
+                                    }
+                                    else
+                                    {
+                                        back = Integer.parseInt(strArray[2]);
+                                        text = Integer.parseInt(strArray[3]);
+                                    }
+                                    out.println("close");
+                                    a1.setBackgroundColor(back);
+                                    a1.setTextColor(text);
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                                else
+                                {
+                                    out.println("close");
+                                    a1.setText(strArray[1].toUpperCase());
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
                             }
-                            else if(str.equals("A1 weather"))
+                            else if(strArray[0].equals("A2"))
                             {
-                                //message = "Closed";
-                                out.println("close");
-                                a1.setText("Weather");
-                                in.close();
-                                out.close();
-                                break;
+                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
+                                {
+                                    int back; int text;
+                                    if(strArray[1].equals("clear"))
+                                    {
+                                        back = Color.parseColor("#000000");
+                                        text = Color.parseColor("#ffffff");
+                                        a2.setText("");
+                                    }
+                                    else
+                                    {
+                                        back = Integer.parseInt(strArray[2]);
+                                        text = Integer.parseInt(strArray[3]);
+                                    }
+                                    out.println("close");
+                                    a2.setBackgroundColor(back);
+                                    a2.setTextColor(text);
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                                else
+                                {
+                                    out.println("close");
+                                    a2.setText(strArray[1].toUpperCase());
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
                             }
-                            else if(str.equals("A1 reminder"))
+                            else if(strArray[0].equals("A3"))
                             {
-                                //message = "Closed";
-                                out.println("close");
-                                a1.setText("Reminder");
-                                in.close();
-                                out.close();
-                                break;
+                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
+                                {
+                                    int back; int text;
+                                    if(strArray[1].equals("clear"))
+                                    {
+                                        back = Color.parseColor("#000000");
+                                        text = Color.parseColor("#ffffff");
+                                        a3.setText("");
+                                    }
+                                    else
+                                    {
+                                        back = Integer.parseInt(strArray[2]);
+                                        text = Integer.parseInt(strArray[3]);
+                                    }
+                                    out.println("close");
+                                    a3.setBackgroundColor(back);
+                                    a3.setTextColor(text);
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                                else
+                                {
+                                    out.println("close");
+                                    a3.setText(strArray[1].toUpperCase());
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
                             }
-                            else if(str.equals("A1 alarm"))
+                            else if(strArray[0].equals("B1"))
                             {
-                                //message = "Closed";
-                                out.println("close");
-                                a1.setText("Alarm");
-                                in.close();
-                                out.close();
-                                break;
+                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
+                                {
+                                    int back; int text;
+                                    if(strArray[1].equals("clear"))
+                                    {
+                                        back = Color.parseColor("#000000");
+                                        text = Color.parseColor("#ffffff");
+                                        b1.setText("");
+                                    }
+                                    else
+                                    {
+                                        back = Integer.parseInt(strArray[2]);
+                                        text = Integer.parseInt(strArray[3]);
+                                    }
+                                    out.println("close");
+                                    b1.setBackgroundColor(back);
+                                    b1.setTextColor(text);
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                                else
+                                {
+                                    out.println("close");
+                                    b1.setText(strArray[1].toUpperCase());
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                            }
+                            else if(strArray[0].equals("B2"))
+                            {
+                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
+                                {
+                                    int back; int text;
+                                    if(strArray[1].equals("clear"))
+                                    {
+                                        back = Color.parseColor("#000000");
+                                        text = Color.parseColor("#ffffff");
+                                        b2.setText("");
+                                    }
+                                    else
+                                    {
+                                        back = Integer.parseInt(strArray[2]);
+                                        text = Integer.parseInt(strArray[3]);
+                                    }
+                                    out.println("close");
+                                    b2.setBackgroundColor(back);
+                                    b2.setTextColor(text);
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                                else
+                                {
+                                    out.println("close");
+                                    b2.setText(strArray[1].toUpperCase());
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                            }
+                            else if(strArray[0].equals("B3"))
+                            {
+                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
+                                {
+                                    int back; int text;
+                                    if(strArray[1].equals("clear"))
+                                    {
+                                        back = Color.parseColor("#000000");
+                                        text = Color.parseColor("#ffffff");
+                                        b3.setText("");
+                                    }
+                                    else
+                                    {
+                                        back = Integer.parseInt(strArray[2]);
+                                        text = Integer.parseInt(strArray[3]);
+                                    }
+                                    out.println("close");
+                                    b3.setBackgroundColor(back);
+                                    b3.setTextColor(text);
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                                else
+                                {
+                                    out.println("close");
+                                    b3.setText(strArray[1].toUpperCase());
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                            }
+                            else if(strArray[0].equals("C1"))
+                            {
+                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
+                                {
+                                    int back; int text;
+                                    if(strArray[1].equals("clear"))
+                                    {
+                                        back = Color.parseColor("#000000");
+                                        text = Color.parseColor("#ffffff");
+                                        c1.setText("");
+                                    }
+                                    else
+                                    {
+                                        back = Integer.parseInt(strArray[2]);
+                                        text = Integer.parseInt(strArray[3]);
+                                    }
+                                    out.println("close");
+                                    c1.setBackgroundColor(back);
+                                    c1.setTextColor(text);
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                                else
+                                {
+                                    out.println("close");
+                                    c1.setText(strArray[1].toUpperCase());
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                            }
+                            else if(strArray[0].equals("C2"))
+                            {
+                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
+                                {
+                                    int back; int text;
+                                    if(strArray[1].equals("clear"))
+                                    {
+                                        back = Color.parseColor("#000000");
+                                        text = Color.parseColor("#ffffff");
+                                        c2.setText("");
+                                    }
+                                    else
+                                    {
+                                        back = Integer.parseInt(strArray[2]);
+                                        text = Integer.parseInt(strArray[3]);
+                                    }
+                                    out.println("close");
+                                    c2.setBackgroundColor(back);
+                                    c2.setTextColor(text);
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                                else
+                                {
+                                    out.println("close");
+                                    c2.setText(strArray[1].toUpperCase());
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                            }
+                            else if(strArray[0].equals("C3"))
+                            {
+                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
+                                {
+                                    int back; int text;
+                                    if(strArray[1].equals("clear"))
+                                    {
+                                        back = Color.parseColor("#000000");
+                                        text = Color.parseColor("#ffffff");
+                                        c3.setText("");
+                                    }
+                                    else
+                                    {
+                                        back = Integer.parseInt(strArray[2]);
+                                        text = Integer.parseInt(strArray[3]);
+                                    }
+                                    out.println("close");
+                                    c3.setBackgroundColor(back);
+                                    c3.setTextColor(text);
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
+                                else
+                                {
+                                    out.println("close");
+                                    c3.setText(strArray[1].toUpperCase());
+                                    in.close();
+                                    out.close();
+                                    break;
+                                }
                             }
                             else
                             {
@@ -202,6 +456,40 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         //Toast.makeText(MainActivity.this, "The world ended", Toast.LENGTH_SHORT).show();
                         //mkmsg("We are done, closing connection\n");
                         //message = "Done";
+                        if(clear)
+                        {
+                            a1.setBackgroundColor(Color.parseColor("#000000"));
+                            a1.setTextColor(Color.parseColor("#ffffff"));
+                            a1.setText("");
+                            a2.setBackgroundColor(Color.parseColor("#000000"));
+                            a2.setTextColor(Color.parseColor("#ffffff"));
+                            a2.setText("");
+                            a3.setBackgroundColor(Color.parseColor("#000000"));
+                            a3.setTextColor(Color.parseColor("#ffffff"));
+                            a3.setText("");
+
+                            b1.setBackgroundColor(Color.parseColor("#000000"));
+                            b1.setTextColor(Color.parseColor("#ffffff"));
+                            b1.setText("");
+                            b2.setBackgroundColor(Color.parseColor("#000000"));
+                            b2.setTextColor(Color.parseColor("#ffffff"));
+                            b2.setText("");
+                            b3.setBackgroundColor(Color.parseColor("#000000"));
+                            b3.setTextColor(Color.parseColor("#ffffff"));
+                            b3.setText("");
+
+                            c1.setBackgroundColor(Color.parseColor("#000000"));
+                            c1.setTextColor(Color.parseColor("#ffffff"));
+                            c1.setText("");
+                            c2.setBackgroundColor(Color.parseColor("#000000"));
+                            c2.setTextColor(Color.parseColor("#ffffff"));
+                            c2.setText("");
+                            c3.setBackgroundColor(Color.parseColor("#000000"));
+                            c3.setTextColor(Color.parseColor("#ffffff"));
+                            c3.setText("");
+
+                            clear = false;
+                        }
                         client.close();  //close the client connection
                         serverSocket.close();  //finally close down the server side as well.
 

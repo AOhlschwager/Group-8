@@ -497,6 +497,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 clearOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        sendMessage = "clear mirror";
                         a1.setBackgroundColor(Color.parseColor("#000000"));
                         a1.setTextColor(Color.parseColor("#ffffff"));
                         a1.setText("+");
@@ -1024,6 +1025,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     a1.setTextColor(a1text);
                     a1back = backTemp;
                     a1.setBackgroundColor(a1back);
+                    sendMessage = "A1 color " + a1back + " " + a1text;
                     colorDialog.dismiss();
                 }
                 else if(row.equals("A") && column == 2)
@@ -3062,6 +3064,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 a1.setBackgroundColor(Color.parseColor("#000000"));
                                 a1.setTextColor(Color.parseColor("#ffffff"));
                                 a1.setText("+");
+
+                                sendMessage = "A1 clear";
                                 break;
                             case "Color Options":
                                 colorOptions("A", 1);
@@ -3191,6 +3195,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 a2.setBackgroundColor(Color.parseColor("#000000"));
                                 a2.setTextColor(Color.parseColor("#ffffff"));
                                 a2.setText("+");
+
+                                sendMessage = "A2 clear";
                                 break;
                             case "Color Options":
                                 colorOptions("A", 2);
@@ -3309,6 +3315,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 a3.setBackgroundColor(Color.parseColor("#000000"));
                                 a3.setTextColor(Color.parseColor("#ffffff"));
                                 a3.setText("+");
+
+                                sendMessage = "A3 clear";
                                 break;
                             case "Color Options":
                                 colorOptions("A", 3);
@@ -3427,6 +3435,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 b1.setBackgroundColor(Color.parseColor("#000000"));
                                 b1.setTextColor(Color.parseColor("#ffffff"));
                                 b1.setText("+");
+
+                                sendMessage = "B1 clear";
                                 break;
                             case "Color Options":
                                 colorOptions("B", 1);
@@ -3545,6 +3555,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 b2.setBackgroundColor(Color.parseColor("#000000"));
                                 b2.setTextColor(Color.parseColor("#ffffff"));
                                 b2.setText("+");
+
+                                sendMessage = "B2 clear";
                                 break;
                             case "Color Options":
                                 colorOptions("B", 2);
@@ -3663,6 +3675,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 b3.setBackgroundColor(Color.parseColor("#000000"));
                                 b3.setTextColor(Color.parseColor("#ffffff"));
                                 b3.setText("+");
+
+                                sendMessage = "B3 clear";
                                 break;
                             case "Color Options":
                                 colorOptions("B", 3);
@@ -3781,6 +3795,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 c1.setBackgroundColor(Color.parseColor("#000000"));
                                 c1.setTextColor(Color.parseColor("#ffffff"));
                                 c1.setText("+");
+
+                                sendMessage = "C1 clear";
                                 break;
                             case "Color Options":
                                 colorOptions("C", 1);
@@ -3899,6 +3915,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 c2.setBackgroundColor(Color.parseColor("#000000"));
                                 c2.setTextColor(Color.parseColor("#ffffff"));
                                 c2.setText("+");
+
+                                sendMessage = "C2 clear";
                                 break;
                             case "Color Options":
                                 colorOptions("C", 2);
@@ -4017,6 +4035,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 c3.setBackgroundColor(Color.parseColor("#000000"));
                                 c3.setTextColor(Color.parseColor("#ffffff"));
                                 c3.setText("+");
+
+                                sendMessage = "C3 clear";
                                 break;
                             case "Color Options":
                                 colorOptions("C", 3);
