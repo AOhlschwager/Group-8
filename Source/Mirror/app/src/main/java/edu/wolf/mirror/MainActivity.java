@@ -34,6 +34,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     ViewSwitcher switcher;
     Button a1, a2, a3, b1, b2, b3, c1, c2, c3;
 
+    // a1 -> 0 | a2 -> 1 | a3 -> 2 | b1 -> 3 | b2 -> 4 | b3 -> 5 | c1 -> 6 | c2 -> 7 | c3 -> 8
+    int[] text;
+    int[] back;
+    String[] formats;
+    String[] timezones;
+    String[] states;
+    String[] cities;
+
     Boolean clear = false;
 
     @Override
@@ -121,8 +129,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                         PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(client.getOutputStream())), true);
 
-                        while(!message.equals("Closed"))
-                        {
+                        label:
+                        while (!message.equals("Closed")) {
                             //receive the message first.
                             mkmsg("Attempting to receive a message ...\n");
                             //Toast.makeText(MainActivity.this, "I'm TRYING", Toast.LENGTH_SHORT).show();
@@ -130,8 +138,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                             mkmsg("received a message:\n" + str + "\n");
                             String[] strArray = str.split("\\s+");
 
-                            if(str.equals("clear mirror"))
-                            {
+                            if (str.equals("clear mirror")) {
                                 out.println("close");
 
                                 clear = true;
@@ -141,298 +148,380 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 break;
                             }
 
-                            if(strArray[0].equals("A1"))
-                            {
-                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
-                                {
-                                    int back; int text;
-                                    if(strArray[1].equals("clear"))
-                                    {
-                                        back = Color.parseColor("#000000");
-                                        text = Color.parseColor("#ffffff");
-                                        a1.setText("");
+                            switch (strArray[0]) {
+                                case "A1":
+                                    switch (strArray[1]) {
+                                        case "color":
+                                        case "clear":
+                                            if (strArray[1].equals("clear")) {
+                                                back[0] = Color.parseColor("#000000");
+                                                text[0] = Color.parseColor("#ffffff");
+                                                a1.setText("");
+                                            } else {
+                                                back[0] = Integer.parseInt(strArray[2]);
+                                                text[0] = Integer.parseInt(strArray[3]);
+                                            }
+                                            out.println("close");
+                                            a1.setBackgroundColor(back[0]);
+                                            a1.setTextColor(text[0]);
+                                            in.close();
+                                            out.close();
+                                            break label;
+                                        case "clock":
+                                            a1.setText("CLOCK");
+                                            formats[0] = strArray[2];
+                                            timezones[0] = strArray[3];
+                                            break;
+                                        case "weather":
+                                            a1.setText("WEATHER");
+                                            states[0] = strArray[2];
+                                            cities[0] = strArray[3];
+                                            break;
+                                        case "reminder":
+                                            a1.setText("REMINDER");
+                                        case "alarm":
+                                            a1.setText("ALARM");
+                                        default:
+                                            out.println("close");
+                                            a1.setText(strArray[1].toUpperCase());
+                                            in.close();
+                                            out.close();
+                                            break label;
                                     }
-                                    else
-                                    {
-                                        back = Integer.parseInt(strArray[2]);
-                                        text = Integer.parseInt(strArray[3]);
+                                    break;
+
+                                case "A2":
+                                    switch (strArray[1]) {
+                                        case "color":
+                                        case "clear":
+                                            if (strArray[1].equals("clear")) {
+                                                back[1] = Color.parseColor("#000000");
+                                                text[1] = Color.parseColor("#ffffff");
+                                                a2.setText("");
+                                            } else {
+                                                back[1] = Integer.parseInt(strArray[2]);
+                                                text[1] = Integer.parseInt(strArray[3]);
+                                            }
+                                            out.println("close");
+                                            a2.setBackgroundColor(back[1]);
+                                            a2.setTextColor(text[1]);
+                                            in.close();
+                                            out.close();
+                                            break label;
+                                        case "clock":
+                                            a2.setText("CLOCK");
+                                            formats[1] = strArray[2];
+                                            timezones[1] = strArray[3];
+                                            break;
+                                        case "weather":
+                                            a2.setText("WEATHER");
+                                            states[1] = strArray[2];
+                                            cities[1] = strArray[3];
+                                            break;
+                                        case "reminder":
+                                            a2.setText("REMINDER");
+                                        case "alarm":
+                                            a2.setText("ALARM");
+                                        default:
+                                            out.println("close");
+                                            a2.setText(strArray[1].toUpperCase());
+                                            in.close();
+                                            out.close();
+                                            break label;
                                     }
-                                    out.println("close");
-                                    a1.setBackgroundColor(back);
-                                    a1.setTextColor(text);
-                                    in.close();
-                                    out.close();
                                     break;
-                                }
-                                else
-                                {
-                                    out.println("close");
-                                    a1.setText(strArray[1].toUpperCase());
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                            }
-                            else if(strArray[0].equals("A2"))
-                            {
-                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
-                                {
-                                    int back; int text;
-                                    if(strArray[1].equals("clear"))
-                                    {
-                                        back = Color.parseColor("#000000");
-                                        text = Color.parseColor("#ffffff");
-                                        a2.setText("");
+
+                                case "A3":
+                                    switch (strArray[1]) {
+                                        case "color":
+                                        case "clear":
+                                            if (strArray[1].equals("clear")) {
+                                                back[2] = Color.parseColor("#000000");
+                                                text[2] = Color.parseColor("#ffffff");
+                                                a3.setText("");
+                                            } else {
+                                                back[2] = Integer.parseInt(strArray[2]);
+                                                text[2] = Integer.parseInt(strArray[3]);
+                                            }
+                                            out.println("close");
+                                            a3.setBackgroundColor(back[2]);
+                                            a3.setTextColor(text[2]);
+                                            in.close();
+                                            out.close();
+                                            break label;
+                                        case "clock":
+                                            a3.setText("CLOCK");
+                                            formats[2] = strArray[2];
+                                            timezones[2] = strArray[3];
+                                            break;
+                                        case "weather":
+                                            a3.setText("WEATHER");
+                                            states[2] = strArray[2];
+                                            cities[2] = strArray[3];
+                                            break;
+                                        case "reminder":
+                                            a3.setText("REMINDER");
+                                        case "alarm":
+                                            a3.setText("ALARM");
+                                        default:
+                                            out.println("close");
+                                            a3.setText(strArray[1].toUpperCase());
+                                            in.close();
+                                            out.close();
+                                            break label;
                                     }
-                                    else
-                                    {
-                                        back = Integer.parseInt(strArray[2]);
-                                        text = Integer.parseInt(strArray[3]);
+                                    break;
+
+                                case "B1":
+                                    switch (strArray[1]) {
+                                        case "color":
+                                        case "clear":
+                                            if (strArray[1].equals("clear")) {
+                                                back[3] = Color.parseColor("#000000");
+                                                text[3] = Color.parseColor("#ffffff");
+                                                b1.setText("");
+                                            } else {
+                                                back[3] = Integer.parseInt(strArray[2]);
+                                                text[3] = Integer.parseInt(strArray[3]);
+                                            }
+                                            out.println("close");
+                                            b1.setBackgroundColor(back[3]);
+                                            b1.setTextColor(text[3]);
+                                            in.close();
+                                            out.close();
+                                            break label;
+                                        case "clock":
+                                            b1.setText("CLOCK");
+                                            formats[3] = strArray[2];
+                                            timezones[3] = strArray[3];
+                                            break;
+                                        case "weather":
+                                            b1.setText("WEATHER");
+                                            states[3] = strArray[2];
+                                            cities[3] = strArray[3];
+                                            break;
+                                        case "reminder":
+                                            b1.setText("REMINDER");
+                                        case "alarm":
+                                            b1.setText("ALARM");
+                                        default:
+                                            out.println("close");
+                                            b1.setText(strArray[1].toUpperCase());
+                                            in.close();
+                                            out.close();
+                                            break label;
                                     }
-                                    out.println("close");
-                                    a2.setBackgroundColor(back);
-                                    a2.setTextColor(text);
-                                    in.close();
-                                    out.close();
                                     break;
-                                }
-                                else
-                                {
-                                    out.println("close");
-                                    a2.setText(strArray[1].toUpperCase());
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                            }
-                            else if(strArray[0].equals("A3"))
-                            {
-                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
-                                {
-                                    int back; int text;
-                                    if(strArray[1].equals("clear"))
-                                    {
-                                        back = Color.parseColor("#000000");
-                                        text = Color.parseColor("#ffffff");
-                                        a3.setText("");
+
+                                case "B2":
+                                    switch (strArray[1]) {
+                                        case "color":
+                                        case "clear":
+                                            if (strArray[1].equals("clear")) {
+                                                back[4] = Color.parseColor("#000000");
+                                                text[4] = Color.parseColor("#ffffff");
+                                                b2.setText("");
+                                            } else {
+                                                back[4] = Integer.parseInt(strArray[2]);
+                                                text[4] = Integer.parseInt(strArray[3]);
+                                            }
+                                            out.println("close");
+                                            b2.setBackgroundColor(back[4]);
+                                            b2.setTextColor(text[4]);
+                                            in.close();
+                                            out.close();
+                                            break label;
+                                        case "clock":
+                                            b2.setText("CLOCK");
+                                            formats[4] = strArray[2];
+                                            timezones[4] = strArray[3];
+                                            break;
+                                        case "weather":
+                                            b2.setText("WEATHER");
+                                            states[4] = strArray[2];
+                                            cities[4] = strArray[3];
+                                            break;
+                                        case "reminder":
+                                            b2.setText("REMINDER");
+                                        case "alarm":
+                                            b2.setText("ALARM");
+                                        default:
+                                            out.println("close");
+                                            b2.setText(strArray[1].toUpperCase());
+                                            in.close();
+                                            out.close();
+                                            break label;
                                     }
-                                    else
-                                    {
-                                        back = Integer.parseInt(strArray[2]);
-                                        text = Integer.parseInt(strArray[3]);
+                                    break;
+
+                                case "B3":
+                                    switch (strArray[1]) {
+                                        case "color":
+                                        case "clear":
+                                            if (strArray[1].equals("clear")) {
+                                                back[5] = Color.parseColor("#000000");
+                                                text[5] = Color.parseColor("#ffffff");
+                                                b3.setText("");
+                                            } else {
+                                                back[5] = Integer.parseInt(strArray[2]);
+                                                text[5] = Integer.parseInt(strArray[3]);
+                                            }
+                                            out.println("close");
+                                            b3.setBackgroundColor(back[5]);
+                                            b3.setTextColor(text[5]);
+                                            in.close();
+                                            out.close();
+                                            break label;
+                                        case "clock":
+                                            b3.setText("CLOCK");
+                                            formats[5] = strArray[2];
+                                            timezones[5] = strArray[3];
+                                            break;
+                                        case "weather":
+                                            b3.setText("WEATHER");
+                                            states[5] = strArray[2];
+                                            cities[5] = strArray[3];
+                                            break;
+                                        case "reminder":
+                                            b3.setText("REMINDER");
+                                        case "alarm":
+                                            b3.setText("ALARM");
+                                        default:
+                                            out.println("close");
+                                            b3.setText(strArray[1].toUpperCase());
+                                            in.close();
+                                            out.close();
+                                            break label;
                                     }
-                                    out.println("close");
-                                    a3.setBackgroundColor(back);
-                                    a3.setTextColor(text);
-                                    in.close();
-                                    out.close();
                                     break;
-                                }
-                                else
-                                {
-                                    out.println("close");
-                                    a3.setText(strArray[1].toUpperCase());
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                            }
-                            else if(strArray[0].equals("B1"))
-                            {
-                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
-                                {
-                                    int back; int text;
-                                    if(strArray[1].equals("clear"))
-                                    {
-                                        back = Color.parseColor("#000000");
-                                        text = Color.parseColor("#ffffff");
-                                        b1.setText("");
+
+                                case "C1":
+                                    switch (strArray[1]) {
+                                        case "color":
+                                        case "clear":
+                                            if (strArray[1].equals("clear")) {
+                                                back[6] = Color.parseColor("#000000");
+                                                text[6] = Color.parseColor("#ffffff");
+                                                c1.setText("");
+                                            } else {
+                                                back[6] = Integer.parseInt(strArray[2]);
+                                                text[6] = Integer.parseInt(strArray[3]);
+                                            }
+                                            out.println("close");
+                                            c1.setBackgroundColor(back[6]);
+                                            c1.setTextColor(text[6]);
+                                            in.close();
+                                            out.close();
+                                            break label;
+                                        case "clock":
+                                            c1.setText("CLOCK");
+                                            formats[6] = strArray[2];
+                                            timezones[6] = strArray[3];
+                                            break;
+                                        case "weather":
+                                            c1.setText("WEATHER");
+                                            states[6] = strArray[2];
+                                            cities[6] = strArray[3];
+                                            break;
+                                        case "reminder":
+                                            c1.setText("REMINDER");
+                                        case "alarm":
+                                            c1.setText("ALARM");
+                                        default:
+                                            out.println("close");
+                                            c1.setText(strArray[1].toUpperCase());
+                                            in.close();
+                                            out.close();
+                                            break label;
                                     }
-                                    else
-                                    {
-                                        back = Integer.parseInt(strArray[2]);
-                                        text = Integer.parseInt(strArray[3]);
+                                    break;
+
+                                case "C2":
+                                    switch (strArray[1]) {
+                                        case "color":
+                                        case "clear":
+                                            if (strArray[1].equals("clear")) {
+                                                back[7] = Color.parseColor("#000000");
+                                                text[7] = Color.parseColor("#ffffff");
+                                                c2.setText("");
+                                            } else {
+                                                back[7] = Integer.parseInt(strArray[2]);
+                                                text[7] = Integer.parseInt(strArray[3]);
+                                            }
+                                            out.println("close");
+                                            c2.setBackgroundColor(back[7]);
+                                            c2.setTextColor(text[7]);
+                                            in.close();
+                                            out.close();
+                                            break label;
+                                        case "clock":
+                                            c2.setText("CLOCK");
+                                            formats[7] = strArray[2];
+                                            timezones[7] = strArray[3];
+                                            break;
+                                        case "weather":
+                                            c2.setText("WEATHER");
+                                            states[7] = strArray[2];
+                                            cities[7] = strArray[3];
+                                            break;
+                                        case "reminder":
+                                            c2.setText("REMINDER");
+                                        case "alarm":
+                                            c2.setText("ALARM");
+                                        default:
+                                            out.println("close");
+                                            c2.setText(strArray[1].toUpperCase());
+                                            in.close();
+                                            out.close();
+                                            break label;
                                     }
-                                    out.println("close");
-                                    b1.setBackgroundColor(back);
-                                    b1.setTextColor(text);
-                                    in.close();
-                                    out.close();
                                     break;
-                                }
-                                else
-                                {
-                                    out.println("close");
-                                    b1.setText(strArray[1].toUpperCase());
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                            }
-                            else if(strArray[0].equals("B2"))
-                            {
-                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
-                                {
-                                    int back; int text;
-                                    if(strArray[1].equals("clear"))
-                                    {
-                                        back = Color.parseColor("#000000");
-                                        text = Color.parseColor("#ffffff");
-                                        b2.setText("");
+
+                                case "C3":
+                                    switch (strArray[1]) {
+                                        case "color":
+                                        case "clear":
+                                            if (strArray[1].equals("clear")) {
+                                                back[8] = Color.parseColor("#000000");
+                                                text[8] = Color.parseColor("#ffffff");
+                                                c3.setText("");
+                                            } else {
+                                                back[8] = Integer.parseInt(strArray[2]);
+                                                text[8] = Integer.parseInt(strArray[3]);
+                                            }
+                                            out.println("close");
+                                            c3.setBackgroundColor(back[8]);
+                                            c3.setTextColor(text[8]);
+                                            in.close();
+                                            out.close();
+                                            break label;
+                                        case "clock":
+                                            c3.setText("CLOCK");
+                                            formats[8] = strArray[2];
+                                            timezones[8] = strArray[3];
+                                            break;
+                                        case "weather":
+                                            c3.setText("WEATHER");
+                                            states[8] = strArray[2];
+                                            cities[8] = strArray[3];
+                                            break;
+                                        case "reminder":
+                                            c3.setText("REMINDER");
+                                        case "alarm":
+                                            c3.setText("ALARM");
+                                        default:
+                                            out.println("close");
+                                            c3.setText(strArray[1].toUpperCase());
+                                            in.close();
+                                            out.close();
+                                            break label;
                                     }
-                                    else
-                                    {
-                                        back = Integer.parseInt(strArray[2]);
-                                        text = Integer.parseInt(strArray[3]);
-                                    }
-                                    out.println("close");
-                                    b2.setBackgroundColor(back);
-                                    b2.setTextColor(text);
-                                    in.close();
-                                    out.close();
                                     break;
-                                }
-                                else
-                                {
-                                    out.println("close");
-                                    b2.setText(strArray[1].toUpperCase());
-                                    in.close();
-                                    out.close();
+
+                                default:
+                                    message = "State of Mirror";
+                                    out.println(message);
                                     break;
-                                }
-                            }
-                            else if(strArray[0].equals("B3"))
-                            {
-                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
-                                {
-                                    int back; int text;
-                                    if(strArray[1].equals("clear"))
-                                    {
-                                        back = Color.parseColor("#000000");
-                                        text = Color.parseColor("#ffffff");
-                                        b3.setText("");
-                                    }
-                                    else
-                                    {
-                                        back = Integer.parseInt(strArray[2]);
-                                        text = Integer.parseInt(strArray[3]);
-                                    }
-                                    out.println("close");
-                                    b3.setBackgroundColor(back);
-                                    b3.setTextColor(text);
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                                else
-                                {
-                                    out.println("close");
-                                    b3.setText(strArray[1].toUpperCase());
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                            }
-                            else if(strArray[0].equals("C1"))
-                            {
-                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
-                                {
-                                    int back; int text;
-                                    if(strArray[1].equals("clear"))
-                                    {
-                                        back = Color.parseColor("#000000");
-                                        text = Color.parseColor("#ffffff");
-                                        c1.setText("");
-                                    }
-                                    else
-                                    {
-                                        back = Integer.parseInt(strArray[2]);
-                                        text = Integer.parseInt(strArray[3]);
-                                    }
-                                    out.println("close");
-                                    c1.setBackgroundColor(back);
-                                    c1.setTextColor(text);
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                                else
-                                {
-                                    out.println("close");
-                                    c1.setText(strArray[1].toUpperCase());
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                            }
-                            else if(strArray[0].equals("C2"))
-                            {
-                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
-                                {
-                                    int back; int text;
-                                    if(strArray[1].equals("clear"))
-                                    {
-                                        back = Color.parseColor("#000000");
-                                        text = Color.parseColor("#ffffff");
-                                        c2.setText("");
-                                    }
-                                    else
-                                    {
-                                        back = Integer.parseInt(strArray[2]);
-                                        text = Integer.parseInt(strArray[3]);
-                                    }
-                                    out.println("close");
-                                    c2.setBackgroundColor(back);
-                                    c2.setTextColor(text);
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                                else
-                                {
-                                    out.println("close");
-                                    c2.setText(strArray[1].toUpperCase());
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                            }
-                            else if(strArray[0].equals("C3"))
-                            {
-                                if(strArray[1].equals("color") || strArray[1].equals("clear"))
-                                {
-                                    int back; int text;
-                                    if(strArray[1].equals("clear"))
-                                    {
-                                        back = Color.parseColor("#000000");
-                                        text = Color.parseColor("#ffffff");
-                                        c3.setText("");
-                                    }
-                                    else
-                                    {
-                                        back = Integer.parseInt(strArray[2]);
-                                        text = Integer.parseInt(strArray[3]);
-                                    }
-                                    out.println("close");
-                                    c3.setBackgroundColor(back);
-                                    c3.setTextColor(text);
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                                else
-                                {
-                                    out.println("close");
-                                    c3.setText(strArray[1].toUpperCase());
-                                    in.close();
-                                    out.close();
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                message = "State of Mirror";
-                                out.println(message);
                             }
                         } // end of while
 

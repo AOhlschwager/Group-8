@@ -42,6 +42,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import android.widget.FrameLayout;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     SimpleCursorAdapter dataAdapter;
     SimpleCursorAdapter alarmDataAdapter;
 
+    // Inflate the options menu when someone selects options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -145,12 +148,12 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 return true;
 
             // If the user selects the "Sleep Timer" option
-            //     Create a new Dialog and set the layout to the correct file
-            //
             case R.id.sleep:
+                // Create a new Dialog and set the layout to the correct file
                 final Dialog sleepDialog = new Dialog(this);
                 sleepDialog.setContentView(R.layout.sleep);
 
+                // Populate an array with sleep timer options
                 List<String> sleepList = new ArrayList<>();
                 sleepList.add("30 Seconds");
                 sleepList.add("10 Minutes");
@@ -160,12 +163,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 sleepList.add("2 Hours");
                 sleepList.add("No Sleep");
 
+                // For each entry in the array of sleep timer options
+                //    .
                 final RadioGroup rg = (RadioGroup) sleepDialog.findViewById(R.id.sleepGroup);
                 for (int i=0; i<sleepList.size(); i++)
                 {
                     RadioButton rb = new RadioButton(this);
                     rb.setText(sleepList.get(i));
-                    rb.setId(i+1);
+                    rb.setId(i+1);  // Offset because of how the id is called
                     rg.addView(rb);
                     if(sleepSelected != null)
                     {
@@ -1513,7 +1518,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         a1timezoneID = a1timezone.getId();
                     }
-                    sendMessage = "A1 clock";
+                    sendMessage = "A1 clock " + a1formatID + " " + a1timezoneID;
                 }
                 else if(rowFinal.equals("A") && columnFinal == 2)
                 {
@@ -1533,7 +1538,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         a2timezoneID = a2timezone.getId();
                     }
-                    sendMessage = "A2 clock";
+                    sendMessage = "A2 clock " + a2formatID + " " + a2timezoneID;
                 }
                 else if(rowFinal.equals("A") && columnFinal == 3)
                 {
@@ -1553,7 +1558,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         a3timezoneID = a3timezone.getId();
                     }
-                    sendMessage = "A3 clock";
+                    sendMessage = "A3 clock " + a3formatID + " " + a3timezoneID;
                 }
                 else if(rowFinal.equals("B") && columnFinal == 1)
                 {
@@ -1573,7 +1578,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         b1timezoneID = b1timezone.getId();
                     }
-                    sendMessage = "B1 clock";
+                    sendMessage = "B1 clock " + b1formatID + " " + b1timezoneID;
                 }
                 else if(rowFinal.equals("B") && columnFinal == 2)
                 {
@@ -1593,7 +1598,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         b2timezoneID = b2timezone.getId();
                     }
-                    sendMessage = "B2 clock";
+                    sendMessage = "B2 clock " + b2formatID + " " + b2timezoneID;
                 }
                 else if(rowFinal.equals("B") && columnFinal == 3)
                 {
@@ -1613,7 +1618,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         b3timezoneID = b3timezone.getId();
                     }
-                    sendMessage = "B3 clock";
+                    sendMessage = "B3 clock " + b3formatID + " " + b3timezoneID;
                 }
                 else if(rowFinal.equals("C") && columnFinal == 1)
                 {
@@ -1633,7 +1638,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         c1timezoneID = c1timezone.getId();
                     }
-                    sendMessage = "C1 clock";
+                    sendMessage = "C1 clock " + c1formatID + " " + c1timezoneID;
                 }
                 else if(rowFinal.equals("C") && columnFinal == 2)
                 {
@@ -1653,7 +1658,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         c2timezoneID = c2timezone.getId();
                     }
-                    sendMessage = "C2 clock";
+                    sendMessage = "C2 clock " + c2formatID + " " + c2timezoneID;
                 }
                 else if(rowFinal.equals("C") && columnFinal == 3)
                 {
@@ -1673,7 +1678,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         c3timezoneID = c3timezone.getId();
                     }
-                    sendMessage = "C3 clock";
+                    sendMessage = "C3 clock " + c3formatID + " " + c3timezoneID;
                 }
                 else
                 {
@@ -1987,47 +1992,47 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 if(row.equals("A") && column == 1)
                 {
                     a1state = stateSelected;
-                    sendMessage = "A1 weather";
+                    sendMessage = "A1 weather " + a1state + " " + a1city;
                 }
                 else if(row.equals("A") && column == 2)
                 {
                     a2state = stateSelected;
-                    sendMessage = "A2 weather";
+                    sendMessage = "A2 weather " + a2state + " " + a2city;
                 }
                 else if(row.equals("A") && column == 3)
                 {
                     a3state = stateSelected;
-                    sendMessage = "A3 weather";
+                    sendMessage = "A3 weather " + a3state + " " + a3city;
                 }
                 else if(row.equals("B") && column == 1)
                 {
                     b1state = stateSelected;
-                    sendMessage = "B1 weather";
+                    sendMessage = "B1 weather " + b1state + " " + b1city;
                 }
                 else if(row.equals("B") && column == 2)
                 {
                     b2state = stateSelected;
-                    sendMessage = "B2 weather";
+                    sendMessage = "B2 weather " + b2state + " " + b2state;
                 }
                 else if(row.equals("B") && column == 3)
                 {
                     b3state = stateSelected;
-                    sendMessage = "B3 weather";
+                    sendMessage = "B3 weather " + b3state + " " + b3city;
                 }
                 else if(row.equals("C") && column == 1)
                 {
                     c1state = stateSelected;
-                    sendMessage = "C1 weather";
+                    sendMessage = "C1 weather " + c1state + " " + c1city;
                 }
                 else if(row.equals("C") && column == 2)
                 {
                     c2state = stateSelected;
-                    sendMessage = "C2 weather";
+                    sendMessage = "C2 weather " + c2state + " " + c2city;
                 }
                 else if(row.equals("C") && column == 3)
                 {
                     c3state = stateSelected;
-                    sendMessage = "C3 weather";
+                    sendMessage = "C3 weather " + c3state + " " + c3city;
                 }
                 else
                 {
@@ -2039,7 +2044,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         weatherDialog.show();
     }
 
-    public void reminderOptions(final String row, final int column, Boolean longC, final String currentSetting)
+    public void reminderOptions(final String row, final int column, Boolean longC, final String currentSetting) // TODO: Set intents gurl
     {
         final String rowFinal = row;
         final int columnFinal = column;
@@ -2903,7 +2908,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         switcher = (ViewSwitcher) findViewById(R.id.activity_main);
 
         ip = (EditText) findViewById(R.id.ipEdit);
-        ip.setText("192.168.1.");
+        ip.setText("10.121.164.99");
 
         port = (EditText) findViewById(R.id.portEdit);
         port.setText("3012");
@@ -4135,8 +4140,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         public BufferedReader in;
 
         public void run() {
-
-
             int p = Integer.parseInt(port.getText().toString());
             String h = ip.getText().toString();
 
