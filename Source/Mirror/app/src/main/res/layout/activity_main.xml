@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <Button
+            <TextView
                 android:id="@+id/A1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -45,6 +45,19 @@
                 android:background="@color/colorBlack"
                 android:text=""
                 android:textColor="@color/colorWhite" />
+
+            <TextClock
+                android:id="@+id/a1clock"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingBottom="100dp"
+                android:paddingLeft="20dp"
+                android:background="@color/colorBlack"
+                android:textColor="@color/colorWhite"
+                android:textSize="25sp"
+                android:textStyle="bold|italic"
+                android:visibility="invisible"/>
 
             <Button
                 android:id="@+id/B1"

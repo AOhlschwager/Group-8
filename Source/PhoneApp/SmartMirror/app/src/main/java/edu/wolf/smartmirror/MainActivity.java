@@ -1188,102 +1188,48 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             format.addView(formatRadio);
             if(row.equals("A") && column == 1)
             {
-                if(a1format != null && i == (a1format.getId()-1))
-                {
-                    formatRadio.toggle();
-                }
-                else if(a1formatID != 0 && i == a1formatID-1)
-                {
-                    formatRadio.toggle();
-                }
+                if(a1format != null && i == (a1format.getId()-1))   formatRadio.toggle();
+                else if(a1formatID != 0 && i == a1formatID-1)       formatRadio.toggle();
             }
             else if(row.equals("A") && column == 2)
             {
-                if(a2format != null && i == (a2format.getId()-1))
-                {
-                    formatRadio.toggle();
-                }
-                else if(a2formatID != 0 && i == a2formatID-1)
-                {
-                    formatRadio.toggle();
-                }
+                if(a2format != null && i == (a2format.getId()-1))   formatRadio.toggle();
+                else if(a2formatID != 0 && i == a2formatID-1)       formatRadio.toggle();
             }
             else if(row.equals("A") && column == 3)
             {
-                if(a3format != null && i == (a3format.getId()-1))
-                {
-                    formatRadio.toggle();
-                }
-                else if(a3formatID != 0 && i == a3formatID-1)
-                {
-                    formatRadio.toggle();
-                }
+                if(a3format != null && i == (a3format.getId()-1))   formatRadio.toggle();
+                else if(a3formatID != 0 && i == a3formatID-1)       formatRadio.toggle();
             }
             else if(row.equals("B") && column == 1)
             {
-                if(b1format != null && i == (b1format.getId()-1))
-                {
-                    formatRadio.toggle();
-                }
-                else if(b1formatID != 0 && i == b1formatID-1)
-                {
-                    formatRadio.toggle();
-                }
+                if(b1format != null && i == (b1format.getId()-1))   formatRadio.toggle();
+                else if(b1formatID != 0 && i == b1formatID-1)       formatRadio.toggle();
             }
             else if(row.equals("B") && column == 2)
             {
-                if(b2format != null && i == (b2format.getId()-1))
-                {
-                    formatRadio.toggle();
-                }
-                else if(b2formatID != 0 && i == b2formatID-1)
-                {
-                    formatRadio.toggle();
-                }
+                if(b2format != null && i == (b2format.getId()-1))   formatRadio.toggle();
+                else if(b2formatID != 0 && i == b2formatID-1)       formatRadio.toggle();
             }
             else if(row.equals("B") && column == 3)
             {
-                if(b3format != null && i == (b3format.getId()-1))
-                {
-                    formatRadio.toggle();
-                }
-                else if(b3formatID != 0 && i == b3formatID-1)
-                {
-                    formatRadio.toggle();
-                }
+                if(b3format != null && i == (b3format.getId()-1))   formatRadio.toggle();
+                else if(b3formatID != 0 && i == b3formatID-1)       formatRadio.toggle();
             }
             else if(row.equals("C") && column == 1)
             {
-                if(c1format != null && i == (c1format.getId()-1))
-                {
-                    formatRadio.toggle();
-                }
-                else if(c1formatID != 0 && i == c1formatID-1)
-                {
-                    formatRadio.toggle();
-                }
+                if(c1format != null && i == (c1format.getId()-1))   formatRadio.toggle();
+                else if(c1formatID != 0 && i == c1formatID-1)       formatRadio.toggle();
             }
             else if(row.equals("C") && column == 2)
             {
-                if(c2format != null && i == (c2format.getId()-1))
-                {
-                    formatRadio.toggle();
-                }
-                else if(c2formatID != 0 && i == c2formatID-1)
-                {
-                    formatRadio.toggle();
-                }
+                if(c2format != null && i == (c2format.getId()-1))   formatRadio.toggle();
+                else if(c2formatID != 0 && i == c2formatID-1)       formatRadio.toggle();
             }
             else if(row.equals("C") && column == 3)
             {
-                if(c3format != null && i == (c3format.getId()-1))
-                {
-                    formatRadio.toggle();
-                }
-                else if(c3formatID != 0 && i == c3formatID-1)
-                {
-                    formatRadio.toggle();
-                }
+                if(c3format != null && i == (c3format.getId()-1))   formatRadio.toggle();
+                else if(c3formatID != 0 && i == c3formatID-1)       formatRadio.toggle();
             }
             else
             {
@@ -1291,7 +1237,13 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         }
 
-        // Create an array list of timezones
+        // Create a radio group and link to TimezoneGroup in clock_options.xml
+        // For each item in the timezoneList:
+        //     Create a radio button
+        //     Set the ID and text of the button.
+        //     Add the radio button the the radio group
+        //     If the ID of the format previously selected is the current id,
+        //       toggle the radio button such that it is checked.
         List<String> timezoneList = new ArrayList<>();
         timezoneList.add("Eastern");
         timezoneList.add("Central");
@@ -1312,102 +1264,48 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
             if(row.equals("A") && column == 1)
             {
-                if(a1timezone != null && i == (a1timezone.getId()-1))
-                {
-                    zoneRadio.toggle();
-                }
-                else if(a1timezoneID != 0 && i == a1timezoneID-1)
-                {
-                    zoneRadio.toggle();
-                }
+                if(a1timezone != null && i == (a1timezone.getId()-1))   zoneRadio.toggle();
+                else if(a1timezoneID != 0 && i == a1timezoneID-1)       zoneRadio.toggle();
             }
             else if(row.equals("A") && column == 2)
             {
-                if(a2timezone != null && i == (a2timezone.getId()-1))
-                {
-                    zoneRadio.toggle();
-                }
-                else if(a2timezoneID != 0 && i == a2timezoneID-1)
-                {
-                    zoneRadio.toggle();
-                }
+                if(a2timezone != null && i == (a2timezone.getId()-1))   zoneRadio.toggle();
+                else if(a2timezoneID != 0 && i == a2timezoneID-1)       zoneRadio.toggle();
             }
             else if(row.equals("A") && column == 3)
             {
-                if(a3timezone != null && i == (a3timezone.getId()-1))
-                {
-                    zoneRadio.toggle();
-                }
-                else if(a3timezoneID != 0 && i == a3timezoneID-1)
-                {
-                    zoneRadio.toggle();
-                }
+                if(a3timezone != null && i == (a3timezone.getId()-1))   zoneRadio.toggle();
+                else if(a3timezoneID != 0 && i == a3timezoneID-1)       zoneRadio.toggle();
             }
             else if(row.equals("B") && column == 1)
             {
-                if(b1timezone != null && i == (b1timezone.getId()-1))
-                {
-                    zoneRadio.toggle();
-                }
-                else if(b1timezoneID != 0 && i == b1timezoneID-1)
-                {
-                    zoneRadio.toggle();
-                }
+                if(b1timezone != null && i == (b1timezone.getId()-1))   zoneRadio.toggle();
+                else if(b1timezoneID != 0 && i == b1timezoneID-1)       zoneRadio.toggle();
             }
             else if(row.equals("B") && column == 2)
             {
-                if(b2timezone != null && i == (b2timezone.getId()-1))
-                {
-                    zoneRadio.toggle();
-                }
-                else if(b2timezoneID != 0 && i == b2timezoneID-1)
-                {
-                    zoneRadio.toggle();
-                }
+                if(b2timezone != null && i == (b2timezone.getId()-1))   zoneRadio.toggle();
+                else if(b2timezoneID != 0 && i == b2timezoneID-1)       zoneRadio.toggle();
             }
             else if(row.equals("B") && column == 3)
             {
-                if(b3timezone != null && i == (b3timezone.getId()-1))
-                {
-                    zoneRadio.toggle();
-                }
-                else if(b3timezoneID != 0 && i == b3timezoneID-1)
-                {
-                    zoneRadio.toggle();
-                }
+                if(b3timezone != null && i == (b3timezone.getId()-1))   zoneRadio.toggle();
+                else if(b3timezoneID != 0 && i == b3timezoneID-1)       zoneRadio.toggle();
             }
             else if(row.equals("C") && column == 1)
             {
-                if(c1timezone != null && i == (c1timezone.getId()-1))
-                {
-                    zoneRadio.toggle();
-                }
-                else if(c1timezoneID != 0 && i == c1timezoneID-1)
-                {
-                    zoneRadio.toggle();
-                }
+                if(c1timezone != null && i == (c1timezone.getId()-1))   zoneRadio.toggle();
+                else if(c1timezoneID != 0 && i == c1timezoneID-1)       zoneRadio.toggle();
             }
             else if(row.equals("C") && column == 2)
             {
-                if(c2timezone != null && i == (c2timezone.getId()-1))
-                {
-                    zoneRadio.toggle();
-                }
-                else if(c2timezoneID != 0 && i == c2timezoneID-1)
-                {
-                    zoneRadio.toggle();
-                }
+                if(c2timezone != null && i == (c2timezone.getId()-1))   zoneRadio.toggle();
+                else if(c2timezoneID != 0 && i == c2timezoneID-1)       zoneRadio.toggle();
             }
             else if(row.equals("C") && column == 3)
             {
-                if(c3timezone != null && i == (c3timezone.getId()-1))
-                {
-                    zoneRadio.toggle();
-                }
-                else if(c2timezoneID != 0 && i == c2timezoneID-1)
-                {
-                    zoneRadio.toggle();
-                }
+                if(c3timezone != null && i == (c3timezone.getId()-1))   zoneRadio.toggle();
+                else if(c2timezoneID != 0 && i == c2timezoneID-1)       zoneRadio.toggle();
             }
             else
             {
@@ -1437,247 +1335,96 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
                 String toastStr = "";
 
-                if(formatID == 1)
-                {
-                    Log.d("ID", String.valueOf(formatID));
-                    toastStr = toastStr + "Standard ";
-                }
-                else if (formatID == 2)
-                {
-                    Log.d("ID", String.valueOf(formatID));
-                    toastStr = toastStr + "Military ";
-                }
-                else
-                {
-                    Log.d("ID", String.valueOf(formatID));
-                }
+                // Get the format for the toast
+                if(formatID == 1)       toastStr = toastStr + "Standard ";
+                else if (formatID == 2) toastStr = toastStr + "Military ";
+                else                    Log.d("ID", String.valueOf(formatID));
 
-                if(timezoneID == 1)
-                {
-                    Log.d("ID", String.valueOf(timezoneID));
-                    toastStr = toastStr + "- Eastern Time Selected";
-                }
-                else if(timezoneID == 2)
-                {
-                    Log.d("ID", String.valueOf(timezoneID));
-                    toastStr = toastStr + "- Central Time Selected";
-                }
-                else if(timezoneID == 3)
-                {
-                    Log.d("ID", String.valueOf(timezoneID));
-                    toastStr = toastStr + "- Mountain Time Selected";
-                }
-                else if(timezoneID == 4)
-                {
-                    Log.d("ID", String.valueOf(timezoneID));
-                    toastStr = toastStr + "- Mountain Time (No DST) Selected";
-                }
-                else if(timezoneID == 5)
-                {
-                    Log.d("ID", String.valueOf(timezoneID));
-                    toastStr = toastStr + "- Pacific Time Selected";
-                }
-                else if(timezoneID == 6)
-                {
-                    Log.d("ID", String.valueOf(timezoneID));
-                    toastStr = toastStr + "- Alaskan Time Selected";
-                }
-                else if(timezoneID == 7)
-                {
-                    Log.d("ID", String.valueOf(timezoneID));
-                    toastStr = toastStr + "- Hawaii-Aleutian Time Selected";
-                }
-                else if(timezoneID == 8)
-                {
-                    Log.d("ID", String.valueOf(timezoneID));
-                    toastStr = toastStr + "- Hawaii-Aleutian Time (No DST) Selected";
-                }
-                else
-                {
-                    Log.d("ID", String.valueOf(timezoneID));
-                }
+                if(timezoneID == 1)      toastStr = toastStr + "- Eastern Time Selected";
+                else if(timezoneID == 2) toastStr = toastStr + "- Central Time Selected";
+                else if(timezoneID == 3) toastStr = toastStr + "- Mountain Time Selected";
+                else if(timezoneID == 4) toastStr = toastStr + "- Mountain Time (No DST) Selected";
+                else if(timezoneID == 5) toastStr = toastStr + "- Pacific Time Selected";
+                else if(timezoneID == 6) toastStr = toastStr + "- Alaskan Time Selected";
+                else if(timezoneID == 7) toastStr = toastStr + "- Hawaii-Aleutian Time Selected";
+                else if(timezoneID == 8) toastStr = toastStr + "- Hawaii-Aleutian Time (No DST) Selected";
+                else                     Log.d("ID", String.valueOf(timezoneID));
 
+                // set the radio button variables to hold information to pass to store variables
                 formatSelected = (RadioButton) clockDialog.findViewById(formatID);
                 timezoneSelected = (RadioButton) clockDialog.findViewById(timezoneID);
 
+                // Set the store variables to the appropriate selection
                 if(rowFinal.equals("A") && columnFinal == 1)
                 {
-                    if(formatSelected != null)
-                    {
-                        a1format = formatSelected;
-                    }
-                    if(timezoneSelected != null)
-                    {
-                        a1timezone = timezoneSelected;
-                    }
-                    if(a1format != null)
-                    {
-                        a1formatID = a1format.getId();
-                    }
-                    if(a1timezone != null)
-                    {
-                        a1timezoneID = a1timezone.getId();
-                    }
+                    if(formatSelected != null)      a1format = formatSelected;
+                    if(timezoneSelected != null)    a1timezone = timezoneSelected;
+                    if(a1format != null)            a1formatID = a1format.getId();
+                    if(a1timezone != null)          a1timezoneID = a1timezone.getId();
                     sendMessage = "A1 clock " + a1formatID + " " + a1timezoneID;
                 }
                 else if(rowFinal.equals("A") && columnFinal == 2)
                 {
-                    if(formatSelected != null)
-                    {
-                        a2format = formatSelected;
-                    }
-                    if(timezoneSelected != null)
-                    {
-                        a2timezone = timezoneSelected;
-                    }
-                    if(a2format != null)
-                    {
-                        a2formatID = a2format.getId();
-                    }
-                    if(a2timezone != null)
-                    {
-                        a2timezoneID = a2timezone.getId();
-                    }
+                    if(formatSelected != null)      a2format = formatSelected;
+                    if(timezoneSelected != null)    a2timezone = timezoneSelected;
+                    if(a2format != null)            a2formatID = a2format.getId();
+                    if(a2timezone != null)          a2timezoneID = a2timezone.getId();
                     sendMessage = "A2 clock " + a2formatID + " " + a2timezoneID;
                 }
                 else if(rowFinal.equals("A") && columnFinal == 3)
                 {
-                    if(formatSelected != null)
-                    {
-                        a3format = formatSelected;
-                    }
-                    if(timezoneSelected != null)
-                    {
-                        a3timezone = timezoneSelected;
-                    }
-                    if(a3format != null)
-                    {
-                        a3formatID = a3format.getId();
-                    }
-                    if(a3timezone != null)
-                    {
-                        a3timezoneID = a3timezone.getId();
-                    }
+                    if(formatSelected != null)      a3format = formatSelected;
+                    if(timezoneSelected != null)    a3timezone = timezoneSelected;
+                    if(a3format != null)            a3formatID = a3format.getId();
+                    if(a3timezone != null)          a3timezoneID = a3timezone.getId();
                     sendMessage = "A3 clock " + a3formatID + " " + a3timezoneID;
                 }
                 else if(rowFinal.equals("B") && columnFinal == 1)
                 {
-                    if(formatSelected != null)
-                    {
-                        b1format = formatSelected;
-                    }
-                    if(timezoneSelected != null)
-                    {
-                        b1timezone = timezoneSelected;
-                    }
-                    if(b1format != null)
-                    {
-                        b1formatID = b1format.getId();
-                    }
-                    if(b1timezone != null)
-                    {
-                        b1timezoneID = b1timezone.getId();
-                    }
+                    if(formatSelected != null)      b1format = formatSelected;
+                    if(timezoneSelected != null)    b1timezone = timezoneSelected;
+                    if(b1format != null)            b1formatID = b1format.getId();
+                    if(b1timezone != null)          b1timezoneID = b1timezone.getId();
                     sendMessage = "B1 clock " + b1formatID + " " + b1timezoneID;
                 }
                 else if(rowFinal.equals("B") && columnFinal == 2)
                 {
-                    if(formatSelected != null)
-                    {
-                        b2format = formatSelected;
-                    }
-                    if(timezoneSelected != null)
-                    {
-                        b2timezone = timezoneSelected;
-                    }
-                    if(b2format != null)
-                    {
-                        b2formatID = b2format.getId();
-                    }
-                    if(b2timezone != null)
-                    {
-                        b2timezoneID = b2timezone.getId();
-                    }
+                    if(formatSelected != null)      b2format = formatSelected;
+                    if(timezoneSelected != null)    b2timezone = timezoneSelected;
+                    if(b2format != null)            b2formatID = b2format.getId();
+                    if(b2timezone != null)          b2timezoneID = b2timezone.getId();
                     sendMessage = "B2 clock " + b2formatID + " " + b2timezoneID;
                 }
                 else if(rowFinal.equals("B") && columnFinal == 3)
                 {
-                    if(formatSelected != null)
-                    {
-                        b3format = formatSelected;
-                    }
-                    if(timezoneSelected != null)
-                    {
-                        b3timezone = timezoneSelected;
-                    }
-                    if(b3format != null)
-                    {
-                        b3formatID = b3format.getId();
-                    }
-                    if(b3timezone != null)
-                    {
-                        b3timezoneID = b3timezone.getId();
-                    }
+                    if(formatSelected != null)      b3format = formatSelected;
+                    if(timezoneSelected != null)    b3timezone = timezoneSelected;
+                    if(b3format != null)            b3formatID = b3format.getId();
+                    if(b3timezone != null)          b3timezoneID = b3timezone.getId();
                     sendMessage = "B3 clock " + b3formatID + " " + b3timezoneID;
                 }
                 else if(rowFinal.equals("C") && columnFinal == 1)
                 {
-                    if(formatSelected != null)
-                    {
-                        c1format = formatSelected;
-                    }
-                    if(timezoneSelected != null)
-                    {
-                        c1timezone = timezoneSelected;
-                    }
-                    if(c1format != null)
-                    {
-                        c1formatID = c1format.getId();
-                    }
-                    if(c1timezone != null)
-                    {
-                        c1timezoneID = c1timezone.getId();
-                    }
+                    if(formatSelected != null)      c1format = formatSelected;
+                    if(timezoneSelected != null)    c1timezone = timezoneSelected;
+                    if(c1format != null)            c1formatID = c1format.getId();
+                    if(c1timezone != null)          c1timezoneID = c1timezone.getId();
                     sendMessage = "C1 clock " + c1formatID + " " + c1timezoneID;
                 }
                 else if(rowFinal.equals("C") && columnFinal == 2)
                 {
-                    if(formatSelected != null)
-                    {
-                        c2format = formatSelected;
-                    }
-                    if(timezoneSelected != null)
-                    {
-                        c2timezone = timezoneSelected;
-                    }
-                    if(c2format != null)
-                    {
-                        c2formatID = c2format.getId();
-                    }
-                    if(c2timezone != null)
-                    {
-                        c2timezoneID = c2timezone.getId();
-                    }
+                    if(formatSelected != null)      c2format = formatSelected;
+                    if(timezoneSelected != null)    c2timezone = timezoneSelected;
+                    if(c2format != null)            c2formatID = c2format.getId();
+                    if(c2timezone != null)          c2timezoneID = c2timezone.getId();
                     sendMessage = "C2 clock " + c2formatID + " " + c2timezoneID;
                 }
                 else if(rowFinal.equals("C") && columnFinal == 3)
                 {
-                    if(formatSelected != null)
-                    {
-                        c3format = formatSelected;
-                    }
-                    if(timezoneSelected != null)
-                    {
-                        c3timezone = timezoneSelected;
-                    }
-                    if(c3format != null)
-                    {
-                        c3formatID = c3format.getId();
-                    }
-                    if(c3timezone != null)
-                    {
-                        c3timezoneID = c3timezone.getId();
-                    }
+                    if(formatSelected != null)      c3format = formatSelected;
+                    if(timezoneSelected != null)    c3timezone = timezoneSelected;
+                    if(c3format != null)            c3formatID = c3format.getId();
+                    if(c3timezone != null)          c3timezoneID = c3timezone.getId();
                     sendMessage = "C3 clock " + c3formatID + " " + c3timezoneID;
                 }
                 else
@@ -1710,7 +1457,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         clockDialog.show();
     }
 
-    // Opens the weather Dialog and sets
     public void weatherOptions(final String row, final int column, final Boolean longC, final String currentSetting)
     {
         final Dialog weatherDialog = new Dialog(this);
@@ -1729,46 +1475,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         // rather than set
         stateConverter statec = null;
 
-        if(row.equals("A") && column == 1)
-        {
-            statec = new stateConverter(a1state);
-        }
-        else if(row.equals("A") && column == 2)
-        {
-            statec = new stateConverter(a2state);
-        }
-        else if(row.equals("A") && column == 3)
-        {
-            statec = new stateConverter(a3state);
-        }
-        else if(row.equals("B") && column == 1)
-        {
-            statec = new stateConverter(b1state);
-        }
-        else if(row.equals("B") && column == 2)
-        {
-            statec = new stateConverter(b2state);
-        }
-        else if(row.equals("B") && column == 3)
-        {
-            statec = new stateConverter(b3state);
-        }
-        else if(row.equals("C") && column == 1)
-        {
-            statec = new stateConverter(c1state);
-        }
-        else if(row.equals("C") && column == 2)
-        {
-            statec = new stateConverter(c2state);
-        }
-        else if(row.equals("C") && column == 3)
-        {
-            statec = new stateConverter(c3state);
-        }
-        else
-        {
-            Log.d("CRAP", "How did I get here?");
-        }
+        if(row.equals("A") && column == 1)      statec = new stateConverter(a1state);
+        else if(row.equals("A") && column == 2) statec = new stateConverter(a2state);
+        else if(row.equals("A") && column == 3) statec = new stateConverter(a3state);
+        else if(row.equals("B") && column == 1) statec = new stateConverter(b1state);
+        else if(row.equals("B") && column == 2) statec = new stateConverter(b2state);
+        else if(row.equals("B") && column == 3) statec = new stateConverter(b3state);
+        else if(row.equals("C") && column == 1) statec = new stateConverter(c1state);
+        else if(row.equals("C") && column == 2) statec = new stateConverter(c2state);
+        else if(row.equals("C") && column == 3) statec = new stateConverter(c3state);
+        else                                    Log.d("CRAP", "How did I get here?");
 
         stateSpinner.setAdapter(adapter);
         if(statec != null)
@@ -1807,46 +1523,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 };
 
                 int savedCityId = -1;
-                if(row.equals("A") && column == 1)
-                {
-                    savedCityId = a1city;
-                }
-                else if(row.equals("A") && column == 2)
-                {
-                    savedCityId = a2city;
-                }
-                else if(row.equals("A") && column == 3)
-                {
-                    savedCityId = a3city;
-                }
-                else if(row.equals("B") && column == 1)
-                {
-                    savedCityId = b1city;
-                }
-                else if(row.equals("B") && column == 2)
-                {
-                    savedCityId = b2city;
-                }
-                else if(row.equals("B") && column == 3)
-                {
-                    savedCityId = b3city;
-                }
-                else if(row.equals("C") && column == 1)
-                {
-                    savedCityId = c1city;
-                }
-                else if(row.equals("C") && column == 2)
-                {
-                    savedCityId = c2city;
-                }
-                else if(row.equals("C") && column == 3)
-                {
-                    savedCityId = c3city;
-                }
-                else
-                {
-                    Log.d("CRAP", "How did I get here?");
-                }
+                if(row.equals("A") && column == 1)      savedCityId = a1city;
+                else if(row.equals("A") && column == 2) savedCityId = a2city;
+                else if(row.equals("A") && column == 3) savedCityId = a3city;
+                else if(row.equals("B") && column == 1) savedCityId = b1city;
+                else if(row.equals("B") && column == 2) savedCityId = b2city;
+                else if(row.equals("B") && column == 3) savedCityId = b3city;
+                else if(row.equals("C") && column == 1) savedCityId = c1city;
+                else if(row.equals("C") && column == 2) savedCityId = c2city;
+                else if(row.equals("C") && column == 3) savedCityId = c3city;
+                else                                    Log.d("CRAP", "How did I get here?");
 
                 citySpinner.setAdapter(cAdapt);
 
@@ -1866,46 +1552,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         //String cityid = c.getString((int)citySpinner.getSelectedItemId());
                         int cid = c.getPosition();
-                        if(row.equals("A") && column == 1)
-                        {
-                            a1city = cid;
-                        }
-                        else if(row.equals("A") && column == 2)
-                        {
-                            a2city = cid;
-                        }
-                        else if(row.equals("A") && column == 3)
-                        {
-                            a3city = cid;
-                        }
-                        else if(row.equals("B") && column == 1)
-                        {
-                            b1city = cid;
-                        }
-                        else if(row.equals("B") && column == 2)
-                        {
-                            b2city = cid;
-                        }
-                        else if(row.equals("B") && column == 3)
-                        {
-                            b3city = cid;
-                        }
-                        else if(row.equals("C") && column == 1)
-                        {
-                            c1city = cid;
-                        }
-                        else if(row.equals("C") && column == 2)
-                        {
-                            c2city = cid;
-                        }
-                        else if(row.equals("C") && column == 3)
-                        {
-                            c3city = cid;
-                        }
-                        else
-                        {
-                            Log.d("CRAP", "How did I get here?");
-                        }
+                        if(row.equals("A") && column == 1)      a1city = cid;
+                        else if(row.equals("A") && column == 2) a2city = cid;
+                        else if(row.equals("A") && column == 3) a3city = cid;
+                        else if(row.equals("B") && column == 1) b1city = cid;
+                        else if(row.equals("B") && column == 2) b2city = cid;
+                        else if(row.equals("B") && column == 3) b3city = cid;
+                        else if(row.equals("C") && column == 1) c1city = cid;
+                        else if(row.equals("C") && column == 2) c2city = cid;
+                        else if(row.equals("C") && column == 3) c3city = cid;
+                        else Log.d("CRAP", "How did I get here?");
                     }
 
                     @Override
@@ -4159,7 +3815,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 //now send a message to the server and then read back the response.
                 try {
                     String str = "";
-                    while (! str.equals("close"))
+                    while (!str.equals("close"))
                     {
                         mkmsg("Attempting to send message ...\n");
                         out.println(sendMessage);
@@ -4182,16 +3838,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
             } catch (Exception e) {
                 mkmsg("Unable to connect...\n");
-                if(!paused)
-                {
-                    run();
-                }
+                if(!paused) run();
             }
             finally {
-                if(!paused)
-                {
-                    run();
-                }
+                if(!paused) run();
             }
         }
     }

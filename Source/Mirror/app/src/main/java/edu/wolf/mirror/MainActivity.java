@@ -12,9 +12,8 @@ import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextClock;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import java.io.BufferedReader;
@@ -32,7 +31,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
     TextView ip;
     ViewSwitcher switcher;
-    Button a1, a2, a3, b1, b2, b3, c1, c2, c3;
+    TextView a1;
+    Button  a2, a3, b1, b2, b3, c1, c2, c3;
 
     // a1 -> 0 | a2 -> 1 | a3 -> 2 | b1 -> 3 | b2 -> 4 | b3 -> 5 | c1 -> 6 | c2 -> 7 | c3 -> 8
     int[] text;
@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     String[] timezones;
     String[] states;
     String[] cities;
+
+    TextClock a1clock;
 
     Boolean clear = false;
 
@@ -64,7 +66,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         String display = "IP: " + ipAddress;
         ip.setText(display);
 
-        a1 = (Button) findViewById(R.id.A1);
+        a1 = (TextView) findViewById(R.id.A1);
+        a1clock = (TextClock) findViewById(R.id.a1clock);
+
         a2 = (Button) findViewById(R.id.A2);
         a3 = (Button) findViewById(R.id.A3);
         b1 = (Button) findViewById(R.id.B1);
@@ -77,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         doNetwork stuff = new doNetwork();
         myNet = new Thread(stuff);
         myNet.start();
-
     }
 
     private Handler handler = new Handler(new Handler.Callback() {
@@ -104,6 +107,11 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         b.putString("msg", str);
         msg.setData(b);
         handler.sendMessage(msg);
+    }
+
+    public void refresh() {
+        finish();
+        startActivity(getIntent());
     }
 
     class doNetwork implements Runnable {
@@ -168,20 +176,30 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             out.close();
                                             break label;
                                         case "clock":
-                                            a1.setText("CLOCK");
-                                            formats[0] = strArray[2];
-                                            timezones[0] = strArray[3];
+                                            //a1.setText("CLOCK");
+                                            //formats[0] = strArray[2];
+                                            //timezones[0] = strArray[3];
+                                            a1.setVisibility(View.INVISIBLE);
+                                            a1clock.setVisibility(View.VISIBLE);
                                             break;
                                         case "weather":
+                                            a1.setVisibility(View.VISIBLE);
+                                            a1clock.setVisibility(View.INVISIBLE);
                                             a1.setText("WEATHER");
                                             states[0] = strArray[2];
                                             cities[0] = strArray[3];
                                             break;
                                         case "reminder":
+                                            a1.setVisibility(View.VISIBLE);
+                                            a1clock.setVisibility(View.INVISIBLE);
                                             a1.setText("REMINDER");
                                         case "alarm":
+                                            a1.setVisibility(View.VISIBLE);
+                                            a1clock.setVisibility(View.INVISIBLE);
                                             a1.setText("ALARM");
                                         default:
+                                            a1.setVisibility(View.VISIBLE);
+                                            a1clock.setVisibility(View.INVISIBLE);
                                             out.println("close");
                                             a1.setText(strArray[1].toUpperCase());
                                             in.close();
@@ -529,6 +547,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
                         in.close();
                         out.close();
+
+
                         //Toast.makeText(MainActivity.this, "I'm TRYING 2", Toast.LENGTH_SHORT).show();
 
                     } catch (Exception e) {
@@ -581,15 +601,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         }
                         client.close();  //close the client connection
                         serverSocket.close();  //finally close down the server side as well.
-
-                        //Toast.makeText(MainActivity.this, "I'm TRYING 4", Toast.LENGTH_SHORT).show();
                     }
 
                 } catch (Exception e) {
                     mkmsg("Unable to connect...\n");
-                    //Toast.makeText(MainActivity.this, "I'm TRYING 3", Toast.LENGTH_SHORT).show();
-                    //message = "Done";
-                    //run();
                 }
             }
         }
