@@ -28,6 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -1075,6 +1076,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 }
                 else if(row.equals("C") && column == 1)
                 {
+                    sendMessage = "C1 color";
                     c1text = textTemp;
                     c1.setTextColor(c1text);
                     c1back = backTemp;
@@ -3771,6 +3773,11 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         myNet = new Thread(stuff);
         myNet.start();
         switcher.showNext();
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private Handler handler = new Handler(new Handler.Callback() {

@@ -4,6 +4,7 @@ import android.app.Service;
 import android.graphics.Color;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,9 @@ import android.text.format.Formatter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -32,7 +36,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     TextView ip;
     ViewSwitcher switcher;
     TextView a1;
-    Button  a2, a3, b1, b2, b3, c1, c2, c3;
+    Button  a2, b1, b2, b3, c1, c2, c3;
+    LinearLayout a3;
 
     // a1 -> 0 | a2 -> 1 | a3 -> 2 | b1 -> 3 | b2 -> 4 | b3 -> 5 | c1 -> 6 | c2 -> 7 | c3 -> 8
     int[] text;
@@ -43,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     String[] cities;
 
     TextClock a1clock;
+    ImageView a3alarm;
 
     Boolean clear = false;
 
@@ -66,11 +72,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         String display = "IP: " + ipAddress;
         ip.setText(display);
 
-        a1 = (TextView) findViewById(R.id.A1);
+        //a1 = (TextView) findViewById(R.id.A1);
         a1clock = (TextClock) findViewById(R.id.a1clock);
 
         a2 = (Button) findViewById(R.id.A2);
-        a3 = (Button) findViewById(R.id.A3);
+        //a3 = (Button) findViewById(R.id.A3);
+        a3alarm = (ImageView) findViewById(R.id.a3alarm);
+        a3 = (LinearLayout) findViewById(R.id.rlayout);
+
         b1 = (Button) findViewById(R.id.B1);
         b2 = (Button) findViewById(R.id.B2);
         b3 = (Button) findViewById(R.id.B3);
@@ -81,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         doNetwork stuff = new doNetwork();
         myNet = new Thread(stuff);
         myNet.start();
+
     }
 
     private Handler handler = new Handler(new Handler.Callback() {
@@ -113,6 +123,21 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         finish();
         startActivity(getIntent());
     }
+
+/*    public void countDown() {
+        new CountDownTimer(12000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                int mins = (int)((millisUntilFinished / 1000) /60);
+                int secs = (12000%mins)/1000;
+                a3alarm.setText(mins + ":" + secs);
+            }
+
+            public void onFinish() {
+                a3alarm.setText("ALARM!");
+            }
+        }.start();
+    }*/
 
     class doNetwork implements Runnable {
         public void run() {
@@ -179,8 +204,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             //a1.setText("CLOCK");
                                             //formats[0] = strArray[2];
                                             //timezones[0] = strArray[3];
-                                            a1.setVisibility(View.INVISIBLE);
+                                            //a1.setVisibility(View.INVISIBLE);
                                             a1clock.setVisibility(View.VISIBLE);
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "weather":
                                             a1.setVisibility(View.VISIBLE);
@@ -188,15 +215,21 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             a1.setText("WEATHER");
                                             states[0] = strArray[2];
                                             cities[0] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "reminder":
                                             a1.setVisibility(View.VISIBLE);
                                             a1clock.setVisibility(View.INVISIBLE);
                                             a1.setText("REMINDER");
+                                            in.close();
+                                            out.close();
                                         case "alarm":
                                             a1.setVisibility(View.VISIBLE);
                                             a1clock.setVisibility(View.INVISIBLE);
                                             a1.setText("ALARM");
+                                            in.close();
+                                            out.close();
                                         default:
                                             a1.setVisibility(View.VISIBLE);
                                             a1clock.setVisibility(View.INVISIBLE);
@@ -230,16 +263,24 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             a2.setText("CLOCK");
                                             formats[1] = strArray[2];
                                             timezones[1] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "weather":
                                             a2.setText("WEATHER");
                                             states[1] = strArray[2];
                                             cities[1] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "reminder":
                                             a2.setText("REMINDER");
+                                            in.close();
+                                            out.close();
                                         case "alarm":
                                             a2.setText("ALARM");
+                                            in.close();
+                                            out.close();
                                         default:
                                             out.println("close");
                                             a2.setText(strArray[1].toUpperCase());
@@ -256,34 +297,43 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             if (strArray[1].equals("clear")) {
                                                 back[2] = Color.parseColor("#000000");
                                                 text[2] = Color.parseColor("#ffffff");
-                                                a3.setText("");
+                                                //a3.setText("");
                                             } else {
                                                 back[2] = Integer.parseInt(strArray[2]);
                                                 text[2] = Integer.parseInt(strArray[3]);
                                             }
                                             out.println("close");
                                             a3.setBackgroundColor(back[2]);
-                                            a3.setTextColor(text[2]);
+                                            //a3.setTextColor(text[2]);
                                             in.close();
                                             out.close();
                                             break label;
                                         case "clock":
-                                            a3.setText("CLOCK");
+                                           // a3.setText("CLOCK");
                                             formats[2] = strArray[2];
                                             timezones[2] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "weather":
-                                            a3.setText("WEATHER");
+                                            //a3.setText("WEATHER");
                                             states[2] = strArray[2];
                                             cities[2] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "reminder":
-                                            a3.setText("REMINDER");
+                                            //a3.setText("REMINDER");
+                                            in.close();
+                                            out.close();
                                         case "alarm":
-                                            a3.setText("ALARM");
+                                            //a3.setText("ALARM");
+                                            a3.setVisibility(View.VISIBLE);///////////////////////////////////////////////////
+                                            in.close();
+                                            out.close();
                                         default:
                                             out.println("close");
-                                            a3.setText(strArray[1].toUpperCase());
+                                            //a3.setText(strArray[1].toUpperCase());
                                             in.close();
                                             out.close();
                                             break label;
@@ -312,16 +362,24 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             b1.setText("CLOCK");
                                             formats[3] = strArray[2];
                                             timezones[3] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "weather":
                                             b1.setText("WEATHER");
                                             states[3] = strArray[2];
                                             cities[3] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "reminder":
                                             b1.setText("REMINDER");
+                                            in.close();
+                                            out.close();
                                         case "alarm":
                                             b1.setText("ALARM");
+                                            in.close();
+                                            out.close();
                                         default:
                                             out.println("close");
                                             b1.setText(strArray[1].toUpperCase());
@@ -353,16 +411,24 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             b2.setText("CLOCK");
                                             formats[4] = strArray[2];
                                             timezones[4] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "weather":
                                             b2.setText("WEATHER");
                                             states[4] = strArray[2];
                                             cities[4] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "reminder":
                                             b2.setText("REMINDER");
+                                            in.close();
+                                            out.close();
                                         case "alarm":
                                             b2.setText("ALARM");
+                                            in.close();
+                                            out.close();
                                         default:
                                             out.println("close");
                                             b2.setText(strArray[1].toUpperCase());
@@ -394,16 +460,24 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             b3.setText("CLOCK");
                                             formats[5] = strArray[2];
                                             timezones[5] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "weather":
                                             b3.setText("WEATHER");
                                             states[5] = strArray[2];
                                             cities[5] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "reminder":
                                             b3.setText("REMINDER");
+                                            in.close();
+                                            out.close();
                                         case "alarm":
                                             b3.setText("ALARM");
+                                            in.close();
+                                            out.close();
                                         default:
                                             out.println("close");
                                             b3.setText(strArray[1].toUpperCase());
@@ -416,6 +490,10 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 case "C1":
                                     switch (strArray[1]) {
                                         case "color":
+                                            c1.setVisibility(View.VISIBLE);
+                                            in.close();
+                                            out.close();
+                                            break;
                                         case "clear":
                                             if (strArray[1].equals("clear")) {
                                                 back[6] = Color.parseColor("#000000");
@@ -430,27 +508,35 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             c1.setTextColor(text[6]);
                                             in.close();
                                             out.close();
-                                            break label;
+                                            break;
                                         case "clock":
                                             c1.setText("CLOCK");
                                             formats[6] = strArray[2];
                                             timezones[6] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "weather":
                                             c1.setText("WEATHER");
                                             states[6] = strArray[2];
                                             cities[6] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "reminder":
                                             c1.setText("REMINDER");
+                                            in.close();
+                                            out.close();
                                         case "alarm":
                                             c1.setText("ALARM");
+                                            in.close();
+                                            out.close();
                                         default:
                                             out.println("close");
                                             c1.setText(strArray[1].toUpperCase());
                                             in.close();
                                             out.close();
-                                            break label;
+                                            break;
                                     }
                                     break;
 
@@ -471,27 +557,35 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             c2.setTextColor(text[7]);
                                             in.close();
                                             out.close();
-                                            break label;
+                                            break;
                                         case "clock":
                                             c2.setText("CLOCK");
                                             formats[7] = strArray[2];
                                             timezones[7] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "weather":
                                             c2.setText("WEATHER");
                                             states[7] = strArray[2];
                                             cities[7] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "reminder":
                                             c2.setText("REMINDER");
+                                            in.close();
+                                            out.close();
                                         case "alarm":
                                             c2.setText("ALARM");
+                                            in.close();
+                                            out.close();
                                         default:
                                             out.println("close");
                                             c2.setText(strArray[1].toUpperCase());
                                             in.close();
                                             out.close();
-                                            break label;
+                                            break;
                                     }
                                     break;
 
@@ -517,16 +611,24 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                             c3.setText("CLOCK");
                                             formats[8] = strArray[2];
                                             timezones[8] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "weather":
                                             c3.setText("WEATHER");
                                             states[8] = strArray[2];
                                             cities[8] = strArray[3];
+                                            in.close();
+                                            out.close();
                                             break;
                                         case "reminder":
-                                            c3.setText("REMINDER");
+                                            c3.setText("Reminder \n April 30, 2017 \n 9:00 PM");//////////////////////////////////
+                                            in.close();
+                                            out.close();
                                         case "alarm":
                                             c3.setText("ALARM");
+                                            in.close();
+                                            out.close();
                                         default:
                                             out.println("close");
                                             c3.setText(strArray[1].toUpperCase());
@@ -552,14 +654,15 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         //Toast.makeText(MainActivity.this, "I'm TRYING 2", Toast.LENGTH_SHORT).show();
 
                     } catch (Exception e) {
+                        e.printStackTrace();
                         mkmsg("Error happened sending/receiving\n");
-                        client.close();
-                        serverSocket.close();
+                        //client.close();
+                        //serverSocket.close();
 
                         //findViewById(R.id.activity_main).performContextClick();
 
                         //Toast.makeText(MainActivity.this, "I'm TRYING 5", Toast.LENGTH_SHORT).show();
-                        run();
+                        //run();
 
                     } finally {
                         //Toast.makeText(MainActivity.this, "The world ended", Toast.LENGTH_SHORT).show();
@@ -574,8 +677,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                             a2.setTextColor(Color.parseColor("#ffffff"));
                             a2.setText("");
                             a3.setBackgroundColor(Color.parseColor("#000000"));
-                            a3.setTextColor(Color.parseColor("#ffffff"));
-                            a3.setText("");
+                            //a3.setTextColor(Color.parseColor("#ffffff"));
+                            //a3.setText("");
 
                             b1.setBackgroundColor(Color.parseColor("#000000"));
                             b1.setTextColor(Color.parseColor("#ffffff"));
@@ -604,6 +707,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
 
                 } catch (Exception e) {
+                    e.printStackTrace();
                     mkmsg("Unable to connect...\n");
                 }
             }
