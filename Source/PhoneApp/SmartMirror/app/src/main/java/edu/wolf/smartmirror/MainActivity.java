@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     }
 
     // What happens when an item is selected from the menu
+    // Options include networking/sleep/power/handGestures/voiceControl/clearMirror
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             case R.id.network:
                 if(findViewById(R.id.networkSwitch).isShown())
                 {
-                    return true;
+                    return true; // This really doesn't do anything. Just there for me to debug
                 }
                 switcher.showNext();
                 return true;
@@ -164,8 +165,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 sleepList.add("2 Hours");
                 sleepList.add("No Sleep");
 
-                // For each entry in the array of sleep timer options
-                //    .
+                // Create a radio button for each entry in sleepList
                 final RadioGroup rg = (RadioGroup) sleepDialog.findViewById(R.id.sleepGroup);
                 for (int i=0; i<sleepList.size(); i++)
                 {
@@ -173,29 +173,17 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     rb.setText(sleepList.get(i));
                     rb.setId(i+1);  // Offset because of how the id is called
                     rg.addView(rb);
-                    if(sleepSelected != null)
-                    {
-                        if(i == (sleepSelected.getId()-1))
-                        {
-                            rb.toggle();
-                        }
-                    }
-                    else if(sleepID != 0)
-                    {
-                        if(i == (sleepID-1))
-                        {
-                            rb.toggle();
-                        }
-                    }
-                    else
-                    {
-                        if(i == 0)
-                        {
-                            rb.toggle();
-                        }
+                    // Set the entry that the app should "remember"
+                    if(sleepSelected != null)  {
+                        if(i == (sleepSelected.getId()-1))  rb.toggle();
+                    } else if(sleepID != 0) {
+                        if(i == (sleepID-1))                rb.toggle();
+                    } else {
+                        if(i == 0)                          rb.toggle();
                     }
                 }
 
+                // Set the cancel button to dismiss the dialog
                 sleepCancel = (Button) sleepDialog.findViewById(R.id.sleepCancel);
                 sleepCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -204,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Set the okay button to give a confirmation toast and set the sleepID for callbacks
                 sleepOk = (Button) sleepDialog.findViewById(R.id.sleepOk);
                 sleepOk.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -255,18 +244,22 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Show the dialog
                 sleepDialog.show();
 
                 return true;
 
+            // If the user selects the power option
             case R.id.power:
                 final Dialog powerDialog = new Dialog(this);
 
+                // Create a list of power options (namely on and off)
                 powerDialog.setContentView(R.layout.power);
                 List<String> powerList = new ArrayList<>();
                 powerList.add("Mirror On");
                 powerList.add("Mirror Off");
 
+                // Create a radio button for each option and set correctly for callbacks
                 final RadioGroup rg2 = (RadioGroup) powerDialog.findViewById(R.id.sleepGroup);
                 for (int i=0; i<powerList.size(); i++)
                 {
@@ -274,29 +267,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     rb2.setText(powerList.get(i));
                     rb2.setId(i+1);
                     rg2.addView(rb2);
-                    if(powerSelected != null)
-                    {
-                        if(i == (powerSelected.getId()-1))
-                        {
-                            rb2.toggle();
-                        }
-                    }
-                    else if(powerID != 0)
-                    {
-                        if(i == (powerID-1))
-                        {
-                            rb2.toggle();
-                        }
-                    }
-                    else
-                    {
-                        if(i == 0)
-                        {
-                            rb2.toggle();
-                        }
+                    if(powerSelected != null) {
+                        if(i == (powerSelected.getId()-1))  rb2.toggle();
+                    } else if(powerID != 0) {
+                        if(i == (powerID-1))                rb2.toggle();
+                    } else {
+                        if(i == 0)                          rb2.toggle();
                     }
                 }
 
+                // Set the cancel button to dismiss the power dialog
                 powerCancel = (Button) powerDialog.findViewById(R.id.powerCancel);
                 powerCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -305,6 +285,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Set the okay button to toast a confirmation message, set the powerSelected callback,
+                // and dismiss the dialog
                 powerOk = (Button) powerDialog.findViewById(R.id.powerOk);
                 powerOk.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -331,18 +313,22 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Show the dialog
                 powerDialog.show();
 
                 return true;
 
+            // Dialog option for handgestures
             case R.id.handGestures:
                 final Dialog gestureDialog = new Dialog(this);
 
+                // Create a list of h.g. options
                 gestureDialog.setContentView(R.layout.hand_gestures);
                 List<String> gestureList = new ArrayList<>();
                 gestureList.add("On");
                 gestureList.add("Off");
 
+                // Create a radio button for each option in the h.g. list and set callbacks
                 final RadioGroup gestureGroup = (RadioGroup) gestureDialog.findViewById(R.id.gesturesGroup);
                 for (int i=0; i<gestureList.size(); i++)
                 {
@@ -350,29 +336,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     gestureRadio.setText(gestureList.get(i));
                     gestureRadio.setId(i+1);
                     gestureGroup.addView(gestureRadio);
-                    if(gesturesSelected != null)
-                    {
-                        if(i == (gesturesSelected.getId()-1))
-                        {
-                            gestureRadio.toggle();
-                        }
-                    }
-                    else if(gestureID != 0)
-                    {
-                        if(i == (gestureID-1))
-                        {
-                            gestureRadio.toggle();
-                        }
-                    }
-                    else
-                    {
-                        if(i == 0)
-                        {
-                            gestureRadio.toggle();
-                        }
+                    if(gesturesSelected != null) {
+                        if(i == (gesturesSelected.getId()-1))   gestureRadio.toggle();
+                    } else if(gestureID != 0) {
+                        if(i == (gestureID-1))                  gestureRadio.toggle();
+                    } else {
+                        if(i == 0)                              gestureRadio.toggle();
                     }
                 }
 
+                // Set the cancel button to dismiss the dialog
                 gesturesCancel = (Button) gestureDialog.findViewById(R.id.gesturesCancel);
                 gesturesCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -381,6 +354,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Set the okay button to toast a confirmation message, set the callbacks, and dismiss
+                // the dialog
                 gesturesOk = (Button) gestureDialog.findViewById(R.id.gesturesOk);
                 gesturesOk.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -407,18 +382,22 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Show the dialog
                 gestureDialog.show();
 
                 return true;
 
+            // Set the voice control user options dialog
             case R.id.voiceControl:
                 final Dialog vcDialog = new Dialog(this);
 
+                // Create a list of voice control options (namely on and off)
                 vcDialog.setContentView(R.layout.voice_control);
                 List<String> vcList = new ArrayList<>();
                 vcList.add("On");
                 vcList.add("Off");
 
+                // Create a radio button for each option in the vcList
                 final RadioGroup vcGroup = (RadioGroup) vcDialog.findViewById(R.id.vcontrolGroup);
                 for (int i=0; i<vcList.size(); i++)
                 {
@@ -426,29 +405,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     vcRadio.setText(vcList.get(i));
                     vcRadio.setId(i+1);
                     vcGroup.addView(vcRadio);
-                    if(vcSelected != null)
-                    {
-                        if(i == (vcSelected.getId()-1))
-                        {
-                            vcRadio.toggle();
-                        }
-                    }
-                    else if(voiceID != 0)
-                    {
-                        if(i == (voiceID-1))
-                        {
-                            vcRadio.toggle();
-                        }
-                    }
-                    else
-                    {
-                        if(i == 0)
-                        {
-                            vcRadio.toggle();
-                        }
+                    if(vcSelected != null) {
+                        if(i == (vcSelected.getId()-1)) vcRadio.toggle();
+                    } else if(voiceID != 0) {
+                        if(i == (voiceID-1))            vcRadio.toggle();
+                    } else {
+                        if(i == 0)                      vcRadio.toggle();
                     }
                 }
 
+                // Set the cancel button to dismiss the dialog
                 vcCancel = (Button) vcDialog.findViewById(R.id.vcontrolCancel);
                 vcCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -457,6 +423,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Set the okay button to give a confirmation toast, set the callbakcs, and
+                // dismiss the dialog
                 vcOk = (Button) vcDialog.findViewById(R.id.vcontrolOk);
                 vcOk.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -483,14 +451,19 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Show the dialog
                 vcDialog.show();
 
                 return true;
+
+            // If the user wants to clear the mirror
             case R.id.clear:
                 final Dialog clearDialog = new Dialog(this);
 
+                // set the dialog to a view
                 clearDialog.setContentView(R.layout.clear_mirror);
 
+                // Set the cancle button to dimiss the dialog
                 clearCancel = (Button) clearDialog.findViewById(R.id.clearCancel);
                 clearCancel.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -499,11 +472,15 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Set the okay button to reset all attributes
                 clearOk = (Button) clearDialog.findViewById(R.id.clearOk);
                 clearOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        // Send the networking message
                         sendMessage = "clear mirror";
+
+                        // Reset all of the panels by way of color and text
                         a1.setBackgroundColor(Color.parseColor("#000000"));
                         a1.setTextColor(Color.parseColor("#ffffff"));
                         a1.setText("+");
@@ -534,6 +511,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         c3.setTextColor(Color.parseColor("#ffffff"));
                         c3.setText("+");
 
+                        // reset all callbacks:
+                        // Option callbacks
                         a1back = 0; a1text = 0;
                         a2back = 0; a2text = 0;
                         a3back = 0; a3text = 0;
@@ -544,13 +523,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         c2back = 0; c2text = 0;
                         c3back = 0; c3text = 0;
 
+                        // Color callbacks
                         backTemp = 0; textTemp = Color.parseColor("#ffffff");
 
+                        // Options callbacks (for radio buttons)
                         sleepID = 0;
                         powerID = 0;
                         gestureID = 0;
                         voiceID = 0;
 
+                        // Clock callbacks
                         a1timezoneID = 0; a1formatID = 0; a1format = null; a1timezone = null;
                         a2timezoneID = 0; a2formatID = 0; a2format = null; a2timezone = null;
                         a3timezoneID = 0; a3formatID = 0; a3format = null; a3timezone = null;
@@ -561,6 +543,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         c2timezoneID = 0; c2formatID = 0; c2format = null; c2timezone = null;
                         c3timezoneID = 0; c3formatID = 0; c3format = null; c3timezone = null;
 
+                        // Options callbacks (legit callbacks)
                         sleepSelected = null;
                         powerSelected = null;
                         formatSelected = null;
@@ -578,6 +561,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         c2String = ""; c2Current = "";
                         c3String = ""; c3Current = "";
 
+                        // Weather callbacks
                         a1city = -1; a1state = "";
                         a2city = -1; a2state = "";
                         a3city = -1; a3state = "";
@@ -590,24 +574,27 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
                         stateSelected = ""; citySelected = "";
 
+                        // Dismiss the dialog
                         clearDialog.dismiss();
                     }
                 });
 
+                // Show the dialog
                 clearDialog.show();
 
                 return true;
 
             default:
+                // This would be weird
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    // Creates the dialog for the textColorPicker
+    // Creates the dialog for the textColorPicker (called from color options)
     // The user has 8 options for text color, labeled text1 through text8
     // Each option is a button whose on click listener sets textTemp to the
     //     color chosen and then dismisses the textColorPicker
-    public void textColorPicker()
+    private void textColorPicker()
     {
         final Dialog colorPicker = new Dialog(this);
 
@@ -698,11 +685,11 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         //return textTemp;
     }
 
-    // Creates the dialog for the backgroundColorPicker
+    // Creates the dialog for the backgroundColorPicker (called from color options)
     // The user has 8 options for background color, labeled back1 through back8
     // Each option is a button whose on click listener sets backTemp to the
     //     color chosen and then dismisses the textColorPicker
-    public void backColorPicker()
+    private void backColorPicker()
     {
         final Dialog colorPicker = new Dialog(this);
 
@@ -793,6 +780,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         //return backTemp;
     }
 
+    // Set up user options for color. A user can change the text color or the background color
+    // of a panel
     public void colorOptions(final String row, final int column)
     {
         // Create a dialog and set the content to color_options.xml
@@ -813,163 +802,90 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         //     Log the color value for debugging purposes
         if(row.equals("A") && column == 1)
         {
-            if(a1text != 0)
-            {
-                textColor.setBackgroundColor(a1text);
-                Log.d("A1", "a1text != 0");
-            }
-            if(a1text == -1)
-            {
-                textColor.setBackgroundResource(R.drawable.button);
-            }
-            if(a1back != 0)
-            {
-                backColor.setBackgroundColor(a1back);
-            }
+            if(a1text != 0)  textColor.setBackgroundColor(a1text);
+            if(a1text == -1) textColor.setBackgroundResource(R.drawable.button);
+            if(a1back != 0)  backColor.setBackgroundColor(a1back);
+
             textTemp = a1text;
             backTemp = a1back;
             Log.d("A1_ColorOptions", String.valueOf(a1text) + " " + String.valueOf(a1back));
         }
         else if(row.equals("A") && column == 2)
         {
-            if(a2text != 0)
-            {
-                textColor.setBackgroundColor(a2text);
-            }
-            if(a2text == -1)
-            {
-                textColor.setBackgroundResource(R.drawable.button);
-            }
-            if(a2back != 0)
-            {
-                backColor.setBackgroundColor(a2back);
-            }
+            if(a2text != 0)  textColor.setBackgroundColor(a2text);
+            if(a2text == -1) textColor.setBackgroundResource(R.drawable.button);
+            if(a2back != 0)  backColor.setBackgroundColor(a2back);
+
             textTemp = a2text;
             backTemp = a2back;
             Log.d("A2_ColorOptions", String.valueOf(a2text) + " " + String.valueOf(a2back));
         }
         else if(row.equals("A") && column == 3)
         {
-            if(a3text != 0)
-            {
-                textColor.setBackgroundColor(a3text);
-            }
-            if(a3text == -1)
-            {
-                textColor.setBackgroundResource(R.drawable.button);
-            }
-            if(a3back != 0)
-            {
-                backColor.setBackgroundColor(a3back);
-            }
+            if(a3text != 0)  textColor.setBackgroundColor(a3text);
+            if(a3text == -1) textColor.setBackgroundResource(R.drawable.button);
+            if(a3back != 0)  backColor.setBackgroundColor(a3back);
+
             textTemp = a3text;
             backTemp = a3back;
             Log.d("A3_ColorOptions", String.valueOf(a3text) + " " + String.valueOf(a3back));
         }
         else if(row.equals("B") && column == 1)
         {
-            if(b1text != 0)
-            {
-                textColor.setBackgroundColor(b1text);
-            }
-            if(b1text == -1)
-            {
-                textColor.setBackgroundResource(R.drawable.button);
-            }
-            if(b1back != 0)
-            {
-                backColor.setBackgroundColor(b1back);
-            }
+            if(b1text != 0)  textColor.setBackgroundColor(b1text);
+            if(b1text == -1) textColor.setBackgroundResource(R.drawable.button);
+            if(b1back != 0)  backColor.setBackgroundColor(b1back);
+
             textTemp = b1text;
             backTemp = b1back;
             Log.d("B1_ColorOptions", String.valueOf(b1text) + " " + String.valueOf(b1back));
         }
         else if(row.equals("B") && column == 2)
         {
-            if(b2text != 0)
-            {
-                textColor.setBackgroundColor(b2text);
-            }
-            if(b2text == -1)
-            {
-                textColor.setBackgroundResource(R.drawable.button);
-            }
-            if(b2back != 0)
-            {
-                backColor.setBackgroundColor(b2back);
-            }
+            if(b2text != 0)  textColor.setBackgroundColor(b2text);
+            if(b2text == -1) textColor.setBackgroundResource(R.drawable.button);
+            if(b2back != 0)  backColor.setBackgroundColor(b2back);
+
             textTemp = b2text;
             backTemp = b2back;
             Log.d("B2_ColorOptions", String.valueOf(b2text) + " " + String.valueOf(b2back));
         }
         else if(row.equals("B") && column == 3)
         {
-            if(b3text != 0)
-            {
-                textColor.setBackgroundColor(b3text);
-            }
-            if(b3text == -1)
-            {
-                textColor.setBackgroundResource(R.drawable.button);
-            }
-            if(b3back != 0)
-            {
-                backColor.setBackgroundColor(b3back);
-            }
+            if(b3text != 0)  textColor.setBackgroundColor(b3text);
+            if(b3text == -1) textColor.setBackgroundResource(R.drawable.button);
+            if(b3back != 0)  backColor.setBackgroundColor(b3back);
+
             textTemp = b3text;
             backTemp = b3back;
             Log.d("B3_ColorOptions", String.valueOf(b3text) + " " + String.valueOf(b3back));
         }
         else if(row.equals("C") && column == 1)
         {
-            if(c1text != 0)
-            {
-                textColor.setBackgroundColor(c1text);
-            }
-            if(c1text == -1)
-            {
-                textColor.setBackgroundResource(R.drawable.button);
-            }
-            if(c1back != 0)
-            {
-                backColor.setBackgroundColor(c1back);
-            }
+            if(c1text != 0)  textColor.setBackgroundColor(c1text);
+            if(c1text == -1) textColor.setBackgroundResource(R.drawable.button);
+            if(c1back != 0)  backColor.setBackgroundColor(c1back);
+
             textTemp = c1text;
             backTemp = c1back;
             Log.d("C1_ColorOptions", String.valueOf(c1text) + " " + String.valueOf(c1back));
         }
         else if(row.equals("C") && column == 2)
         {
-            if(c2text != 0)
-            {
-                textColor.setBackgroundColor(c2text);
-            }
-            if(c2text == -1)
-            {
-                textColor.setBackgroundResource(R.drawable.button);
-            }
-            if(c2back != 0)
-            {
-                backColor.setBackgroundColor(c2back);
-            }
+            if(c2text != 0)  textColor.setBackgroundColor(c2text);
+            if(c2text == -1) textColor.setBackgroundResource(R.drawable.button);
+            if(c2back != 0)  backColor.setBackgroundColor(c2back);
+
             textTemp = c2text;
             backTemp = c2back;
             Log.d("C2_ColorOptions", String.valueOf(c2text) + " " + String.valueOf(c2back));
         }
         else if(row.equals("C") && column == 3)
         {
-            if(c3text != 0)
-            {
-                textColor.setBackgroundColor(c3text);
-            }
-            if(c3text == -1)
-            {
-                textColor.setBackgroundResource(R.drawable.button);
-            }
-            if(c3back != 0)
-            {
-                backColor.setBackgroundColor(c3back);
-            }
+            if(c3text != 0)  textColor.setBackgroundColor(c3text);
+            if(c3text == -1) textColor.setBackgroundResource(R.drawable.button);
+            if(c3back != 0)  backColor.setBackgroundColor(c3back);
+
             textTemp = c3text;
             backTemp = c3back;
             Log.d("C3_ColorOptions", String.valueOf(c3text) + " " + String.valueOf(c3back));
@@ -1021,7 +937,6 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         // Dismiss the colorDialog when finished.
         // Log colors for debugging purposes.
         colorOk = (Button) colorDialog.findViewById(R.id.colorOk);
-
         colorOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1119,6 +1034,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         //backTemp = 0; textTemp = Color.parseColor("#ffffff");
     }
 
+    // When an option is selected on a panel menu, set the text of the button on dismiss
     public void dismissOption(String rowFinal, int columnFinal, String current)
     {
         if(rowFinal.equals("A") && columnFinal == 1)
@@ -1159,6 +1075,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         }
     }
 
+    // Set the clock options dialog
     public void clockOptions(String row, int column, Boolean longC, final String currentSetting)
     {
         final String rowFinal = row;
@@ -1459,25 +1376,28 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         clockDialog.show();
     }
 
+    // Set the weather options dialog
     public void weatherOptions(final String row, final int column, final Boolean longC, final String currentSetting)
     {
         final Dialog weatherDialog = new Dialog(this);
         weatherDialog.setContentView(R.layout.weather_options);
 
+        // Initialize spinners
         stateSpinner = (Spinner) weatherDialog.findViewById(R.id.stateSpinner);
         citySpinner = (Spinner) weatherDialog.findViewById(R.id.citySpinner);
-        cityText = (TextView) weatherDialog.findViewById(R.id.cityText);
+        // cityText = (TextView) weatherDialog.findViewById(R.id.cityText);
 
+        // Set up the adaptor for the states
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getApplicationContext(),
                 R.array.states_array, R.layout.spinner_item);
 
         adapter.setDropDownViewResource(R.layout.spinner_item);
 
         // Callback -- Set the state dropdown if button is being edited
-        // rather than set
         stateConverter statec = null;
 
-        if(row.equals("A") && column == 1)      statec = new stateConverter(a1state);
+        // set the state for the appropriate panel
+        if     (row.equals("A") && column == 1) statec = new stateConverter(a1state);
         else if(row.equals("A") && column == 2) statec = new stateConverter(a2state);
         else if(row.equals("A") && column == 3) statec = new stateConverter(a3state);
         else if(row.equals("B") && column == 1) statec = new stateConverter(b1state);
@@ -1486,21 +1406,29 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         else if(row.equals("C") && column == 1) statec = new stateConverter(c1state);
         else if(row.equals("C") && column == 2) statec = new stateConverter(c2state);
         else if(row.equals("C") && column == 3) statec = new stateConverter(c3state);
-        else                                    Log.d("CRAP", "How did I get here?");
+        else Log.d("CRAP", "How did I get here?");
 
+        // Set the stateSpinner to what it was for the correct panel
         stateSpinner.setAdapter(adapter);
         if(statec != null)
         {
             stateSpinner.setSelection(statec.getRelativeId());
         }
+
+        // Dynamically set the city spinner based on the state selection
         stateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // Get the selected state
                 String state = stateSpinner.getSelectedItem().toString();
                 stateConverter sc = new stateConverter(state);
 
+                // Set up a cursor for the database
                 final Cursor c = citydb.getCitiesByState(sc.getId());
 
+                // Set up the cursor adaptor
+                //   Inflate the view
+                //   Bind data
                 CursorAdapter cAdapt = new CursorAdapter(getApplicationContext(), c, 0) {
                     @Override
                     public View newView(Context context, Cursor cursor, ViewGroup parent) {
@@ -1511,19 +1439,16 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     @Override
                     public void bindView(View view, Context context, Cursor cursor) {
                         TextView textWeather = (TextView) view.findViewById(R.id.textWeather);
+
                         String city = cursor.getString(cursor.getColumnIndexOrThrow("City"));
-                        if(city.startsWith("\""))
-                        {
-                            city = city.substring(1);
-                        }
-                        if(city.endsWith("\""))
-                        {
-                            city = city.substring(0, city.length()-1);
-                        }
+                        if(city.startsWith("\"")) city = city.substring(1);
+                        if(city.endsWith("\""))   city = city.substring(0, city.length()-1);
+
                         textWeather.setText(city);
                     }
                 };
 
+                // Save the cityID for callbacks
                 int savedCityId = -1;
                 if(row.equals("A") && column == 1)      savedCityId = a1city;
                 else if(row.equals("A") && column == 2) savedCityId = a2city;
@@ -1534,8 +1459,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 else if(row.equals("C") && column == 1) savedCityId = c1city;
                 else if(row.equals("C") && column == 2) savedCityId = c2city;
                 else if(row.equals("C") && column == 3) savedCityId = c3city;
-                else                                    Log.d("CRAP", "How did I get here?");
+                else Log.d("CRAP", "How did I get here?");
 
+                // Set Adapter for cities
                 citySpinner.setAdapter(cAdapt);
 
                 // BUG
@@ -1544,15 +1470,17 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 //    savedCityId = -1;
                 //}
 
+                // Set the spinner on callback
                 if(savedCityId != -1)
                 {
                     citySpinner.setSelection(savedCityId);
                 }
 
+                // Set on click lister for city selection to save the data
                 citySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        //String cityid = c.getString((int)citySpinner.getSelectedItemId());
+                        //Set the appropriate panel data
                         int cid = c.getPosition();
                         if(row.equals("A") && column == 1)      a1city = cid;
                         else if(row.equals("A") && column == 2) a2city = cid;
@@ -1580,6 +1508,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 //cityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 //citySpinner.setAdapter(cityAdapter);
 
+                // Make the city spinner generate off of the selection of a state
                 if(!stateSpinner.getSelectedItem().toString().equals("Select State"))
                 {
                     cityText.setVisibility(View.VISIBLE);
@@ -1587,6 +1516,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 }
             }
 
+            // Make the city spinner generate off of the selection of a state
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 cityText.setVisibility(View.INVISIBLE);
@@ -1594,6 +1524,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // Dismiss the dialog when the user hits the cancel button
         weatherCancel = (Button) weatherDialog.findViewById(R.id.weatherCancel);
         weatherCancel.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -1607,6 +1538,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // Set the OK button to save the data
         weatherOk = (Button) weatherDialog.findViewById(R.id.weatherOk);
         weatherOk.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -1617,15 +1549,20 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     Toast.makeText(getApplicationContext(), "Please Select State", Toast.LENGTH_LONG).show();
                     return;
                 }*/
+
+                // If the user clicks OK before selecting a state, toast error to the user
                 if(citySpinner.getSelectedItem() == null)
                 {
                     Toast.makeText(getApplicationContext(), "Please Select State", Toast.LENGTH_LONG).show();
                     return;
                 }
 
+                // Get the selected items from each spinner
                 citySelected = citySpinner.getSelectedItem().toString();
                 stateSelected = stateSpinner.getSelectedItem().toString();
 
+                // Set appropriate toast to either tell the user the error or return that the
+                // selection has been saved
                 if(citySelected != null && stateSelected != null)
                 {
                     Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
@@ -1699,10 +1636,12 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // Show the dialog
         weatherDialog.show();
     }
 
-    public void reminderOptions(final String row, final int column, Boolean longC, final String currentSetting) // TODO: Set intents gurl
+    // Set the reminder options dialog
+    public void reminderOptions(final String row, final int column, Boolean longC, final String currentSetting)
     {
         final String rowFinal = row;
         final int columnFinal = column;
@@ -1714,11 +1653,13 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         final Dialog timePickDialog = new Dialog(this);
         final Dialog datePickDialog = new Dialog(this);
 
+        // Connect the dialogs to their XML layout files
         reminderDialog.setContentView(R.layout.reminder_options);
         addReminderDialog.setContentView(R.layout.add_reminder);
         timePickDialog.setContentView(R.layout.time_pick);
         datePickDialog.setContentView(R.layout.date_pick);
 
+        // Connect the on-screen elements with their XML file items
         timePick = (TimePicker) timePickDialog.findViewById(R.id.timePicker);
         timePicked = (TextView) addReminderDialog.findViewById(R.id.timePicked);
         reminderText = (EditText) addReminderDialog.findViewById(R.id.reminderText);
@@ -1728,11 +1669,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         //final ReminderDatabase db;
         //final SimpleCursorAdapter dataAdapter;
 
+        // Open the reminders database
         db = new ReminderDatabase(this);
         db.open();
 
+        // Set up the cursor for the reminders database
         Cursor c = db.getAllReminders();
 
+        // Check for broken cursor
         if (c == null) {
             Log.i("CAA", "cursor is null...");
         }
@@ -1753,18 +1697,18 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         // create the adapter using the cursor pointing to the desired data
         //as well as the layout information
-        dataAdapter = new SimpleCursorAdapter(
-                this, R.layout.reminder, c, columns, to, 0);
+        dataAdapter = new SimpleCursorAdapter(this, R.layout.reminder, c, columns, to, 0);
 
+        // Set up the listview for the reminders and set the adapter
         final ListView listView = (ListView) reminderDialog.findViewById(R.id.reminderList);
         listView.setAdapter(dataAdapter);
 
-
+        // Set up what happens when you click on a list item (edit a reminder)
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> lView, View view,
                                     int position, final long id) {
-
+                // Log and set the current time, date, and reminder text
                 Log.d("CURRENT TIME", db.getTime(id));
                 timePicked.setText(db.getTime(id));
 
@@ -1774,11 +1718,13 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 Log.d("CURRENT TITLE", db.getTitle(id));
                 reminderText.setText(db.getTitle(id));
 
+                // Set what happens when the user wants to choose the time
                 timeButton = (Button) addReminderDialog.findViewById(R.id.timeButton);
                 timeButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v)
                     {
+                        // Set up local variables for tracking data
                         int hour = 0;
                         int minute = 0;
 
@@ -1788,6 +1734,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         String sMinute;
                         String sAmPm;
 
+                        // Split up the time string and parse everything
                         String[] timeBreak = time.split("\\s+");
                         String[] hourMinuteBreak = timeBreak[0].split("[:]");
 
@@ -1800,18 +1747,14 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         hour = Integer.parseInt(sHour);
                         minute = Integer.parseInt(sMinute);
 
-                        if(sAmPm.equals("PM"))
-                        {
-                            hour = hour + 12;
-                        }
-                        if(sAmPm.equals("AM") && hour == 12)
-                        {
-                            hour = 0;
-                        }
+                        if(sAmPm.equals("PM")) hour = hour + 12;
+                        if(sAmPm.equals("AM") && hour == 12) hour = 0;
 
+                        // Set the time picker for callbacks
                         timePick.setHour(hour);
                         timePick.setMinute(minute);
 
+                        // Dismiss the time picker on cancel
                         timePickCancel = (Button) timePickDialog.findViewById(R.id.timePickCancel);
                         timePickCancel.setOnClickListener(new View.OnClickListener(){
                             @Override
@@ -1821,59 +1764,57 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                             }
                         });
 
+                        // Parse and save the data when the user clicks OK
                         timePickOk = (Button) timePickDialog.findViewById(R.id.timePickOk);
                         timePickOk.setOnClickListener(new View.OnClickListener(){
                             @Override
                             public void onClick(View v)
                             {
+                                // Get the hour from the time picker
                                 int militaryHour = timePick.getHour();
                                 String ampm;
 
-                                if(militaryHour < 12)
-                                {
-                                    ampm = " AM";
-                                }
-                                else
-                                {
-                                    ampm = " PM";
-                                }
+                                // Set AM or PM
+                                if(militaryHour < 12) ampm = " AM";
+                                else                  ampm = " PM";
 
+                                // Set the hour to not be military time (yet)
                                 militaryHour = militaryHour % 12;
-                                if(militaryHour == 0)
-                                {
-                                    militaryHour = 12;
-                                }
-                                String hour = Integer.toString(militaryHour);
-                                if(militaryHour < 10)
-                                {
-                                    hour = "0" + hour;
-                                }
+                                if(militaryHour == 0) militaryHour = 12;
 
+                                // Pad single digit hours with a zero
+                                String hour = Integer.toString(militaryHour);
+                                if(militaryHour < 10) hour = "0" + hour;
+
+                                // Get the minutes from the time picker
                                 int mins = timePick.getMinute();
                                 String minutes = Integer.toString(mins);
-                                if(mins < 10)
-                                {
-                                    minutes = "0" + minutes;
-                                }
+                                if(mins < 10) minutes = "0" + minutes;
 
+                                // Save the time for callbacks
                                 rTime = "";
                                 rTime = hour + ":" + minutes + ampm;
 
+                                // Set the text for the time selected
                                 timePicked.setText(rTime);
 
+                                // Dismiss the dialog
                                 timePickDialog.dismiss();
                             }
                         });
 
+                        // Show the time picking dialog
                         timePickDialog.show();
                     }
                 });
 
+                // Set up dialog for choosing a reminder date
                 dateButton = (Button) addReminderDialog.findViewById(R.id.dateButton);
                 dateButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v)
                     {
+                        // Dismiss the dialog on cancel
                         datePickCancel = (Button) datePickDialog.findViewById(R.id.datePickCancel);
                         datePickCancel.setOnClickListener(new View.OnClickListener(){
                             @Override
@@ -1883,6 +1824,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                             }
                         });
 
+                        // Save the data from the date picker
                         datePickOk = (Button) datePickDialog.findViewById(R.id.datePickOk);
                         datePickOk.setOnClickListener(new View.OnClickListener(){
                             @Override
@@ -1892,17 +1834,21 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 int day = datePick.getDayOfMonth();
                                 int year = datePick.getYear();
 
+                                // Set the data for callbacks
                                 String date = month + "/" + day + "/" + year;
                                 datePicked.setText(date);
 
+                                // Dismiss the dialog
                                 datePickDialog.dismiss();
                             }
                         });
 
+                        // Dismiss the date picker dialog
                         datePickDialog.show();
                     }
                 });
 
+                // Dismiss the reminders dialog on cancel
                 addRCancel = (Button) addReminderDialog.findViewById(R.id.reminderCancel);
                 addRCancel.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -1912,6 +1858,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Set up delete button for entry
                 addRDelete = (Button) addReminderDialog.findViewById(R.id.reminderDelete);
                 addRDelete.setVisibility(View.VISIBLE);
                 addRDelete.setClickable(true);
@@ -1919,13 +1866,19 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     @Override
                     public void onClick(View v)
                     {
+                        // remove the item from the database
                         db.removeReminder(id);
+
+                        // dismiss the dialog
                         addReminderDialog.dismiss();
+
+                        // fix cursor and adapter
                         Cursor cursor = db.getAllReminders();
                         dataAdapter.changeCursor(cursor);
                     }
                 });
 
+                // Parse and save information from add dialog
                 addROk = (Button) addReminderDialog.findViewById(R.id.reminderOk);
                 addROk.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -1933,62 +1886,59 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     {
                         appendthis("Start of database code.");
 
+                        // Get information from the date picker
                         int rmonth = datePick.getMonth() + 1;
                         int rday = datePick.getDayOfMonth();
                         int ryear = datePick.getYear();
+                        int mins = timePick.getMinute();
 
+                        // Set AM or PM
                         int militaryHour = timePick.getHour();
                         String ampm;
-                        if(militaryHour < 12)
-                        {
-                            ampm = " AM";
-                        }
-                        else
-                        {
-                            ampm = " PM";
-                        }
+                        if(militaryHour < 12) ampm = " AM";
+                        else                  ampm = " PM";
 
+                        // Set the hour to not military (yet)
                         militaryHour = militaryHour % 12;
-                        if (militaryHour == 0)
-                        {
-                            militaryHour = 12;
-                        }
+                        if (militaryHour == 0) militaryHour = 12;
+
+                        // Set the hour to standard time (for now)
                         String hour = Integer.toString(militaryHour);
-                        if(militaryHour < 10)
-                        {
-                            hour = "0" + hour;
-                        }
+                        if(militaryHour < 10) hour = "0" + hour;
 
-                        int mins = timePick.getMinute();
+                        // Pad single digit hours with a zero
                         String minutes = Integer.toString(mins);
-                        if(mins < 10)
-                        {
-                            minutes = "0" + minutes;
-                        }
+                        if(mins < 10) minutes = "0" + minutes;
 
+                        // Reset/Initialize variables
                         rDate = "";
                         rTime = "";
                         rText = "";
 
+                        // Compile reminder information to variables
                         rDate = rmonth + "/" + rday + "/" + ryear;
                         rTime = hour + ":" + minutes + ampm;
                         rText = reminderText.getText().toString();
 
+                        // Add to the database
                         db.removeReminder(id);
                         db.insertReminder(rDate, rTime, rText);
 
+                        // Update cursor and adapter
                         Cursor cursor = db.getAllReminders();
                         dataAdapter.changeCursor(cursor);
 
+                        // Dismiss the dialog
                         addReminderDialog.dismiss();
-
                     }
                 });
 
+                // Show the dialog
                 addReminderDialog.show();
             }
         });
 
+        // Set the dialog for adding a reminder (not a callback)
         addReminder = (Button) reminderDialog.findViewById(R.id.addReminder);
         addReminder.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -1996,6 +1946,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             {
                 reminderText.setText("");
 
+                // Initialize the time and date to zeroes
                 timePicked.setText(R.string.startTime);
                 timePick.setHour(0);
                 timePick.setMinute(0);
@@ -2003,6 +1954,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 String date = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
                 datePicked.setText(date);
 
+                // Set the time-selection button
                 timeButton = (Button) addReminderDialog.findViewById(R.id.timeButton);
                 timeButton.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -2014,24 +1966,22 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                         String[] hourMinuteBreak = timePicked.getText().toString().split("[:]");
                         String[] minuteBreak = hourMinuteBreak[1].split("\\s+");
 
+                        // Parse the time selections
                         hour = Integer.parseInt(hourMinuteBreak[0]);
                         minute = Integer.parseInt(minuteBreak[0]);
                         String sAmPm = minuteBreak[1];
 
                         Log.d("DEBUG", sAmPm);
 
-                        if(sAmPm.equals("PM"))
-                        {
-                            hour = hour + 12;
-                        }
-                        if(sAmPm.equals("AM") && hour == 12)
-                        {
-                            hour = 0;
-                        }
+                        // Select AM or PM
+                        if(sAmPm.equals("PM"))               hour = hour + 12;
+                        if(sAmPm.equals("AM") && hour == 12) hour = 0;
 
+                        // Set the time pick for recall
                         timePick.setHour(hour);
                         timePick.setMinute(minute);
 
+                        // Dismiss the dialog on cancel
                         timePickCancel = (Button) timePickDialog.findViewById(R.id.timePickCancel);
                         timePickCancel.setOnClickListener(new View.OnClickListener(){
                             @Override
@@ -2041,6 +1991,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                             }
                         });
 
+                        // Save the data on OK
                         timePickOk = (Button) timePickDialog.findViewById(R.id.timePickOk);
                         timePickOk.setOnClickListener(new View.OnClickListener(){
                             @Override
@@ -2049,51 +2000,46 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                                 int militaryHour = timePick.getHour();
                                 String ampm;
 
-                                if(militaryHour < 12)
-                                {
-                                    ampm = " AM";
-                                }
-                                else
-                                {
-                                    ampm = " PM";
-                                }
+                                // Set AM or PM
+                                if(militaryHour < 12)  ampm = " AM";
+                                else                   ampm = " PM";
 
+                                // Set to standard time (for now)
                                 militaryHour = militaryHour % 12;
-                                if(militaryHour == 0)
-                                {
-                                    militaryHour = 12;
-                                }
-                                String hour = Integer.toString(militaryHour);
-                                if(militaryHour < 10)
-                                {
-                                    hour = "0" + hour;
-                                }
+                                if(militaryHour == 0) militaryHour = 12;
 
+                                // Pad single digit hours with a leading zero
+                                String hour = Integer.toString(militaryHour);
+                                if(militaryHour < 10) hour = "0" + hour;
+
+                                // Parse minutes and pad single digit minutes with zeros
                                 int mins = timePick.getMinute();
                                 String minutes = Integer.toString(mins);
-                                if(mins < 10)
-                                {
-                                    minutes = "0" + minutes;
-                                }
+                                if(mins < 10) minutes = "0" + minutes;
 
                                 rTime = "";
                                 rTime = hour + ":" + minutes + ampm;
 
+                                // Set text
                                 timePicked.setText(rTime);
 
+                                // Dismiss the dialog
                                 timePickDialog.dismiss();
                             }
                         });
 
+                        // Show the dialog
                         timePickDialog.show();
                     }
                 });
 
+                // Set up the date pick button
                 dateButton = (Button) addReminderDialog.findViewById(R.id.dateButton);
                 dateButton.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v)
                     {
+                        // Cancel on dismiss
                         datePickCancel = (Button) datePickDialog.findViewById(R.id.datePickCancel);
                         datePickCancel.setOnClickListener(new View.OnClickListener(){
                             @Override
@@ -2103,26 +2049,32 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                             }
                         });
 
+                        // Save the data on OK
                         datePickOk = (Button) datePickDialog.findViewById(R.id.datePickOk);
                         datePickOk.setOnClickListener(new View.OnClickListener(){
                             @Override
                             public void onClick(View v)
                             {
+                                // Get the date
                                 int month = datePick.getMonth() + 1;
                                 int day = datePick.getDayOfMonth();
                                 int year = datePick.getYear();
 
+                                // Set the date
                                 String date = month + "/" + day + "/" + year;
                                 datePicked.setText(date);
 
+                                // Dismiss the dilog
                                 datePickDialog.dismiss();
                             }
                         });
 
+                        // Show the dialog
                         datePickDialog.show();
                     }
                 });
 
+                // Dismiss the dialog on cancel
                 addRCancel = (Button) addReminderDialog.findViewById(R.id.reminderCancel);
                 addRCancel.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -2132,9 +2084,11 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                     }
                 });
 
+                // Make the delete button invisible since this is a new entry
                 addRDelete = (Button) addReminderDialog.findViewById(R.id.reminderDelete);
                 addRDelete.setVisibility(View.INVISIBLE);
 
+                // Save the reminder on OK
                 addROk = (Button) addReminderDialog.findViewById(R.id.reminderOk);
                 addROk.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -2166,6 +2120,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // Dismiss the dialog on cancel
         reminderCancel = (Button) reminderDialog.findViewById(R.id.reminderCancel);
         reminderCancel.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -2180,47 +2135,21 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // Save the panel data on OK
         reminderOk = (Button) reminderDialog.findViewById(R.id.reminderOk);
         reminderOk.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view)
             {
-                if(row.equals("A") && column == 1)
-                {
-                    sendMessage = "A1 reminder";
-                }
-                else if(row.equals("A") && column == 2)
-                {
-                    sendMessage = "A2 reminder";
-                }
-                else if(row.equals("A") && column == 3)
-                {
-                    sendMessage = "A3 reminder";
-                }
-                else if(row.equals("B") && column == 1)
-                {
-                    sendMessage = "B1 reminder";
-                }
-                else if(row.equals("B") && column == 2)
-                {
-                    sendMessage = "B2 reminder";
-                }
-                else if(row.equals("B") && column == 3)
-                {
-                    sendMessage = "B3 reminder";
-                }
-                else if(row.equals("C") && column == 1)
-                {
-                    sendMessage = "C1 reminder";
-                }
-                else if(row.equals("C") && column == 2)
-                {
-                    sendMessage = "C2 reminder";
-                }
-                else if(row.equals("C") && column == 3)
-                {
-                    sendMessage = "C3 reminder";
-                }
+                if(row.equals("A") && column == 1)      sendMessage = "A1 reminder";
+                else if(row.equals("A") && column == 2) sendMessage = "A2 reminder";
+                else if(row.equals("A") && column == 3) sendMessage = "A3 reminder";
+                else if(row.equals("B") && column == 1) sendMessage = "B1 reminder";
+                else if(row.equals("B") && column == 2) sendMessage = "B2 reminder";
+                else if(row.equals("B") && column == 3) sendMessage = "B3 reminder";
+                else if(row.equals("C") && column == 1) sendMessage = "C1 reminder";
+                else if(row.equals("C") && column == 2) sendMessage = "C2 reminder";
+                else if(row.equals("C") && column == 3) sendMessage = "C3 reminder";
 
                 reminderDialog.dismiss();
                 db.close();
@@ -2230,6 +2159,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         reminderDialog.show();
     }
 
+    // Set the alarm options dialog
     public void alarmOptions(final String row, final int column, Boolean longC, final String currentSetting)
     {
         final String rowFinal = row;
@@ -2551,6 +2481,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         alarmDialog.show();
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Networking Madness
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     public void appendthis(String item) {
         Log.d("TAG", item + "\n");
     }
@@ -2563,6 +2496,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
 
         //mReceiver = new MyReceiver();
 
+        // Set up the view switcher and the network settings
         switcher = (ViewSwitcher) findViewById(R.id.activity_main);
 
         ip = (EditText) findViewById(R.id.ipEdit);
@@ -2571,6 +2505,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         port = (EditText) findViewById(R.id.portEdit);
         port.setText("3012");
 
+        // set the connection button to do the networking stuff
         connect = (Button) findViewById(R.id.connect);
         connect.setOnClickListener(this);
         /*connect.setOnClickListener(new View.OnClickListener() {
@@ -2583,15 +2518,19 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });*/
 
+        // Set preferences soy ou can call back data
         String prefs = "MyPrefs";
         SharedPreferences settings = getSharedPreferences(prefs, 0);
 
+        // Set up and open the database for the cities
         citydb = new CitiesDatabase(this);
         citydb.open();
 
+        // Only do database stuff on install of the app
         if(settings.getBoolean("firstRun", true)) {
             //Cursor c = citydb.getAllCities();
 
+            // Set up a reader and an array to read into
             BufferedReader br = null;
             String[] cityArr;
             try {
@@ -2611,7 +2550,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 }
             } catch (IOException e) {
                 Log.i("IOException", e.toString());
-            } finally {
+            } finally { // Close the reader when finished
                 if (br != null) {
                     try {
                         br.close();
@@ -2624,6 +2563,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             settings.edit().putBoolean("firstRun", false).apply();
         }
 
+        // Reload all variables for callbacks
         if(savedInstanceState != null)
         {
             sleepID = savedInstanceState.getInt("sleepID");
@@ -2672,28 +2612,30 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             c3state = savedInstanceState.getString("c3state");
         }
 
-        a1 = (Button) findViewById(R.id.A1);
+        // ------- FOR EACH BUTTON ----------- //
+        // Connect the button to the id in the XML
+        // Check for a null saved instance state
+        // Set the colors and text
+        // Set the case statement for the options list, calling the appropriate method from above
+        // Set long click lister and to call the appropriate method with callback settings
 
+        // If I were to rewrite this code, I would have put this whole thing into a method
+        // and called it 9 times rather than doing this stupidity
+
+        // ---------------------------------------- A1 ---------------------------------------- //
+
+        a1 = (Button) findViewById(R.id.A1);
         if(savedInstanceState != null)
         {
             a1String = savedInstanceState.getString("a1String");
             Log.d("-----a1Text------", a1String);
-            if(a1String != null)
-            {
-                a1.setText(a1String);
-            }
+            if(a1String != null) a1.setText(a1String);
 
             a1back = savedInstanceState.getInt("a1back");
-            if(a1back != 0)
-            {
-                a1.setBackgroundColor(a1back);
-            }
+            if(a1back != 0) a1.setBackgroundColor(a1back);
 
             a1text = savedInstanceState.getInt("a1text");
-            if(a1text != 0)
-            {
-                a1.setTextColor(a1text);
-            }
+            if(a1text != 0) a1.setTextColor(a1text);
         }
 
         a1.setOnClickListener(new View.OnClickListener() {
@@ -2804,6 +2746,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 return true;
             }
         });
+
+
+        // ---------------------------------------- A2 ---------------------------------------- //
 
         a2 = (Button) findViewById(R.id.A2);
 
@@ -2925,6 +2870,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // ---------------------------------------- A3 ---------------------------------------- //
+
         a3 = (Button) findViewById(R.id.A3);
 
         if(savedInstanceState != null)
@@ -3044,6 +2991,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 return true;
             }
         });
+
+        // ---------------------------------------- B1 ---------------------------------------- //
 
         b1 = (Button) findViewById(R.id.B1);
 
@@ -3165,6 +3114,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // ---------------------------------------- B2 ---------------------------------------- //
+
         b2 = (Button) findViewById(R.id.B2);
 
         if(savedInstanceState != null)
@@ -3284,6 +3235,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 return true;
             }
         });
+
+
+        // ---------------------------------------- B3 ---------------------------------------- //
 
         b3 = (Button) findViewById(R.id.B3);
 
@@ -3405,6 +3359,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // ---------------------------------------- C1 ---------------------------------------- //
+
         c1 = (Button) findViewById(R.id.C1);
 
         if(savedInstanceState != null)
@@ -3524,6 +3480,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
                 return true;
             }
         });
+
+        // ---------------------------------------- C2 ---------------------------------------- //
 
         c2 = (Button) findViewById(R.id.C2);
 
@@ -3645,6 +3603,8 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // ---------------------------------------- C3 ---------------------------------------- //
+
         c3 = (Button) findViewById(R.id.C3);
 
         if(savedInstanceState != null)
@@ -3764,9 +3724,11 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
             }
         });
 
+        // Reset prefs
         getprefs();
     }
 
+    // Do networking stuff on the click
     @Override
     public void onClick(View v) {
         doNetwork stuff = new doNetwork();
@@ -3780,6 +3742,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         }
     }
 
+    // Set up handler (which is sadly broken)
     private Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -3790,7 +3753,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
     });
 
     public void mkmsg(String str) {
-        //handler junk, because thread can't update screen!
+        //thread can't update screen!
         Message msg = new Message();
         Bundle b = new Bundle();
         b.putString("msg", str);
@@ -3798,6 +3761,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         handler.sendMessage(msg);
     }
 
+    // Network code based off of Ward's Battle Bots project
     class doNetwork implements Runnable {
         public PrintWriter out;
         public BufferedReader in;
@@ -3853,6 +3817,9 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Set what gets saved for closing the app
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
@@ -3944,6 +3911,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    // Set recall for preferences
     void getprefs()
     {
         SharedPreferences prefs = getSharedPreferences("name", MODE_PRIVATE);
@@ -4215,6 +4183,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         }
     }
 
+    // Set instance state variables to save on pause
     @Override
     public void onPause()
      {
@@ -4314,6 +4283,7 @@ public class MainActivity extends AppCompatActivity implements Button.OnClickLis
         editor.apply(); //FLAG
     }
 
+    // Recall paused variables
     @Override
     public void onResume()
     {
